@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ia0;ug_PingceResult (i8s;nv_PingceResult)-->
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.XinliCePingMapper">
+    <update id="updateCepingResult" parameterType="com.authine.cloudpivot.web.api.entity.PingceResult">
+        UPDATE ia0ug_PingceResult
+        <set>
+            <if test="yiyuScore != null">
+                yiyuScore = #{yiyuScore},
+            </if>
+            <if test="jiaolvScore != null">
+                jiaolvScore = #{jiaolvScore},
+            </if>
+            <if test="scoreResult != null">
+                scoreResult = #{scoreResult},
+            </if>
+            <if test="testResult != null">
+                testResult = #{testResult},
+            </if>
+            <if test="yiyutestDate != null">
+                yiyutestDate = #{yiyutestDate},
+            </if>
+            <if test="jiaolvTestDate != null">
+                jiaolvTestDate = #{jiaolvTestDate},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertCepingResult" parameterType="com.authine.cloudpivot.web.api.entity.PingceResult">
+        INSERT INTO ia0ug_PingceResult
+          (id,name,creater,createdDeptId,
+            owner,ownerDeptId,createdTime,
+            modifier, modifiedTime,
+            sequenceNo,sequenceStatus,ownerDeptQueryCode,
+            yiyuScore, jiaolvScore, scoreResult, testName,
+            testResult, yiyutestDate, jiaolvTestDate)
+        VALUES
+           (#{id},#{name},#{creater},#{createdDeptId},
+            #{owner},#{ownerDeptId},now(),
+            #{modifier},#{ modifiedTime},
+            #{sequenceNo},#{sequenceStatus},#{ownerDeptQueryCode},
+            #{yiyuScore},#{ jiaolvScore},#{ scoreResult},#{ testName},
+            #{testResult},#{ yiyutestDate},#{ jiaolvTestDate})
+
+    </insert>
+
+    <select id="getCepingResultByName" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.PingceResult">
+        SELECT * from ia0ug_PingceResult where creater = #{creater} ORDER BY createdTime desc LIMIT 1
+    </select>
+
+    <select id="getXinliSdsById" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.XinliSas">
+        SELECT * from ia0ug_XinLi_SDS where id = #{id}
+    </select>
+
+    <select id="getXinliSasById" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.XinliSas">
+        SELECT * from ia0ug_XinLi_SAS where id = #{id}
+    </select>
+</mapper>

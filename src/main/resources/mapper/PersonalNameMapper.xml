@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.PersonalNameMapper">
+
+    <select id="getAllBrigadePersonal" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.PersonalName">
+        SELECT job_title, personal_name
+        FROM ilhr4_personal_name
+        WHERE brigade_name = #{brigadeId}
+    </select>
+
+</mapper>

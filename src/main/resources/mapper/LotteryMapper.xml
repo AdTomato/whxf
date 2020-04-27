@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.LotteryMapper">
+
+    <resultMap id="lotteryNameAndId" type="java.util.Map">
+        <id property="id" column="id" javaType="java.lang.String" jdbcType="VARCHAR"></id>
+        <id property="name" column="project_name" jdbcType="VARCHAR"></id>
+    </resultMap>
+    <select id="getLotteryNameAndId" resultMap="lotteryNameAndId">
+        SELECT id, project_name
+        FROM ilhr4_lottery
+    </select>
+
+</mapper>

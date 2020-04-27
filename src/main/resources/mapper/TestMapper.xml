@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.TestMapper">
+
+    <select id="getAllTestData" resultType="com.authine.cloudpivot.web.api.entity.Test">
+        SELECT * FROM test
+    </select>
+</mapper>
