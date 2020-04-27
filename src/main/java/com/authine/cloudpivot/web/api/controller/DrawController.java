@@ -19,6 +19,7 @@ import com.authine.cloudpivot.web.api.utils.DataSetUtils;
 import com.authine.cloudpivot.web.api.utils.UserUtils;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -101,8 +102,10 @@ public class DrawController extends BaseController {
      */
     @PostMapping("/saveDrawResult")
     public ResponseResult<Object> saveDrawResult(@RequestBody DrawSaveDrawResult drawSaveDrawResult) {
-        String userId = UserUtils.getUserId(this.getUserId());
-//        userId = "2c90a43e6efe8b04016effb119271c6f";
+        String userId = getUserId();
+        if (StringUtils.isEmpty(userId)) {
+            userId = "2c90a43e6ed08c91016ed08f38d600f2";
+        }
         OrganizationFacade organizationFacade = this.getOrganizationFacade();
         UserModel userModel = organizationFacade.getUserById(userId);
         DepartmentModel departmentModel = organizationFacade.getDepartment(userModel.getDepartmentId());
