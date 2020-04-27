@@ -1,23 +1,28 @@
 package com.authine.cloudpivot.web.api.controller;
 
+import com.authine.cloudpivot.engine.api.facade.BizObjectFacade;
+import com.authine.cloudpivot.engine.api.facade.OrganizationFacade;
+import com.authine.cloudpivot.engine.api.model.organization.DepartmentModel;
+import com.authine.cloudpivot.engine.api.model.organization.UserModel;
+import com.authine.cloudpivot.engine.api.model.runtime.BizObjectModel;
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
+import com.authine.cloudpivot.web.api.entity.DrawRecord;
 import com.authine.cloudpivot.web.api.entity.PersonalName;
+import com.authine.cloudpivot.web.api.params.DrawSaveDrawResult;
 import com.authine.cloudpivot.web.api.service.BrigadeService;
+import com.authine.cloudpivot.web.api.service.DrawRecordService;
 import com.authine.cloudpivot.web.api.service.LotteryService;
 import com.authine.cloudpivot.web.api.service.PersonalNameService;
+import com.authine.cloudpivot.web.api.utils.Constant;
+import com.authine.cloudpivot.web.api.utils.DataSetUtils;
+import com.authine.cloudpivot.web.api.utils.UserUtils;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: wangyong
@@ -37,6 +42,9 @@ public class DrawController extends BaseController {
 
     @Autowired
     PersonalNameService personalNameService;
+
+    @Autowired
+    DrawRecordService drawRecordService;
 
     /**
      * 获取抽签项目id以及项目名称
@@ -83,6 +91,38 @@ public class DrawController extends BaseController {
             }
         }
         return this.getErrResponseResult(result, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+    }
+
+    /**
+     * 存储抽签结果
+     * @param drawSaveDrawResult 抽签结果
+     * @return
+     * @author wangyong
+     */
+    @PostMapping("/saveDrawResult")
+    public ResponseResult<Object> saveDrawResult(@RequestBody DrawSaveDrawResult drawSaveDrawResult) {
+        String userId = UserUtils.getUserId(this.getUserId());
+//        userId = "2c90a43e6efe8b04016effb119271c6f";
+        OrganizationFacade organizationFacade = this.getOrganizationFacade();
+        UserModel userModel = organizationFacade.getUserById(userId);
+        DepartmentModel departmentModel = organizationFacade.getDepartment(userModel.getDepartmentId());
+        DrawRecord drawRecord = new DrawRecord();
+        String name = drawSaveDrawResult.getProjectName() + "-" + drawSaveDrawResult.getBrigadeName();
+        DataSetUtils.setBaseData(drawRecord, userModel, departmentModel, name, Constant.COMPLETED_STATUS);
+        drawRecord.setProjectName(drawSaveDrawResult.getProjectName());
+        drawRecord.setBrigadeName(drawSaveDrawResult.getBrigadeName());
+        drawRecord.setDrawDate(new Date());
+        StringBuilder sb = new StringBuilder();
+        for (String key : drawSaveDrawResult.getDrawResult().keySet()) {
+            sb.append(key + ":");
+            for (String value : drawSaveDrawResult.getDrawResult().get(key)) {
+                sb.append(value + "; ");
+            }
+            sb.append("\n");
+        }
+        drawRecord.setDrawResult(sb.toString());
+        drawRecordService.saveDrawResult(drawRecord);
+        return this.getErrResponseResult(null, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
 
 }

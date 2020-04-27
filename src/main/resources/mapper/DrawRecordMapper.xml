@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.DrawRecordMapper">
+
+    <!--存储抽签记录-->
+    <insert id="saveDrawResult" parameterType="com.authine.cloudpivot.web.api.entity.DrawRecord">
+        INSERT INTO ilhr4_draw_record
+        (id, name, creater, createdDeptId, owner, ownerDeptId, createdTime, modifier, modifiedTime, workflowInstanceId,
+         sequenceNo, sequenceStatus, ownerDeptQueryCode,
+         project_name, brigade_name, draw_result, draw_date)
+        VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
+                #{createdTime}, #{modifier}, #{modifiedTime}, #{workflowInstanceId}, #{sequenceNo},
+                #{sequenceStatus}, #{ownerDeptQueryCode}, #{projectName}, #{brigadeName}, #{drawResult}, #{drawDate})
+    </insert>
+
+</mapper>
