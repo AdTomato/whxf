@@ -105,12 +105,12 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
 
                     // 二次开发接口
                     .antMatchers("/controller/draw/**").permitAll()
-
-                    // 用于测试
                     // 抽签模块
                     .antMatchers("/test/**").permitAll()
                     // 心理测评
                     .antMatchers("/controller/xinlipingce/**").permitAll()
+                    //训练登记薄查询部门人员
+                    .antMatchers("/controller/dept/**").permitAll()
 
                     // swagger end
                     .antMatchers("/actuator/**", "/monitor/**", "/login/dingtalk", "login/mobile", "login/mobile/ajax", "login/password").permitAll()
