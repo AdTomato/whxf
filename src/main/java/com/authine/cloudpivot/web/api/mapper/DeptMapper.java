@@ -1,5 +1,7 @@
 package com.authine.cloudpivot.web.api.mapper;
 
+import com.authine.cloudpivot.web.api.entity.Unit;
+
 import java.util.List;
 
 /**
@@ -10,4 +12,7 @@ import java.util.List;
 public interface DeptMapper {
     //查询部门下面人员
     List<String> getUserBydeptId(String deptId);
+
+    List<Unit> getUsersById(List<String> userIdList);
+
 }
