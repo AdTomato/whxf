@@ -13,7 +13,7 @@
 
     <select id="getUsersById" parameterType="java.lang.String"
             resultType="com.authine.cloudpivot.web.api.entity.Unit">
-        SELECT id, 1 as type, name, imgUrl
+        SELECT id, 3 as type, name, imgUrl
         FROM h_org_user
         WHERE status = "ENABLE"
         AND id IN (
