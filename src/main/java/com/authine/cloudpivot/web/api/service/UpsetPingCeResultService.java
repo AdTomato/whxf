@@ -10,4 +10,6 @@ public interface UpsetPingCeResultService {
     public String upsetResultBySas(String id);
 
     public String upsetResultBySds(String id);
+
+    public String upsetScl90Result(String id);
 }

@@ -49,4 +49,16 @@ public class XinliPingCeController extends BaseController {
         }
     }
 
+    //weiyao 焦虑 修改或新增测评结果
+    @GetMapping("/upsetScl90Result")
+    public ResponseResult<String> upsetScl90Result( String id) {
+
+        if(StringUtils.isNotEmpty(id)){
+            String res=upsetPingCeResultService.upsetScl90Result(id);
+            return this.getOkResponseResult("success", res);
+        }else{
+            return this.getErrResponseResult(null, 404L, "没有Id");
+        }
+    }
+
 }
