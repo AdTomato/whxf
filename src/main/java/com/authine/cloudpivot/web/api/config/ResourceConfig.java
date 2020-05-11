@@ -109,8 +109,10 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                     .antMatchers("/test/**").permitAll()
                     // 心理测评
                     .antMatchers("/controller/xinlipingce/**").permitAll()
-                    //训练登记薄查询部门人员
+                    // 训练登记薄查询部门人员
                     .antMatchers("/controller/dept/**").permitAll()
+                    // 车辆信息
+                    .antMatchers("/controller/carsInfo/**").permitAll()
 
                     // swagger end
                     .antMatchers("/actuator/**", "/monitor/**", "/login/dingtalk", "login/mobile", "login/mobile/ajax", "login/password").permitAll()

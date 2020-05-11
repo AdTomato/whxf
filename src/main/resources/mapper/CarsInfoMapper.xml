@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.CarsInfoMapper">
+
+    <resultMap id="carsInfos" type="com.authine.cloudpivot.web.api.dto.VehicleInfoDto">
+        <id column="id" property="id"/>
+        <collection property="vehicleInfos" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.CarsInfoMapper.getVehicleInfoByParentId"/>
+    </resultMap>
+    <select id="getCarsInfosByStationId" parameterType="java.lang.String" resultMap="carsInfos">
+        SELECT *
+        FROM i4h9w_carsinfo
+        WHERE station_id = #{stationId}
+        ORDER BY createdTime DESC
+        LIMIT 0, 1
+    </select>
+
+    <select id="getVehicleInfoByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.VehicleInfo">
+        SELECT *
+        FROM i4h9w_vehicle_info
+        WHERE parentId = #{id}
+    </select>
+
+    <update id="updateCarsStatusById">
+        UPDATE i4h9w_vehicle_info
+        SET vehicle_status = #{status}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
