@@ -13,5 +13,5 @@ public class Constant {
      */
     public static final String COMPLETED_STATUS = "COMPLETED";
 
-    public static final String ADMIN_ID = "2c90a43e6ed08c91016ed08f38d600f2";
+    public static final String ADMIN_ID = "2c9280a26706a73a016706a93ccf002b";
 }

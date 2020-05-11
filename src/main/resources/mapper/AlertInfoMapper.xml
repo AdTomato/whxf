@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.AlertInfoMapper">
+
+    <insert id="insertStationAlertInfo" parameterType="com.authine.cloudpivot.web.api.entity.AlertInfo">
+        INSERT INTO i4h9w_jingqingxinxi(id, name, creater, createdDeptId, owner, ownerDeptId, createdTime, modifier,
+                                        modifiedTime, workflowInstanceId, sequenceNo, sequenceStatus,
+                                        ownerDeptQueryCode, call_police_total, fire_alarm_num, emergency_rescue_num,
+                                        false_alarm_num, social_assistance_num, date, brigade_id, station_id)
+        VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
+                #{createdTime}, #{modifier}, #{modifiedTime}, #{workflowInstanceId},
+                #{sequenceNo},
+                #{sequenceStatus}, #{ownerDeptQueryCode}, #{callPoliceTotal}, #{fireAlarmNum},
+                #{emergencyRescueNum},
+                #{falseAlarmNum}, #{socialAssistanceNum}, #{date}, #{brigadeId},
+                #{stationId})
+    </insert>
+
+    <select id="getStationAlertInfoByStationId"
+            resultType="com.authine.cloudpivot.web.api.entity.AlertInfo">
+        SELECT *
+        FROM i4h9w_jingqingxinxi
+        WHERE station_id = #{stationId}
+          AND date = #{date}
+    </select>
+
+    <update id="updateStationAlertInfoByStationId" parameterType="com.authine.cloudpivot.web.api.entity.AlertInfo">
+        UPDATE i4h9w_jingqingxinxi
+        SET call_police_total     = #{callPoliceTotal},
+            fire_alarm_num        = #{fireAlarmNum},
+            emergency_rescue_num  = #{emergencyRescueNum},
+            social_assistance_num = #{socialAssistanceNum},
+            false_alarm_num       = #{falseAlarmNum}
+        WHERE id = #{id}
+    </update>
+
+    <resultMap id="brigadeAlertInfo" type="java.util.Map">
+        <id property="callPoliceTotal" column="callPoliceTotal"/>
+        <id property="fireAlarmNum" column="fireAlarmNum"/>
+        <id property="emergencyRescueNum" column="emergencyRescueNum"/>
+        <id property="socialAssistanceNum" column="socialAssistanceNum"/>
+        <id property="falseAlarmNum" column="falseAlarmNum"/>
+    </resultMap>
+    <select id="getBrigadeAlertInfoByBrigadeId" resultMap="brigadeAlertInfo">
+        SELECT SUM(call_police_total)     AS callPoliceTotal,
+               SUM(fire_alarm_num)        AS fireAlarmNum,
+               SUM(emergency_rescue_num)  AS emergencyRescueNum,
+               SUM(social_assistance_num) AS socialAssistanceNum,
+               SUM(false_alarm_num)       AS falseAlarmNum
+        FROM i4h9w_jingqingxinxi
+        WHERE brigade_id = #{brigadeId}
+          AND date = #{date}
+    </select>
+
+</mapper>

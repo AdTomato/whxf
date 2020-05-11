@@ -3,9 +3,9 @@ package com.authine.cloudpivot.web.api.utils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @Author: wangyong
- * @Date: 2020-01-12 10:42
- * @Description: 用户工具类
+ * 用户工具类
+ * @author wangyong
+ * @date: 2020-01-12 10:42
  */
 public class UserUtils {
 

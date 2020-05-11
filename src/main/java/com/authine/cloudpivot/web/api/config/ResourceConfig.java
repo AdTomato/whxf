@@ -115,6 +115,8 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                     .antMatchers("/controller/carsInfo/**").permitAll()
                     // 组织
                     .antMatchers("/controller/org").permitAll()
+                    // 警情信息
+                    .antMatchers("/controller/alertInfo/**").permitAll()
 
                     // swagger end
                     .antMatchers("/actuator/**", "/monitor/**", "/login/dingtalk", "login/mobile", "login/mobile/ajax", "login/password").permitAll()

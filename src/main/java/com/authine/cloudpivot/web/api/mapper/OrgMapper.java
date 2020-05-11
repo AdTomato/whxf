@@ -29,6 +29,15 @@ public interface OrgMapper {
     String getBrigadeIdByName(String brigadeName);
 
     /**
+     * 根据消防站id获取该消防站所属大队的id
+     *
+     * @param stationId 消防站id
+     * @return 大队id
+     * @author wangyong
+     */
+    String getBrigadeIdByStationId(String stationId);
+
+    /**
      * 获取所有的消防站名称列表
      *
      * @return 消防站名称，消防站id
