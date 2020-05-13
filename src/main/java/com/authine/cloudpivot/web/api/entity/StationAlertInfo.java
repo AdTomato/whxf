@@ -7,20 +7,15 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 警情信息
+ * 消防站警情信息
  *
  * @author wangyong
- * @time 2020/5/11 13:41
+ * @time 2020/5/13 13:46
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AlertInfo extends BaseEntity {
-
-    /**
-     * 大队id
-     */
-    private String brigadeId;
+public class StationAlertInfo extends BaseEntity{
 
     /**
      * 消防站id
@@ -61,5 +56,4 @@ public class AlertInfo extends BaseEntity {
      * 其他警情
      */
     private Integer otherAlertNum;
-
 }

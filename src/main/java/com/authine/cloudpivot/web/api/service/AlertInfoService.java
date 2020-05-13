@@ -1,6 +1,7 @@
 package com.authine.cloudpivot.web.api.service;
 
 import com.authine.cloudpivot.web.api.entity.AlertInfo;
+import com.authine.cloudpivot.web.api.entity.StationAlertInfo;
 
 import java.util.Date;
 import java.util.Map;
@@ -19,7 +20,7 @@ public interface AlertInfoService {
      * @param alertInfo 今日警情信息
      * @author wangyong
      */
-    void insertStationAlertInfo(AlertInfo alertInfo);
+    void insertStationAlertInfo(StationAlertInfo alertInfo);
 
     /**
      * 根据消防站id获取今日警情信息
@@ -30,7 +31,7 @@ public interface AlertInfoService {
      * @return 今日警情信息
      * @author wangyong
      */
-    AlertInfo getStationAlertInfoByStationId(String stationId, Date date, String userId);
+    StationAlertInfo getStationAlertInfoByStationId(String stationId, Date date, String userId);
 
     /**
      * 更新消防站的今日警情信息
@@ -38,16 +39,7 @@ public interface AlertInfoService {
      * @param alertInfo 今日警情信息
      * @author wangyong
      */
-    void updateStationAlertInfoByStationId(AlertInfo alertInfo);
+    void updateStationAlertInfoByStationId(StationAlertInfo alertInfo);
 
-    /**
-     * 获取一个大队的警情信息
-     *
-     * @param brigadeId 大队id
-     * @param date      时间
-     * @return 警情信息
-     * @author wangyong
-     */
-    Map<String, Integer> getBrigadeAlertInfoByBrigadeId(String brigadeId, Date date);
 
 }

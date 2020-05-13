@@ -5,13 +5,16 @@ import com.authine.cloudpivot.engine.api.model.organization.DepartmentModel;
 import com.authine.cloudpivot.engine.api.model.organization.UserModel;
 import com.authine.cloudpivot.web.api.dubbo.DubboConfigService;
 import com.authine.cloudpivot.web.api.entity.AlertInfo;
+import com.authine.cloudpivot.web.api.entity.StationAlertInfo;
 import com.authine.cloudpivot.web.api.mapper.AlertInfoMapper;
 import com.authine.cloudpivot.web.api.mapper.OrgMapper;
 import com.authine.cloudpivot.web.api.service.AlertInfoService;
 import com.authine.cloudpivot.web.api.utils.Constant;
 import com.authine.cloudpivot.web.api.utils.DataSetUtils;
+import com.authine.cloudpivot.web.api.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sun.awt.geom.AreaOp;
 
 import javax.annotation.Resource;
@@ -44,7 +47,7 @@ public class AlertInfoServiceImpl implements AlertInfoService {
      * @author wangyong
      */
     @Override
-    public void insertStationAlertInfo(AlertInfo alertInfo) {
+    public void insertStationAlertInfo(StationAlertInfo alertInfo) {
         alertInfoMapper.insertStationAlertInfo(alertInfo);
     }
 
@@ -57,27 +60,24 @@ public class AlertInfoServiceImpl implements AlertInfoService {
      * @author wangyong
      */
     @Override
-    public AlertInfo getStationAlertInfoByStationId(String stationId, Date date, String userId) {
+    public StationAlertInfo getStationAlertInfoByStationId(String stationId, Date date, String userId) {
 
-        AlertInfo alertInfo = alertInfoMapper.getStationAlertInfoByStationId(stationId, date);
+        StationAlertInfo alertInfo = alertInfoMapper.getStationAlertInfoByStationId(stationId, date);
         if (alertInfo == null) {
             // 今日数据不存在
             OrganizationFacade organizationFacade = dubboConfigService.getOrganizationFacade();
             UserModel user = organizationFacade.getUser(userId);
             DepartmentModel department = organizationFacade.getDepartment(user.getDepartmentId());
-            alertInfo = new AlertInfo();
-            alertInfo.setBrigadeId(orgMapper.getBrigadeIdByStationId(stationId));
+            alertInfo = new StationAlertInfo();
             alertInfo.setStationId(stationId);
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            alertInfo.setDate(calendar.getTime());
+            alertInfo.setDate(DateUtils.getYearMonthDateTime(date));
             alertInfo.setCallPoliceTotal(0);
             alertInfo.setFireAlarmNum(0);
             alertInfo.setEmergencyRescueNum(0);
             alertInfo.setSocialAssistanceNum(0);
             alertInfo.setFalseAlarmNum(0);
+            alertInfo.setOtherAlertNum(0);
             DataSetUtils.setBaseData(alertInfo, user, department, calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DATE), Constant.COMPLETED_STATUS);
             insertStationAlertInfo(alertInfo);
         }
@@ -91,20 +91,8 @@ public class AlertInfoServiceImpl implements AlertInfoService {
      * @author wangyong
      */
     @Override
-    public void updateStationAlertInfoByStationId(AlertInfo alertInfo) {
+    public void updateStationAlertInfoByStationId(StationAlertInfo alertInfo) {
         alertInfoMapper.updateStationAlertInfoByStationId(alertInfo);
     }
 
-    /**
-     * 获取一个大队的警情信息
-     *
-     * @param brigadeId 大队id
-     * @param data      时间
-     * @return 警情信息
-     * @author wangyong
-     */
-    @Override
-    public Map<String, Integer> getBrigadeAlertInfoByBrigadeId(String brigadeId, Date date) {
-        return alertInfoMapper.getBrigadeAlertInfoByBrigadeId(brigadeId, date);
-    }
 }
