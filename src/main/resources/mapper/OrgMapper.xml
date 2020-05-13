@@ -4,46 +4,82 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.authine.cloudpivot.web.api.mapper.OrgMapper">
 
+    <select id="getDetachmentIdByUserId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT id
+        FROM i6t21_ls_detachment
+        WHERE JSON_UNQUOTE(personal -> '$[0].id') = #{userId}
+    </select>
+
     <resultMap id="brigadeNameList" type="java.util.Map">
         <id property="id" column="id"/>
-        <id property="name" column="brigade_name"/>
+        <id property="name" column="deptName"/>
+        <id property="sourceId" column="sourceId"/>
     </resultMap>
+
+    <select id="getBrigadeIdByUserId" parameterType="java.lang.String" resultMap="brigadeNameList">
+        SELECT id,
+               (SELECT name FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id'))     as deptName,
+               (SELECT sourceId FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id')) AS sourceId
+        FROM i6t21_ls_brigade
+        WHERE id IN
+              (SELECT parentId
+               FROM i6t21_b_authority
+               WHERE JSON_UNQUOTE(operator -> '$[0].id') = #{userId})
+    </select>
+
     <select id="getAllBrigadeNameList" resultMap="brigadeNameList">
-        SELECT id, brigade_name
-        FROM i4h9w_brigade
+        SELECT id,
+               (SELECT name FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id'))     as deptName,
+               (SELECT sourceId FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id')) AS sourceId
+        FROM i6t21_ls_brigade
     </select>
 
     <resultMap id="stationList" type="java.util.Map">
         <id property="id" column="id"/>
-        <id property="name" column="station_name"/>
+        <id property="name" column="deptName"/>
     </resultMap>
+
+    <select id="getStationIdByUserId" parameterType="java.lang.String" resultMap="stationList">
+        SELECT id,
+               (SELECT NAME FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id'))     AS deptName,
+               (SELECT sourceId FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id')) AS sourceId
+        FROM i6t21_ls_station
+        WHERE id IN (SELECT parentId FROM i6t21_s_authority WHERE JSON_UNQUOTE(operator -> '$[0].id') = #{userId})
+    </select>
+
+    <select id="getAllStationListByBrigadeId" parameterType="java.lang.String" resultMap="stationList">
+        SELECT id,
+               (SELECT NAME FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id'))     AS deptName,
+               (SELECT sourceId FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id')) AS sourceId
+        FROM i6t21_ls_station
+        WHERE brigade_id = #{brigadeId}
+    </select>
+
+
     <select id="getAllStationList" resultMap="stationList">
-        SELECT id, station_name
-        FROM i4h9w_station
+        SELECT id,
+               (SELECT NAME FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id'))     AS deptName,
+               (SELECT sourceId FROM h_org_department WHERE id = JSON_UNQUOTE(relationDept -> '$[0].id')) AS sourceId
+        FROM i6t21_ls_station
     </select>
 
     <select id="getBrigadeIdByName" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT id
-        FROM i4h9w_brigade
+        FROM i6t21_ls_brigade
         WHERE brigade_name = #{brigadeName}
     </select>
 
     <select id="getBrigadeIdByStationId" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT brigade_id
-        FROM i4h9w_station
+        FROM i6t21_ls_station
         WHERE id = #{stationId}
     </select>
 
     <select id="getStationIdByName" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT id
-        FROM i4h9w_station
+        FROM i6t21_ls_station
         WHERE station_name = #{stationName}
     </select>
 
-    <select id="getAllStationListByBrigadeId" parameterType="java.lang.String" resultMap="stationList">
-        SELECT id, station_name
-        FROM i4h9w_station
-        WHERE brigade_id = #{brigadeId}
-    </select>
 
 </mapper>

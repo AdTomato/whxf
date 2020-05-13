@@ -12,6 +12,33 @@ import java.util.Map;
 public interface OrgService {
 
     /**
+     * 根据人员id获取支队id
+     *
+     * @param userId 人员id
+     * @return 支队id
+     * @author wnagyong
+     */
+    String getDetachmentIdByUserId(String userId);
+
+    /**
+     * 根据人员id获取大队id
+     *
+     * @param userId 人员id
+     * @return 大队id
+     * @author wangyong
+     */
+    List<Map<String, String>> getBrigadeIdByUserId(String userId);
+
+    /**
+     * 根据人员id获取消防站id
+     *
+     * @param userId 人员id
+     * @return 消防站id
+     * @author wangyong
+     */
+    List<Map<String, String>> getStationIdByUserId(String userId);
+
+    /**
      * 获取所有的大队名称列表
      *
      * @return 大队名称，大队id

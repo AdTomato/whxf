@@ -2,11 +2,14 @@ package com.authine.cloudpivot.web.api.controller;
 
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
+import com.authine.cloudpivot.web.api.entity.LargeScreenAuthority;
 import com.authine.cloudpivot.web.api.service.OrgService;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,62 @@ public class OrgController extends BaseController {
 
     @Autowired
     OrgService orgService;
+
+    /**
+     * 判断登陆人的权限
+     *
+     * @param userId 用户id
+     * @return 登录人权限
+     * @author wangyong
+     */
+    @ApiOperation("判断登陆人的权限")
+    @GetMapping("/getUserAuthority")
+    public ResponseResult<Object> getUserAuthority(@RequestParam(required = false) @ApiParam(value = "登陆人的id") String userId) {
+
+        if (StringUtils.isEmpty(userId)) {
+            // 登陆人id为空
+            userId = this.getUserId();
+            if (StringUtils.isEmpty(userId)) {
+                // 没有查询到用户的id
+                return this.getErrResponseResult(null, 405L, "没有查询到用户id");
+            }
+        }
+
+        LargeScreenAuthority largeScreenAuthority = new LargeScreenAuthority();
+        largeScreenAuthority.setIsDetachment(false);
+        largeScreenAuthority.setIsBrigade(false);
+        largeScreenAuthority.setIsStation(false);
+
+        // 支队
+        String detachmentId = orgService.getDetachmentIdByUserId(userId);
+        if (StringUtils.isEmpty(detachmentId)) {
+            // 没有支队的权限
+            // 查询是否有站的权限
+            List<Map<String, String>> brigadeList = orgService.getBrigadeIdByUserId(userId);
+            if (brigadeList.isEmpty()) {
+                // 没有大队权限
+                // 查询是否有站的权限
+                List<Map<String, String>> stationList = orgService.getStationIdByUserId(userId);
+                if (stationList.isEmpty()) {
+                    // 没有消防站的权限
+                    // 该用户没有查看大屏的权限
+                    return this.getErrResponseResult(null, 406L, "没有查询大屏的权限");
+                } else {
+                    largeScreenAuthority.setIsStation(true);
+                    largeScreenAuthority.setStationData(stationList);
+                }
+            } else {
+                // 为大队权限
+                largeScreenAuthority.setIsBrigade(true);
+                largeScreenAuthority.setBrigadeData(brigadeList);
+            }
+        } else {
+            // 为支队权限
+            largeScreenAuthority.setIsDetachment(true);
+            largeScreenAuthority.setDetachmentData(orgService.getAllBrigadeNameList());
+        }
+        return this.getErrResponseResult(largeScreenAuthority, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+    }
 
     /**
      * 获取所有的大队名称列表

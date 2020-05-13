@@ -21,6 +21,42 @@ public class OrgServiceImpl implements OrgService {
     OrgMapper orgMapper;
 
     /**
+     * 根据人员id获取支队id
+     *
+     * @param userId 人员id
+     * @return 支队id
+     * @author wnagyong
+     */
+    @Override
+    public String getDetachmentIdByUserId(String userId) {
+        return orgMapper.getDetachmentIdByUserId(userId);
+    }
+
+    /**
+     * 根据人员id获取大队id
+     *
+     * @param userId 人员id
+     * @return 大队id
+     * @author wangyong
+     */
+    @Override
+    public List<Map<String, String>> getBrigadeIdByUserId(String userId) {
+        return orgMapper.getBrigadeIdByUserId(userId);
+    }
+
+    /**
+     * 根据人员id获取消防站id
+     *
+     * @param userId 人员id
+     * @return 消防站id
+     * @author wangyong
+     */
+    @Override
+    public List<Map<String, String>> getStationIdByUserId(String userId) {
+        return orgMapper.getStationIdByUserId(userId);
+    }
+
+    /**
      * 获取所有的大队名称列表
      *
      * @return 大队名称，大队id
