@@ -121,6 +121,23 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.ahdingtalk</groupId>
+            <artifactId>lippi-oapi</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/lippi-oapi-encrpt.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ahdingtalk</groupId>
+            <artifactId>taobao-sdk</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20200416.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>

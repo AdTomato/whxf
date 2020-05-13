@@ -15,4 +15,7 @@ public interface DeptMapper {
 
     List<Unit> getUsersById(List<String> userIdList);
 
+    //weiyao 获取钉钉部门Id
+    String getddDeptId(String deptId);
+
 }

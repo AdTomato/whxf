@@ -1,0 +1,187 @@
+package com.authine.cloudpivot.web.api.service.impl;
+
+import com.authine.cloudpivot.web.api.entity.PersonlInfo;
+import com.authine.cloudpivot.web.api.mapper.DeptMapper;
+import com.authine.cloudpivot.web.api.service.PersonlInfoService;
+import com.authine.cloudpivot.web.api.utils.DateUtil;
+import com.authine.cloudpivot.web.api.utils.DingDingUtil;
+import com.dingtalk.api.response.OapiAttendanceScheduleListbydayResponse;
+import com.dingtalk.api.response.OapiDepartmentListResponse;
+import com.dingtalk.api.response.OapiSmartworkHrmEmployeeListResponse;
+import com.dingtalk.api.response.OapiUserListbypageResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @author: weiyao
+ * @time: 2020/5/11
+ * @Description: 武汉消防 大屏功能 人员动态模块信息
+ */
+@Service
+public class PersonlInfoServiceImpl implements PersonlInfoService {
+
+    @Resource
+    DeptMapper deptMapper;
+
+    @Override
+    public PersonlInfo getPersonlInfo(String deptId) {
+        PersonlInfo person=new PersonlInfo();
+        String ddDeptId=deptMapper.getddDeptId(deptId);
+        //获取token
+        String token=DingDingUtil.getToken();
+        //设置生日
+
+        if(StringUtils.isNotBlank(ddDeptId)) {
+            //获取部门用户详情
+            OapiUserListbypageResponse deptUserList = DingDingUtil.getDeptUserByDeptId(ddDeptId,token);
+            if(deptUserList.getUserlist()!=null &&deptUserList.getUserlist().size()>0){
+                person.setNumtype1(deptUserList.getUserlist().size());//指挥员人数
+            //    List<String> userNames1=new ArrayList<>();
+                for(OapiUserListbypageResponse.Userlist user :deptUserList.getUserlist()){
+                    person.getUserNames1().add(user.getName());//添加指挥员人员姓名
+                //    userNames1.add(user.getName());//添加指挥员人员姓名
+                    person=getPersonState(person,user.getUserid(),token);//设置在岗，出差，请假人数
+                    person=getBirthdayPerson(person,user.getUserid(),user.getName(),token);//设置生日人员
+                }
+             //   person.setUserNames1(userNames1);
+            }
+
+            //      获取子部门
+            OapiDepartmentListResponse depList= DingDingUtil.getDeptList(ddDeptId,token);
+            if(depList.getDepartment() !=null && depList.getDepartment().size()>0){
+                for(OapiDepartmentListResponse.Department list:depList.getDepartment()){
+                    //获取部门用户详情
+                    OapiUserListbypageResponse tq1 = DingDingUtil.getDeptUserByDeptId(list.getId()+"",token);
+                 //   List<String> userNames1=new ArrayList<>();
+                    if(list.getName().indexOf("特勤一班")!=-1){
+                        if(tq1.getUserlist()!=null &&tq1.getUserlist().size()>0){
+                            person.setNumtype2(tq1.getUserlist().size()+person.getNumtype2());//消防员人数
+                        //    List<String> userNames1=new ArrayList<>();
+                            for(OapiUserListbypageResponse.Userlist user :tq1.getUserlist()){
+                                person.getUserNames2().add(user.getName());//添加指挥员人员姓名
+                           //     userNames1.add(user.getName());//添加指挥员人员姓名
+                                person=getPersonState(person,user.getUserid(),token);//设置在岗，出差，请假人数
+                                person=getBirthdayPerson(person,user.getUserid(),user.getName(),token);//设置生日人员
+                            }
+                        //    person.setUserNames2(userNames1);
+                        }
+
+                    }else if(list.getName().indexOf("特勤二班")!=-1){
+                        if(tq1.getUserlist()!=null &&tq1.getUserlist().size()>0){
+                            person.setNumtype2(tq1.getUserlist().size()+person.getNumtype2());//消防员人数
+                         //   List<String> userNames1=new ArrayList<>();
+                            for(OapiUserListbypageResponse.Userlist user :tq1.getUserlist()){
+                                person.getUserNames3().add(user.getName());//添加指挥员人员姓名
+                             //   userNames1.add(user.getName());//添加指挥员人员姓名
+                                person=getPersonState(person,user.getUserid(),token);//设置在岗，出差，请假人数
+                                person=getBirthdayPerson(person,user.getUserid(),user.getName(),token);//设置生日人员
+                            }
+                       //     person.setUserNames3(userNames1);
+                        }
+
+                    }else if(list.getName().indexOf("灭火一班")!=-1){
+                        if(tq1.getUserlist()!=null &&tq1.getUserlist().size()>0){
+                            person.setNumtype2(tq1.getUserlist().size()+person.getNumtype2());//消防员人数
+                            //   List<String> userNames1=new ArrayList<>();
+                            for(OapiUserListbypageResponse.Userlist user :tq1.getUserlist()){
+                                person.getUserNames4().add(user.getName());//添加指挥员人员姓名
+                          //      userNames1.add(user.getName());//添加指挥员人员姓名
+                                person=getPersonState(person,user.getUserid(),token);//设置在岗，出差，请假人数
+                                person=getBirthdayPerson(person,user.getUserid(),user.getName(),token);//设置生日人员
+                            }
+                     //       person.setUserNames4(userNames1);
+                        }
+
+                    }else if(list.getName().indexOf("灭火二班")!=-1){
+                        if(tq1.getUserlist()!=null &&tq1.getUserlist().size()>0){
+                            person.setNumtype2(tq1.getUserlist().size()+person.getNumtype2());//消防员人数
+                            //   List<String> userNames1=new ArrayList<>();
+                            for(OapiUserListbypageResponse.Userlist user :tq1.getUserlist()){
+                                person.getUserNames5().add(user.getName());//添加指挥员人员姓名
+                         //       userNames1.add(user.getName());//添加指挥员人员姓名
+                                person=getPersonState(person,user.getUserid(),token);//设置在岗，出差，请假人数
+                                person=getBirthdayPerson(person,user.getUserid(),user.getName(),token);//设置生日人员
+                            }
+                        //    person.setUserNames5(userNames1);
+                        }
+
+                    }else if(list.getName().indexOf("通信保障班")!=-1){
+                        if(tq1.getUserlist()!=null &&tq1.getUserlist().size()>0){
+                            person.setNumtype2(tq1.getUserlist().size()+person.getNumtype2());//消防员人数
+                            //   List<String> userNames1=new ArrayList<>();
+                            for(OapiUserListbypageResponse.Userlist user :tq1.getUserlist()){
+                                person.getUserNames6().add(user.getName());//添加指挥员人员姓名
+                           //     userNames1.add(user.getName());//添加指挥员人员姓名
+                                person=getPersonState(person,user.getUserid(),token);//设置在岗，出差，请假人数
+                                person=getBirthdayPerson(person,user.getUserid(),user.getName(),token);//设置生日人员
+                            }
+                      //      person.setUserNames6(userNames1);
+                        }
+
+                    }
+                }
+
+            }
+            //设置总人数
+            person.setNumAll(person.getNumtype1()+person.getNumtype2());
+        }
+
+        return person;
+    }
+
+
+    /*
+    weiyao
+    根据id查询员工上班状态（休假，出差）
+     */
+     PersonlInfo getPersonState(PersonlInfo person,String personId,String token){
+         OapiAttendanceScheduleListbydayResponse rsp=DingDingUtil.listbyday(personId, personId, new Date(),token);
+         if(rsp.getResult()!=null && rsp.getResult().size()>0){
+             //check_type  ==> OnDuty：上班  OffDuty：下班
+        //     String check_type=rsp.getResult().get(0).getCheckType();
+             //1：加班，2：出差，3：请假
+             Long type=rsp.getResult().get(0).getApproveBizType();
+         //    String check_type1=rsp.getResult().get(1).getCheckType();
+             //1：加班，2：出差，3：请假
+         //    Long type2=rsp.getResult().get(1).getApproveBizType();
+             if(type !=null && type==2){
+                 person.setNumGongchai(person.getNumGongchai()+1);
+             }else if(type !=null && type==3){
+                 person.setNumXiujia(person.getNumXiujia()+1);
+             }else{
+                 person.setNumZaigang(person.getNumZaigang()+1);
+             }
+         }else{
+             person.setNumZaigang(person.getNumZaigang()+1);
+         }
+        return person;
+     }
+
+    /*
+    weiyao
+    查询是否今天生日
+      */
+    PersonlInfo getBirthdayPerson(PersonlInfo person,String userid,String name,String token){
+        String doday=DateUtil.getDate("MM-dd");
+        OapiSmartworkHrmEmployeeListResponse us=DingDingUtil.getBirthDayforEmployee(userid,token);
+        List<OapiSmartworkHrmEmployeeListResponse.EmpFieldInfoVO> result =us.getResult();
+
+        if(result.size()>0){
+            if(result.get(0).getFieldList().size()>0){
+                String birthday= result.get(0).getFieldList().get(0).getValue();
+                if(StringUtils.isNotBlank(birthday) && birthday.length()>5){
+                    //今天生日
+                    if(birthday.substring(5).equals(doday)){
+                        person.getBirthdayNames().add(name);
+                    }
+                }
+            }
+
+        }
+        return person;
+    }
+}

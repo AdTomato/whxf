@@ -22,4 +22,8 @@
         </foreach>
         )
     </select>
+
+    <select id="getddDeptId" resultType="java.lang.String">
+        SELECT sourceId FROM h_org_department where id= #{deptId}
+    </select>
 </mapper>
