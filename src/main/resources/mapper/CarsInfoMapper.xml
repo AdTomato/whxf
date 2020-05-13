@@ -11,7 +11,7 @@
     </resultMap>
     <select id="getCarsInfosByStationId" parameterType="java.lang.String" resultMap="carsInfos">
         SELECT *
-        FROM i4h9w_carsinfo
+        FROM i6t21_ls_vehicle
         WHERE station_id = #{stationId}
         ORDER BY createdTime DESC
         LIMIT 0, 1
@@ -20,12 +20,12 @@
     <select id="getVehicleInfoByParentId" parameterType="java.lang.String"
             resultType="com.authine.cloudpivot.web.api.entity.VehicleInfo">
         SELECT *
-        FROM i4h9w_vehicle_info
+        FROM i6t21_v_vehicle_Info
         WHERE parentId = #{id}
     </select>
 
     <update id="updateCarsStatusById">
-        UPDATE i4h9w_vehicle_info
+        UPDATE i6t21_v_vehicle_Info
         SET vehicle_status = #{status}
         WHERE id = #{id}
     </update>

@@ -4,20 +4,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
- * 车辆信息主表信息
+ * 消防站值班信息主表
  *
  * @author wangyong
- * @time 2020/5/11 9:07
+ * @time 2020/5/13 14:39
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarsInfo extends BaseEntity {
+public class StationDutyInfo extends BaseEntity{
 
     /**
-     * 站名称
+     * 消防站id
      */
     private String stationId;
+
+    /**
+     * 日期
+     */
+    private Date date;
 
 }

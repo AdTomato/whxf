@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper">
+
+    <resultMap id="stationDutyInfo" type="com.authine.cloudpivot.web.api.dto.StationDutyInfoDto">
+        <id column="id" property="id"/>
+        <collection property="stationDutyCadres" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getStationDutyCadreByParentId"/>
+        <collection property="brigadeHeadquarters" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getBrigadeHeadquarterByParentId"/>
+    </resultMap>
+    <select id="getStationDutyInfoByStationId" resultMap="stationDutyInfo">
+        SELECT *
+        FROM i6t21_ls_station_duty_info
+        WHERE station_id = #{stationId}
+          AND date = #{date}
+    </select>
+
+    <select id="getStationDutyCadreByParentId" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT duty_name
+        FROM i6t21_di_station_duty_cadre
+        WHERE parentId = #{parentId}
+    </select>
+
+    <select id="getBrigadeHeadquarterByParentId" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT duty_name
+        FROM i6t21_di_brigade_headquarter
+        WHERE parentId = #{parentId}
+    </select>
+
+</mapper>

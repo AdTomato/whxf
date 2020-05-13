@@ -25,7 +25,7 @@ import java.util.Map;
  * @author wangyong
  * @time 2020/5/11 11:50
  */
-@Api(value = "自建组织表单", tags = "自建组织表单")
+@Api(value = "自建组织表单", tags = "二次开发：自建组织表单")
 @RestController
 @RequestMapping("/controller/org")
 @Slf4j
