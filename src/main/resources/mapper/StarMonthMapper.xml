@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.StarMonthMapper">
+
+    <resultMap id="starMonth" type="com.authine.cloudpivot.web.api.entity.StationStarMonth">
+        <id property="stationId" column="station_id"/>
+        <collection property="learningStar" column="learningStarId"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+        <collection property="disciplineStar" column="disciplineStarId"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+        <collection property="trainStar" column="trainStarId"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+        <collection property="houseStar" column="houseStarId"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+    </resultMap>
+
+    <select id="getStationStarMonthByStationId" resultMap="starMonth">
+        SELECT station_id,
+               JSON_UNQUOTE(learning_star -> '$[0].id')   AS learningStarId,
+               JSON_UNQUOTE(discipline_star -> '$[0].id') AS disciplineStarId,
+               JSON_UNQUOTE(train_star -> '$[0].id')      AS trainStarId,
+               JSON_UNQUOTE(house_star -> '$[0].id')      AS houseStarId
+        FROM i6t21_ls_star_month
+        WHERE station_id = #{stationId}
+          AND date = #{date}
+    </select>
+
+    <select id="getOrgUserById" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.Unit">
+        SELECT name, imgUrl
+        FROM h_org_user
+        WHERE id = #{id}
+    </select>
+
+</mapper>

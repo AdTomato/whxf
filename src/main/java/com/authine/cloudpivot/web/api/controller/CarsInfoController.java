@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @time 2020/5/11 10:39
  */
 
-@Api(value = "车辆信息接口", tags = "车辆信息接口")
+@Api(value = "车辆信息接口", tags = "二次开发：车辆信息接口")
 @RestController
 @Slf4j
 @RequestMapping("/controller/carsInfo")

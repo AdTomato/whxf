@@ -121,6 +121,8 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                     .antMatchers("/controller/stationDutyInfo/**").permitAll()
                     // 人员动态
                     .antMatchers("/controller/personlInfo/**").permitAll()
+                    // 每月之星
+                    .antMatchers("/controller/starMonth/**").permitAll()
 
                     // swagger end
                     .antMatchers("/actuator/**", "/monitor/**", "/login/dingtalk", "login/mobile", "login/mobile/ajax", "login/password").permitAll()

@@ -21,7 +21,7 @@ import java.util.Map;
  * @author wangyong
  * @time 2020/5/11 15:04
  */
-@Api(value = "警情信息", tags = "警情信息")
+@Api(value = "警情信息", tags = "二次开发：警情信息")
 @RestController
 @Slf4j
 @RequestMapping("/controller/alertInfo")
