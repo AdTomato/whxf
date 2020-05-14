@@ -29,7 +29,8 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
     @Override
     public PersonlInfo getPersonlInfo(String deptId) {
         PersonlInfo person = new PersonlInfo();
-        String ddDeptId = deptMapper.getddDeptId(deptId);
+//        String ddDeptId = deptMapper.getddDeptId(deptId);
+        String ddDeptId = deptId;
         //获取token
         String token = DingDingUtil.getToken();
         //设置生日
