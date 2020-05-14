@@ -38,6 +38,8 @@ public class PersonlInfo {
     List<String> userNames6;
     //生日集合
     List<String> birthdayNames;
+    //公告信息
+    List<Notice> notice;
 
 
     public  PersonlInfo(){
@@ -60,6 +62,7 @@ public class PersonlInfo {
         this.userNames5=new ArrayList<>();
         this.userNames6=new ArrayList<>();
         this.birthdayNames=new ArrayList<>();
+        this.notice=new ArrayList<>();
     }
 
 

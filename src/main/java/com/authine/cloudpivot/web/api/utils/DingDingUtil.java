@@ -26,7 +26,7 @@ public class DingDingUtil {
     /**
      * 企业Id
      */
-        private static String CORPID = "dingydna2ntaym0hoika";
+    private static String CORPID = "dingydna2ntaym0hoika";
 
     /**
      * 企业应用的凭证密钥
@@ -104,10 +104,10 @@ public class DingDingUtil {
         request.setCreateVo(creatVo);
         OapiCalendarCreateResponse response;
         try {
-             response = client.execute(request, DingDingUtil.getToken());
+            response = client.execute(request, DingDingUtil.getToken());
             if(response.getResult()!=null){
                 Log.info("日程创建成功,日程id为:"+ response.getResult().getDingtalkCalendarId());
-               return response.getResult().getDingtalkCalendarId();
+                return response.getResult().getDingtalkCalendarId();
             }
         } catch (ApiException e) {
             e.printStackTrace();
@@ -148,26 +148,26 @@ public class DingDingUtil {
      * @return
      */
 
-    public static OapiAttendanceScheduleListbydayResponse listbyday(String op_user_id , String user_id, Date date_time, String token){
+    public static OapiAttendanceScheduleListbydayResponse listbyday(String op_user_id , String user_id, Date date_time,String token){
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/attendance/schedule/listbyday");
         OapiAttendanceScheduleListbydayRequest req = new OapiAttendanceScheduleListbydayRequest();
         req.setOpUserId(op_user_id);
         req.setUserId(user_id);
         req.setDateTime(date_time.getTime());
         OapiAttendanceScheduleListbydayResponse rsp = null;
-       // List<OapiAttendanceScheduleListbydayResponse.TopScheduleVo> result = null;
+        // List<OapiAttendanceScheduleListbydayResponse.TopScheduleVo> result = null;
         try {
             rsp = client.execute(req, token);
             if (rsp.getErrcode() == 0) {
-            //    result= rsp.getResult();
+                //    result= rsp.getResult();
 
                 return rsp;
             }
 
         } catch (ApiException e) {
-           log.info("获取token错误:"+e.getErrMsg());
+            log.info("获取token错误:"+e.getErrMsg());
         }
-      //  System.out.println(rsp.getBody());
+        //  System.out.println(rsp.getBody());
         return rsp;
     }
 
@@ -242,8 +242,8 @@ public class DingDingUtil {
         OapiAttendanceShiftListResponse execute = null;
         OapiAttendanceShiftListResponse.PageResult result = null;
         try {
-             execute = client.execute(req, getToken());
-             result = execute.getResult();
+            execute = client.execute(req, getToken());
+            result = execute.getResult();
         } catch (ApiException e) {
             log.info("获取token错误:"+e.getErrMsg());
         }
@@ -330,8 +330,8 @@ public class DingDingUtil {
         OapiAttendanceGetusergroupResponse response = null;
         OapiAttendanceGetusergroupResponse.AtGroupFullForTopVo result =null;
         try {
-             response = client.execute(request,getToken());
-             result = response.getResult();
+            response = client.execute(request,getToken());
+            result = response.getResult();
         } catch (ApiException e) {
             e.printStackTrace();
         }
@@ -357,7 +357,7 @@ public class DingDingUtil {
         OapiAttendanceListResponse response = null;
         List<OapiAttendanceListResponse.Recordresult> recordresult  = null;
         try {
-             response = client.execute(request, getToken());
+            response = client.execute(request, getToken());
             if (response.getErrcode() == 0) {
                 recordresult= response.getRecordresult();
             }
@@ -375,21 +375,21 @@ public class DingDingUtil {
      * @param userId
      * @return
      */
-    public static List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> listtopten(String userId){
+    public static List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> listtopten(String userId,String token){
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/blackboard/listtopten");
         OapiBlackboardListtoptenRequest request = new OapiBlackboardListtoptenRequest();
         request.setUserid(userId);
         OapiBlackboardListtoptenResponse execute = null;
         List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> blackboardList = null;
         try {
-            execute = client.execute(request, getToken());
+            execute = client.execute(request, token);
             if (execute.getErrcode() == 0) {
                 blackboardList = execute.getBlackboardList();
             }
         } catch (ApiException e) {
             log.info("获取token错误:"+e.getErrMsg());
         }
-        log.info("用户发布的公告信息:"+execute.getBody());
+        //   log.info("用户发布的公告信息:"+execute.getBody());
         return blackboardList;
     }
 
@@ -405,7 +405,7 @@ public class DingDingUtil {
         request.setUserid(userId);
         request.setHttpMethod("GET");
         OapiUserGetResponse response = null;
-      //  List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> oapiBlackboardVos = null;
+        //  List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> oapiBlackboardVos = null;
         // List<OapiUserGetResponse.Roles> roles = null;
         try {
             response = client.execute(request, getToken());
@@ -415,7 +415,7 @@ public class DingDingUtil {
         } catch (ApiException e) {
             log.info("获取token错误:"+e.getErrMsg());
         }
-        return null;
+        return response;
     }
 
     /**
@@ -442,7 +442,7 @@ public class DingDingUtil {
         } catch (ApiException e) {
             log.info("获取token错误:"+e.getErrMsg());
         }
-        return null;
+        return response;
     }
 
     /**
@@ -494,7 +494,7 @@ public class DingDingUtil {
         } catch (ApiException e) {
             log.info("获取token错误:"+e.getErrMsg());
         }
-        return null;
+        return response;
     }
 
     /**
@@ -518,7 +518,7 @@ public class DingDingUtil {
         } catch (ApiException e) {
             log.info("获取token错误:"+e.getErrMsg());
         }
-        return null;
+        return response;
     }
 
     /**
@@ -543,6 +543,6 @@ public class DingDingUtil {
         } catch (ApiException e) {
             log.info("获取token错误:"+e.getErrMsg());
         }
-        return null;
+        return response;
     }
 }
