@@ -6,9 +6,12 @@ import com.authine.cloudpivot.web.api.mapper.DeptMapper;
 import com.authine.cloudpivot.web.api.service.PersonlInfoService;
 import com.authine.cloudpivot.web.api.utils.DateUtil;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
+import com.authine.cloudpivot.web.api.utils.RedisUtils;
 import com.dingtalk.api.response.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,6 +28,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
 
     @Resource
     DeptMapper deptMapper;
+
+    @Autowired
+    RedisUtils redisUtils;
 
     @Override
     public PersonlInfo getPersonlInfo(String deptId) {
@@ -172,21 +178,23 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
     查询是否今天生日
       */
     PersonlInfo getBirthdayPerson(PersonlInfo person, String userid, String name, String token) {
+        String birthday = "";
         String doday = DateUtil.getDate("MM-dd");
-        OapiSmartworkHrmEmployeeListResponse us = DingDingUtil.getBirthDayforEmployee(userid, token);
-        List<OapiSmartworkHrmEmployeeListResponse.EmpFieldInfoVO> result = us.getResult();
-
-        if (result.size() > 0) {
+        if (redisUtils.hasKey(userid + "-birthday")) {
+            birthday = redisUtils.get(userid + "-birthday") + "";
+        } else {
+            OapiSmartworkHrmEmployeeListResponse us = DingDingUtil.getBirthDayforEmployee(userid, token);
+            List<OapiSmartworkHrmEmployeeListResponse.EmpFieldInfoVO> result = us.getResult();
             if (result.get(0).getFieldList().size() > 0) {
-                String birthday = result.get(0).getFieldList().get(0).getValue();
-                if (StringUtils.isNotBlank(birthday) && birthday.length() > 5) {
-                    //今天生日
-                    if (birthday.substring(5).equals(doday)) {
-                        person.getBirthdayNames().add(name);
-                    }
-                }
+                birthday = result.get(0).getFieldList().get(0).getValue();
+                redisUtils.set(userid  + "-birthday", birthday, 12 * 60 * 60);
             }
-
+        }
+        if (StringUtils.isNotBlank(birthday) && birthday.length() > 5) {
+            //今天生日
+            if (birthday.substring(5).equals(doday)) {
+                person.getBirthdayNames().add(name);
+            }
         }
         return person;
     }
@@ -196,6 +204,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
    设置公告信息
     */
     PersonlInfo setPersonNotice(PersonlInfo person, OapiUserListbypageResponse.Userlist user, String token) {
+        if(!user.getIsAdmin()) {
+            return person;
+        }
         List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> rsp = DingDingUtil.listtopten(user.getUserid(), token);
         if (CollectionUtils.isNotEmpty(rsp)) {
             //获取当前月时间范围
