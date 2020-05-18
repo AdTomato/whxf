@@ -4,47 +4,46 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
-import com.authine.cloudpivot.web.api.entity.Test;
-import com.authine.cloudpivot.web.api.service.OrgService;
-import com.authine.cloudpivot.web.api.service.TestService;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import io.swagger.util.Json;
+import com.authine.cloudpivot.web.api.view.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * @author: wangyong
- * @time: 2020/4/24 12:58
- * @Description:
+ * 天气
+ *
+ * @author wangyong
+ * @time 2020/5/18 15:57
  */
 @RestController
-@RequestMapping("/controller/testController")
-public class TestController extends BaseController {
-
-    @Autowired
-    TestService testService;
-
-    @Autowired
-    OrgService orgService;
+@RequestMapping("/controller/weather")
+@Api(value = "天气", tags = "二次开发：天气")
+@Slf4j
+public class WeatherController extends BaseController {
 
     @Autowired
     RestTemplate restTemplate;
 
-    @RequestMapping("/getAllTestData")
-    public Object getAllTestData() {
+    @ApiOperation(value = "根据城市获取城市相关天气")
+    @GetMapping("getWeatherByCityCode")
+    public ResponseResult<Object> getWeatherByCityCode(@ApiParam("城市编码") String cityCode) {
         Map<String, Object> result = new HashMap<>();
         getWeather(result, "wuhan");
         getAirQuality(result, "wuhan");
         getHighAndLowTemperature(result, "wuhan");
         return this.getErrResponseResult(result, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
+
 
     /**
      * 获取天气实况
@@ -75,9 +74,6 @@ public class TestController extends BaseController {
                 }
             }
         }
-
-
-
 
 
     }
