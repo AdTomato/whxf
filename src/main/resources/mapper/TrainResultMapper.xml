@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.TrainResultMapper">
+
+    <resultMap id="trainResults" type="com.authine.cloudpivot.web.api.dto.DetailInfoDto">
+        <id column="id" property="id"/>
+        <collection property="DetailInfos" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.TrainResultMapper.getDetailInfoByParentId"/>
+    </resultMap>
+    <select id="getTrainResultsByStationId" parameterType="java.lang.String" resultMap="trainResults">
+        SELECT *
+        FROM i6t21_ls_train_result
+        WHERE station_id = #{stationId}
+          and date_format(date, '%Y-%m') = date_format(now(), '%Y-%m')
+        ORDER BY createdTime DESC
+    </select>
+
+    <select id="getDetailInfoByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.DetailInfo">
+        SELECT *
+        FROM i6t21_tr_detail_info
+        WHERE parentId = #{id}
+    </select>
+
+    <update id="updateSubjectsStatusById">
+        UPDATE i6t21_tr_detail_info
+        SET train_subject = #{subject}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateResultsStatusById">
+        UPDATE i6t21_tr_detail_info
+        SET result = #{result}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

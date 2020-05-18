@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.EduTrainPalnMapper">
+
+    <insert id="insertStationEduTrainPaln" parameterType="com.authine.cloudpivot.web.api.entity.StationAlertInfo">
+        INSERT INTO i6t21_ls_edu_train_paln(id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
+                                            modifier,
+                                            modifiedTime, workflowInstanceId, sequenceNo, sequenceStatus,
+                                            ownerDeptQueryCode, morning_exercises, morning,
+                                            afternoon,
+                                            night, date,
+                                            station_id)
+        VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
+                #{createdTime}, #{modifier}, #{modifiedTime}, #{workflowInstanceId},
+                #{sequenceNo},
+                #{sequenceStatus}, #{ownerDeptQueryCode},
+                #{morning_exercises},
+                #{morning}, #{afternoon}, #{night}, #{date},
+                #{stationId})
+    </insert>
+
+    <select id="getStationEduTrainPalnByStationId"
+            resultType="com.authine.cloudpivot.web.api.entity.StationEduTrainPaln">
+        SELECT *
+        FROM i6t21_ls_edu_train_paln
+        WHERE station_id = #{stationId}
+          AND date_format(date, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+    </select>
+
+    <update id="updateStationEduTrainPalnStationId"
+            parameterType="com.authine.cloudpivot.web.api.entity.StationEduTrainPaln">
+        UPDATE i6t21_ls_edu_train_paln
+        SET morning_exercises = #{morning_exercises},
+            morning           = #{morning},
+            afternoon         = #{afternoon},
+            night             = #{night}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
