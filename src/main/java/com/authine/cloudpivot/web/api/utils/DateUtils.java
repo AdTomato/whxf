@@ -41,4 +41,23 @@ public class DateUtils {
         return calendar.getTime();
     }
 
+    /**
+     * 判断两个时间年、月、日是否相同
+     *
+     * @param d1 时间1
+     * @param d2 时间2
+     * @return true 相同 false 不同
+     * @author wangyong
+     */
+    public static boolean YearMonthDateIsSame(Date d1, Date d2) {
+        if ((d1 == null && d2 == null) || (d1 == null && d2 != null) || (d1 != null && d2 == null)) {
+            return false;
+        }
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(d1);
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(d2);
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) && c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) == c2.get(Calendar.DATE) ? true : false;
+    }
+
 }

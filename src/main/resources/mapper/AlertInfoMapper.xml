@@ -40,4 +40,20 @@
         WHERE id = #{id}
     </update>
 
+    <select id="getDateBrigadeAlertInfoByBrigadeId"
+            resultType="com.authine.cloudpivot.web.api.entity.BrigadeAlertInfo">
+        SELECT *
+        FROM i6t21_ls_brigade_alert_info
+        WHERE brigade_id = #{brigadeId}
+          AND date_format(date, '%Y-%m-%d') = date_format(#{date}, '%Y-%m-%d')
+    </select>
+
+    <select id="getMonthBrigadeAlertInfoByBrigadeId"
+            resultType="com.authine.cloudpivot.web.api.entity.BrigadeAlertInfo">
+        SELECT *
+        FROM i6t21_ls_brigade_alert_info
+        WHERE brigade_id = #{brigadeId}
+          AND date_format(date, '%Y-%m') = date_format(#{date}, '%Y-%m')
+    </select>
+
 </mapper>

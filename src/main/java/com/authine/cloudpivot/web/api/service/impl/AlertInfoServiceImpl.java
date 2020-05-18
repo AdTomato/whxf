@@ -5,6 +5,7 @@ import com.authine.cloudpivot.engine.api.model.organization.DepartmentModel;
 import com.authine.cloudpivot.engine.api.model.organization.UserModel;
 import com.authine.cloudpivot.web.api.dubbo.DubboConfigService;
 import com.authine.cloudpivot.web.api.entity.AlertInfo;
+import com.authine.cloudpivot.web.api.entity.BrigadeAlertInfo;
 import com.authine.cloudpivot.web.api.entity.StationAlertInfo;
 import com.authine.cloudpivot.web.api.mapper.AlertInfoMapper;
 import com.authine.cloudpivot.web.api.mapper.OrgMapper;
@@ -20,6 +21,7 @@ import sun.awt.geom.AreaOp;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -93,6 +95,32 @@ public class AlertInfoServiceImpl implements AlertInfoService {
     @Override
     public void updateStationAlertInfoByStationId(StationAlertInfo alertInfo) {
         alertInfoMapper.updateStationAlertInfoByStationId(alertInfo);
+    }
+
+    /**
+     * 根据大队id获取某一日的大队警情信息
+     *
+     * @param brigadeId 大队id
+     * @param date      时间
+     * @return 大队某日警情信息
+     * @author wangyong
+     */
+    @Override
+    public List<BrigadeAlertInfo> getDateBrigadeAlertInfoByBrigadeId(String brigadeId, Date date) {
+        return alertInfoMapper.getDateBrigadeAlertInfoByBrigadeId(brigadeId, date);
+    }
+
+    /**
+     * 根据大队id获取某一月的大队警情信息
+     *
+     * @param brigadeId 大队id
+     * @param date      时间
+     * @return 大队某月警情信息
+     * @author wangyong
+     */
+    @Override
+    public List<BrigadeAlertInfo> getMonthBrigadeAlertInfoByBrigadeId(String brigadeId, Date date) {
+        return alertInfoMapper.getMonthBrigadeAlertInfoByBrigadeId(brigadeId, date);
     }
 
 }
