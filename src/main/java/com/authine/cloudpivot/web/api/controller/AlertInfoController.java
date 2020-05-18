@@ -118,7 +118,6 @@ public class AlertInfoController extends BaseController {
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("falseAlarmNum", 0);
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("otherAlertNum", 0);
 
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("callPoliceTotal", 0D);
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("fireAlarmNum", 0D);
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("emergencyRescueNum", 0D);
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("socialAssistanceNum", 0D);

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.WeekWorkMapper">
+
+    <resultMap id="weekWorks" type="com.authine.cloudpivot.web.api.dto.WeekFocusDto">
+        <id column="id" property="id"/>
+        <collection property="weekFocusList" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.WeekWorkMapper.getWeekFocusByParentId"/>
+    </resultMap>
+    <select id="getWeekWorksByBrigadeId" parameterType="java.lang.String" resultMap="weekWorks">
+        SELECT *
+        FROM i6t21_ls_week_priority_work
+        WHERE brigade_id = #{brigadeId} AND  YEARWEEK(date_format(date ,'%Y-%m-%d'),1) = YEARWEEK(now(),1)
+        ORDER BY date ASC
+
+    </select>
+
+    <select id="getWeekFocusByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.WeekFocus">
+        SELECT *
+        FROM i6t21_wpw_priority_work
+        WHERE parentId = #{id}
+    </select>
+
+    <update id="updateWorksStatusById">
+        UPDATE i6t21_wpw_priority_work
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
