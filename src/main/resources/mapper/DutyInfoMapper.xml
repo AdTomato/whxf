@@ -31,5 +31,32 @@
         FROM i6t21_di_brigade_headquarter
         WHERE parentId = #{parentId}
     </select>
+    <resultMap id="brigadeDutyInfo" type="com.authine.cloudpivot.web.api.dto.BrigadeDutyInfoDto">
+        <id column="id" property="id"/>
+        <collection property="commanders" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getCommanderByParentId"/>
+        <collection property="commandAssistants" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getCommandAssistantByParentId"/>
+    </resultMap>
+    <select id="getBrigadeDutyInfoByBrigadeId" resultMap="brigadeDutyInfo">
+        SELECT *
+        FROM i6t21_ls_brigade_duty_info
+        WHERE brigade_id = #{brigadeId}
+          AND date_format(date, '%Y-%m-%d') = date_format(#{date}, '%Y-%m-%d')
+    </select>
+
+    <select id="getCommanderByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.Commander">
+        SELECT *
+        FROM i6t21_bdi_commander
+        WHERE parentId = #{id}
+    </select>
+
+    <select id="getCommandAssistantByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.CommandAssistant">
+        SELECT *
+        FROM i6t21_bdi_command_assistant
+        WHERE parentId = #{id}
+    </select>
 
 </mapper>

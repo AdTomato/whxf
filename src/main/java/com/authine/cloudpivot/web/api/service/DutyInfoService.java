@@ -1,5 +1,6 @@
 package com.authine.cloudpivot.web.api.service;
 
+import com.authine.cloudpivot.web.api.dto.BrigadeDutyInfoDto;
 import com.authine.cloudpivot.web.api.dto.StationDutyInfoDto;
 
 import java.util.Date;
@@ -20,6 +21,17 @@ public interface DutyInfoService {
      * @author wangyong
      */
     StationDutyInfoDto getStationDutyInfoByStationId(String stationId, Date date);
+
+
+    /**
+     * 根据大队id，日期获取大队的值班信息
+     *
+     * @param brigadeId 大队id
+     * @param date      日期
+     * @return 大队值班信息
+     * @author wangyong
+     */
+    BrigadeDutyInfoDto getBrigadeDutyInfoByBrigadeId(String brigadeId, Date date);
 
 }
 

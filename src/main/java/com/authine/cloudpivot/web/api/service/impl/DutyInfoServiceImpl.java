@@ -1,5 +1,6 @@
 package com.authine.cloudpivot.web.api.service.impl;
 
+import com.authine.cloudpivot.web.api.dto.BrigadeDutyInfoDto;
 import com.authine.cloudpivot.web.api.dto.StationDutyInfoDto;
 import com.authine.cloudpivot.web.api.mapper.DutyInfoMapper;
 import com.authine.cloudpivot.web.api.service.DutyInfoService;
@@ -31,5 +32,19 @@ public class DutyInfoServiceImpl implements DutyInfoService {
     @Override
     public StationDutyInfoDto getStationDutyInfoByStationId(String stationId, Date date) {
         return dutyInfoMapper.getStationDutyInfoByStationId(stationId, date);
+    }
+
+
+    /**
+     * 根据大队id，日期获取大队的值班信息
+     *
+     * @param brigadeId 大队id
+     * @param date      日期
+     * @return 大队值班信息
+     * @author wangyong
+     */
+    @Override
+    public BrigadeDutyInfoDto getBrigadeDutyInfoByBrigadeId(String brigadeId, Date date) {
+        return dutyInfoMapper.getBrigadeDutyInfoByBrigadeId(brigadeId, date);
     }
 }

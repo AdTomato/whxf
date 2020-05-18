@@ -2,6 +2,7 @@ package com.authine.cloudpivot.web.api.controller;
 
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
+import com.authine.cloudpivot.web.api.dto.BrigadeDutyInfoDto;
 import com.authine.cloudpivot.web.api.dto.StationDutyInfoDto;
 import com.authine.cloudpivot.web.api.service.DutyInfoService;
 import com.authine.cloudpivot.web.api.utils.DateUtils;
@@ -43,6 +44,13 @@ public class DutyInfoController extends BaseController {
     public ResponseResult<Object> getStationDutyInfoByStationId(@ApiParam(value = "消防站id") String stationId, @ApiParam(value = "日期") Date date) {
         StationDutyInfoDto stationDutyInfo = dutyInfoService.getStationDutyInfoByStationId(stationId, DateUtils.getYearMonthDateTime(date));
         return this.getErrResponseResult(stationDutyInfo, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+    }
+
+    @ApiOperation(value = "根据大队id以及日期获取大队的今日值班信息")
+    @GetMapping("/getBrigadeDutyInfoByBrigadeId")
+    public ResponseResult<Object> getBrigadeDutyInfoByBrigadeId(@ApiParam(value = "大队id") String brigadeId, @ApiParam(value = "日期") Date date) {
+        BrigadeDutyInfoDto brigadeDutyInfo = dutyInfoService.getBrigadeDutyInfoByBrigadeId(brigadeId, date);
+        return this.getErrResponseResult(brigadeDutyInfo, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
 
 }
