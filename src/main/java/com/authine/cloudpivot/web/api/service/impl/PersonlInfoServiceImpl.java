@@ -3,6 +3,7 @@ package com.authine.cloudpivot.web.api.service.impl;
 import com.authine.cloudpivot.web.api.entity.Notice;
 import com.authine.cloudpivot.web.api.entity.PersonlInfo;
 import com.authine.cloudpivot.web.api.mapper.DeptMapper;
+import com.authine.cloudpivot.web.api.mapper.TwoRandownMapper;
 import com.authine.cloudpivot.web.api.service.PersonlInfoService;
 import com.authine.cloudpivot.web.api.utils.DateUtil;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
@@ -31,6 +32,7 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
 
     @Autowired
     RedisUtils redisUtils;
+
 
     @Override
     public PersonlInfo getPersonlInfo(String deptId) {
@@ -145,6 +147,52 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
         return person;
     }
 
+    /*
+    获取大队人员信息
+     */
+    @Override
+    public PersonlInfo getTeamPersonlInfo(String sourceId) {
+        PersonlInfo person = new PersonlInfo();
+        //获取token
+        String token = DingDingUtil.getToken();
+        if (StringUtils.isNotBlank(sourceId)) {
+            //获取部门用户详情
+            OapiUserListbypageResponse deptUserList = DingDingUtil.getDeptUserByDeptId(sourceId, token);
+            if (deptUserList.getUserlist() != null && deptUserList.getUserlist().size() > 0) {
+                person.setNumAll(deptUserList.getUserlist().size());//总人数
+                for (OapiUserListbypageResponse.Userlist user : deptUserList.getUserlist()) {
+
+                    if(StringUtils.isNotBlank(user.getPosition())){
+                        if(user.getPosition().equals("大队长") ||user.getPosition().equals("政治教导员")){
+                            //设置大队主官 人员
+                            person.getUserNames1().add(user.getName());
+                            person.setNumtype1(person.getNumtype1()+1);//添加干部人数
+                        }else if(user.getPosition().indexOf("干部")!= -1 ||user.getPosition().equals("副大队长")){
+                            //设置大队干部 人员
+                            person.getUserNames2().add(user.getName());
+                            person.setNumtype1(person.getNumtype1()+1);//添加干部人数
+                        }else{
+                            //设置大队文员 人员
+                            person.getUserNames3().add(user.getName());
+                            person.setNumtype2(person.getNumtype2()+1);//添加文员人数
+                        }
+                    }else{
+                        //没有职位也算文员
+                        person.getUserNames3().add(user.getName());
+                        person.setNumtype2(person.getNumtype2()+1);//添加文员人数
+                    }
+                    //    userNames1.add(user.getName());//添加指挥员人员姓名
+                    person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                    person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
+                    person = setPersonNotice(person, user, token);//获取公告
+                }
+                //   person.setUserNames1(userNames1);
+            }
+        }
+
+        return person;
+    }
+
 
     /*
     weiyao
@@ -231,6 +279,4 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
         }
         return person;
     }
-
-
 }

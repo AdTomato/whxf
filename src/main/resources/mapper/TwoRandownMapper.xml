@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.TwoRandownMapper">
+
+    <select id="getTwoRandownInfo" resultType="com.authine.cloudpivot.web.api.entity.TwoRandownInfo" parameterType="java.lang.String">
+       select id,should_check,checked,remaining_check,date from i6t21_ls_two_randown_one_public ORDER BY createdTime desc  limit 1
+    </select>
+
+    <update id="updateTwoRandownInfo" parameterType="com.authine.cloudpivot.web.api.entity.TwoRandownInfo">
+        UPDATE i6t21_ls_two_randown_one_public
+        <set>
+            <if test="checked != null">checked=#{checked},</if>
+            <if test="remainingCheck != null">remaining_check=#{remainingCheck},</if>
+            <if test="shouldCheck != null">should_check=#{shouldCheck},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

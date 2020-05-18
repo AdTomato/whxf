@@ -12,4 +12,7 @@ public interface PersonlInfoService {
 
     public PersonlInfo getPersonlInfo(String deptId);
 
+    //获取大队人员动态信息
+    public PersonlInfo getTeamPersonlInfo(String sourceId);
+
 }
