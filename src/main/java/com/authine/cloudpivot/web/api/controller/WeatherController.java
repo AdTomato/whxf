@@ -38,9 +38,9 @@ public class WeatherController extends BaseController {
     @GetMapping("getWeatherByCityCode")
     public ResponseResult<Object> getWeatherByCityCode(@ApiParam("城市编码") String cityCode) {
         Map<String, Object> result = new HashMap<>();
-        getWeather(result, "wuhan");
-        getAirQuality(result, "wuhan");
-        getHighAndLowTemperature(result, "wuhan");
+        getWeather(result, cityCode);
+        getAirQuality(result, cityCode);
+        getHighAndLowTemperature(result, cityCode);
         return this.getErrResponseResult(result, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
 
