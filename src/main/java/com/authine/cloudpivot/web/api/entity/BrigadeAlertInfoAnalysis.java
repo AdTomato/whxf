@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,7 +39,7 @@ public class BrigadeAlertInfoAnalysis {
     /**
      * 月度警情分析
      */
-    Map<String, Double> monthAlertAnalysis;
+    List<Map<String, Object>> monthAlertAnalysis;
 
     /**
      * 月度街道警情

@@ -29,7 +29,7 @@
 
     <select id="getOrgUserById" parameterType="java.lang.String"
             resultType="com.authine.cloudpivot.web.api.entity.Unit">
-        SELECT name, imgUrl
+        SELECT name, imgUrl, sourceId, userId
         FROM h_org_user
         WHERE id = #{id}
     </select>

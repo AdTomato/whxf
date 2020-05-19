@@ -22,4 +22,8 @@ public class Unit {
 
     private String imgUrl;
 
+    private String sourceId;
+
+    private String userId;
+
 }

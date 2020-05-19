@@ -19,10 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wangyong
@@ -63,13 +60,27 @@ public class AlertInfoController extends BaseController {
         BrigadeAlertInfoAnalysis brigadeAlertInfoAnalysis = new BrigadeAlertInfoAnalysis();
         initBrigadeAlertInfoAnalysis(brigadeAlertInfoAnalysis, brigadeId, date);
 
-        Map<String, Integer> monthAlertInfoNum = new HashMap<>();
-        monthAlertInfoNum.put("callPoliceTotal", 0);
-        monthAlertInfoNum.put("fireAlarmNum", 0);
-        monthAlertInfoNum.put("emergencyRescueNum", 0);
-        monthAlertInfoNum.put("socialAssistanceNum", 0);
-        monthAlertInfoNum.put("falseAlarmNum", 0);
-        monthAlertInfoNum.put("otherAlertNum", 0);
+        Map<String, Map<String, Object>> monthAlertInfoNum = new HashMap<>();
+
+        monthAlertInfoNum.put("fireAlarmNum", new HashMap<>());
+        monthAlertInfoNum.get("fireAlarmNum").put("name", "火灾扑救");
+        monthAlertInfoNum.get("fireAlarmNum").put("value", 0);
+
+        monthAlertInfoNum.put("emergencyRescueNum", new HashMap<>());
+        monthAlertInfoNum.get("emergencyRescueNum").put("name", "抢险救援");
+        monthAlertInfoNum.get("emergencyRescueNum").put("value", 0);
+
+        monthAlertInfoNum.put("socialAssistanceNum", new HashMap<>());
+        monthAlertInfoNum.get("socialAssistanceNum").put("name", "社会救助");
+        monthAlertInfoNum.get("socialAssistanceNum").put("value", 0);
+
+        monthAlertInfoNum.put("falseAlarmNum", new HashMap<>());
+        monthAlertInfoNum.get("falseAlarmNum").put("name", "虚假报警");
+        monthAlertInfoNum.get("falseAlarmNum").put("value", 0);
+
+        monthAlertInfoNum.put("otherAlertNum", new HashMap<>());
+        monthAlertInfoNum.get("otherAlertNum").put("name", "其他警情");
+        monthAlertInfoNum.get("otherAlertNum").put("value", 0);
 
         for (BrigadeAlertInfo alertInfo : alertInfos) {
             String key = getBrigadeAlertInfoAnalysisKey(alertInfo.getAlertType());
@@ -78,8 +89,8 @@ public class AlertInfoController extends BaseController {
                     brigadeAlertInfoAnalysis.getDateAlertInfo().put(key, brigadeAlertInfoAnalysis.getDateAlertInfo().get(key) + 1);
                     brigadeAlertInfoAnalysis.getDateAlertInfo().put("callPoliceTotal", brigadeAlertInfoAnalysis.getDateAlertInfo().get("callPoliceTotal") + 1);
                 }
-                monthAlertInfoNum.put(key, monthAlertInfoNum.get(key) + 1);
-                monthAlertInfoNum.put("callPoliceTotal", monthAlertInfoNum.get("callPoliceTotal") + 1);
+                Map<String, Object> monthData = monthAlertInfoNum.get(key);
+                monthData.put("value", Integer.parseInt(monthData.get("value") + "") + 1);
                 if (brigadeAlertInfoAnalysis.getMonthStreetAlert().containsKey(alertInfo.getStreet())) {
                     brigadeAlertInfoAnalysis.getMonthStreetAlert().put(alertInfo.getStreet(), brigadeAlertInfoAnalysis.getMonthStreetAlert().get(alertInfo.getStreet()) + 1);
                 } else {
@@ -88,11 +99,11 @@ public class AlertInfoController extends BaseController {
             }
         }
 
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("fireAlarmNum", monthAlertInfoNum.get("fireAlarmNum") == 0 ? 0D : DoubleUtils.doubleRound(monthAlertInfoNum.get("fireAlarmNum") / Double.parseDouble(monthAlertInfoNum.get("callPoliceTotal") + ""), 4));
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("emergencyRescueNum", monthAlertInfoNum.get("emergencyRescueNum") == 0 ? 0D : DoubleUtils.doubleRound(monthAlertInfoNum.get("emergencyRescueNum") / Double.parseDouble(monthAlertInfoNum.get("callPoliceTotal") + ""), 4));
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("socialAssistanceNum", monthAlertInfoNum.get("socialAssistanceNum") == 0 ? 0D : DoubleUtils.doubleRound(monthAlertInfoNum.get("socialAssistanceNum") / Double.parseDouble(monthAlertInfoNum.get("callPoliceTotal") + ""), 4));
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("falseAlarmNum", monthAlertInfoNum.get("falseAlarmNum") == 0 ? 0D : DoubleUtils.doubleRound(monthAlertInfoNum.get("falseAlarmNum") / Double.parseDouble(monthAlertInfoNum.get("callPoliceTotal") + ""), 4));
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("otherAlertNum", monthAlertInfoNum.get("otherAlertNum") == 0 ? 0D : DoubleUtils.doubleRound(monthAlertInfoNum.get("otherAlertNum") / Double.parseDouble(monthAlertInfoNum.get("callPoliceTotal") + ""), 4));
+        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("fireAlarmNum"));
+        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("emergencyRescueNum"));
+        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("socialAssistanceNum"));
+        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("falseAlarmNum"));
+        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("otherAlertNum"));
 
         return this.getErrResponseResult(brigadeAlertInfoAnalysis, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
@@ -109,7 +120,7 @@ public class AlertInfoController extends BaseController {
         brigadeAlertInfoAnalysis.setBrigadeId(brigadeId);
         brigadeAlertInfoAnalysis.setDate(date);
         brigadeAlertInfoAnalysis.setDateAlertInfo(new HashMap<>());
-        brigadeAlertInfoAnalysis.setMonthAlertAnalysis(new HashMap<>());
+        brigadeAlertInfoAnalysis.setMonthAlertAnalysis(new ArrayList<>());
         brigadeAlertInfoAnalysis.setMonthStreetAlert(new HashMap<>());
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("callPoliceTotal", 0);
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("fireAlarmNum", 0);
@@ -118,11 +129,6 @@ public class AlertInfoController extends BaseController {
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("falseAlarmNum", 0);
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("otherAlertNum", 0);
 
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("fireAlarmNum", 0D);
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("emergencyRescueNum", 0D);
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("socialAssistanceNum", 0D);
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("falseAlarmNum", 0D);
-        brigadeAlertInfoAnalysis.getMonthAlertAnalysis().put("otherAlertNum", 0D);
     }
 
     private String getBrigadeAlertInfoAnalysisKey(String alertType) {
