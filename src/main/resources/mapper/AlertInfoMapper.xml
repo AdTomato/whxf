@@ -27,6 +27,8 @@
         FROM i6t21_ls_station_alert_info
         WHERE station_id = #{stationId}
           AND date = #{date}
+        ORDER BY createdTime DESC
+        LIMIT 0, 1
     </select>
 
     <update id="updateStationAlertInfoByStationId" parameterType="com.authine.cloudpivot.web.api.entity.AlertInfo">

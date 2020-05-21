@@ -5,6 +5,7 @@ import com.authine.cloudpivot.web.api.mapper.StarMonthMapper;
 import com.authine.cloudpivot.web.api.service.StarMonthService;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.dingtalk.api.response.OapiUserGetResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,26 +36,23 @@ public class StarMonthServiceIml implements StarMonthService {
     public StationStarMonth getStationStarMonthByStationId(String stationId, Date date) {
 
         StationStarMonth stationStarMonths = starMonthMapper.getStationStarMonthByStationId(stationId, date);
-
-        OapiUserGetResponse trainStar = DingDingUtil.getUserDetail(stationStarMonths.getTrainStar().getUserId());
-        if (trainStar != null) {
-            stationStarMonths.getTrainStar().setImgUrl(trainStar.getAvatar());
-            stationStarMonths.getTrainStar().setName(trainStar.getName());
-        }
-        OapiUserGetResponse disciplineStar = DingDingUtil.getUserDetail(stationStarMonths.getDisciplineStar().getUserId());
-        if (disciplineStar != null) {
-            stationStarMonths.getDisciplineStar().setImgUrl(disciplineStar.getAvatar());
-            stationStarMonths.getDisciplineStar().setName(disciplineStar.getName());
-        }
-        OapiUserGetResponse houseStar = DingDingUtil.getUserDetail(stationStarMonths.getHouseStar().getUserId());
-        if (houseStar != null) {
-            stationStarMonths.getHouseStar().setImgUrl(houseStar.getAvatar());
-            stationStarMonths.getHouseStar().setName(houseStar.getName());
-        }
-        OapiUserGetResponse learningStar = DingDingUtil.getUserDetail(stationStarMonths.getLearningStar().getUserId());
-        if (learningStar != null) {
-            stationStarMonths.getLearningStar().setImgUrl(learningStar.getAvatar());
-            stationStarMonths.getLearningStar().setName(learningStar.getName());
+        if (stationStarMonths != null) {
+            if (!StringUtils.isEmpty(stationStarMonths.getLearningStarImg())) {
+                stationStarMonths.setLearningStarImg("http://121.41.27.194/api/api/aliyun/download?refId=" + stationStarMonths.getLearningStarImg());
+                stationStarMonths.getLearningStar().setImgUrl(stationStarMonths.getLearningStarImg());
+            }
+            if (!StringUtils.isEmpty(stationStarMonths.getDisciplineStarImg())) {
+                stationStarMonths.setDisciplineStarImg("http://121.41.27.194/api/api/aliyun/download?refId=" + stationStarMonths.getDisciplineStarImg());
+                stationStarMonths.getDisciplineStar().setImgUrl(stationStarMonths.getDisciplineStarImg());
+            }
+            if (!StringUtils.isEmpty(stationStarMonths.getTrainStarImg())) {
+                stationStarMonths.setTrainStarImg("http://121.41.27.194/api/api/aliyun/download?refId=" + stationStarMonths.getTrainStarImg());
+                stationStarMonths.getTrainStar().setImgUrl(stationStarMonths.getTrainStarImg());
+            }
+            if (!StringUtils.isEmpty(stationStarMonths.getHouseStarImg())) {
+                stationStarMonths.setHouseStarImg("http://121.41.27.194/api/api/aliyun/download?refId=" + stationStarMonths.getHouseStarImg());
+                stationStarMonths.getHouseStar().setImgUrl(stationStarMonths.getHouseStarImg());
+            }
         }
 
         return stationStarMonths;

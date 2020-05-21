@@ -1,5 +1,6 @@
 package com.authine.cloudpivot.web.api.service.impl;
 
+import com.authine.cloudpivot.web.api.entity.BaseEntity;
 import com.authine.cloudpivot.web.api.entity.Notice;
 import com.authine.cloudpivot.web.api.entity.PersonlInfo;
 import com.authine.cloudpivot.web.api.mapper.DeptMapper;
@@ -17,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: weiyao
@@ -50,9 +53,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                 person.setNumtype1(deptUserList.getUserlist().size());//指挥员人数
                 //    List<String> userNames1=new ArrayList<>();
                 for (OapiUserListbypageResponse.Userlist user : deptUserList.getUserlist()) {
-                    person.getUserNames1().add(user.getName());//添加指挥员人员姓名
+                    //    person.getUserNames1().add(user.getName());//添加指挥员人员姓名
                     //    userNames1.add(user.getName());//添加指挥员人员姓名
-                    person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                    person = getPersonState(person, user.getUserid(), token,1,user.getName());//设置在岗，出差，请假人数
                     person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
                     person = setPersonNotice(person, user, token);//获取公告
                 }
@@ -71,9 +74,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             person.setNumtype2(tq1.getUserlist().size() + person.getNumtype2());//消防员人数
                             //    List<String> userNames1=new ArrayList<>();
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
-                                person.getUserNames2().add(user.getName());//添加指挥员人员姓名
+                                //     person.getUserNames2().add(user.getName());//添加指挥员人员姓名
                                 //     userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token,2,user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
                                 person = setPersonNotice(person, user, token);//获取公告
                             }
@@ -85,9 +88,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             person.setNumtype2(tq1.getUserlist().size() + person.getNumtype2());//消防员人数
                             //   List<String> userNames1=new ArrayList<>();
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
-                                person.getUserNames3().add(user.getName());//添加指挥员人员姓名
+                                //   person.getUserNames3().add(user.getName());//添加指挥员人员姓名
                                 //   userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token,3,user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
                                 person = setPersonNotice(person, user, token);//获取公告
                             }
@@ -99,9 +102,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             person.setNumtype2(tq1.getUserlist().size() + person.getNumtype2());//消防员人数
                             //   List<String> userNames1=new ArrayList<>();
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
-                                person.getUserNames4().add(user.getName());//添加指挥员人员姓名
+                                //   person.getUserNames4().add(user.getName());//添加指挥员人员姓名
                                 //      userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token,4,user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
                                 person = setPersonNotice(person, user, token);//获取公告
                             }
@@ -113,9 +116,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             person.setNumtype2(tq1.getUserlist().size() + person.getNumtype2());//消防员人数
                             //   List<String> userNames1=new ArrayList<>();
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
-                                person.getUserNames5().add(user.getName());//添加指挥员人员姓名
+                                //   person.getUserNames5().add(user.getName());//添加指挥员人员姓名
                                 //       userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token,5,user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
                                 person = setPersonNotice(person, user, token);//获取公告
                             }
@@ -127,9 +130,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             person.setNumtype2(tq1.getUserlist().size() + person.getNumtype2());//消防员人数
                             //   List<String> userNames1=new ArrayList<>();
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
-                                person.getUserNames6().add(user.getName());//添加指挥员人员姓名
+                                //    person.getUserNames6().add(user.getName());//添加指挥员人员姓名
                                 //     userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token,6,user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
                                 person = setPersonNotice(person, user, token);//获取公告
                             }
@@ -165,24 +168,28 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                     if(StringUtils.isNotBlank(user.getPosition())){
                         if(user.getPosition().equals("大队长") ||user.getPosition().equals("政治教导员")){
                             //设置大队主官 人员
-                            person.getUserNames1().add(user.getName());
+                            //  person.getUserNames1().add(user.getName());
+                            person = getPersonState(person, user.getUserid(), token,1,user.getName());//设置在岗，出差，请假人数
                             person.setNumtype1(person.getNumtype1()+1);//添加干部人数
                         }else if(user.getPosition().indexOf("干部")!= -1 ||user.getPosition().equals("副大队长")){
                             //设置大队干部 人员
-                            person.getUserNames2().add(user.getName());
+                            //     person.getUserNames2().add(user.getName());
+                            person = getPersonState(person, user.getUserid(), token,2,user.getName());//设置在岗，出差，请假人数
                             person.setNumtype1(person.getNumtype1()+1);//添加干部人数
                         }else{
                             //设置大队文员 人员
-                            person.getUserNames3().add(user.getName());
+                            //    person.getUserNames3().add(user.getName());
+                            person = getPersonState(person, user.getUserid(), token,3,user.getName());//设置在岗，出差，请假人数
                             person.setNumtype2(person.getNumtype2()+1);//添加文员人数
                         }
                     }else{
                         //没有职位也算文员
-                        person.getUserNames3().add(user.getName());
+                        //   person.getUserNames3().add(user.getName());
+                        person = getPersonState(person, user.getUserid(), token,3,user.getName());//设置在岗，出差，请假人数
                         person.setNumtype2(person.getNumtype2()+1);//添加文员人数
                     }
                     //    userNames1.add(user.getName());//添加指挥员人员姓名
-                    person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
+                    //     person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
                     person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
                     person = setPersonNotice(person, user, token);//获取公告
                 }
@@ -197,8 +204,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
     /*
     weiyao
     根据id查询员工上班状态（休假，出差）
+    types: //详细人员集合1-6
      */
-    PersonlInfo getPersonState(PersonlInfo person, String personId, String token) {
+    PersonlInfo getPersonState(PersonlInfo person, String personId, String token,Integer types,String name) {
         OapiAttendanceScheduleListbydayResponse rsp = DingDingUtil.listbyday(personId, personId, new Date(), token);
         if (rsp.getResult() != null && rsp.getResult().size() > 0) {
             //check_type  ==> OnDuty：上班  OffDuty：下班
@@ -210,13 +218,21 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
             //    Long type2=rsp.getResult().get(1).getApproveBizType();
             if (type != null && type == 2) {
                 person.setNumGongchai(person.getNumGongchai() + 1);
+                //设置人员和颜色
+                person=getNameAndColor(person,types,2,name);
             } else if (type != null && type == 3) {
                 person.setNumXiujia(person.getNumXiujia() + 1);
+                //设置人员和颜色
+                person=getNameAndColor(person,types,3,name);
             } else {
                 person.setNumZaigang(person.getNumZaigang() + 1);
+                //设置人员和颜色
+                person=getNameAndColor(person,types,1,name);
             }
         } else {
             person.setNumZaigang(person.getNumZaigang() + 1);
+            //设置人员和颜色
+            person=getNameAndColor(person,types,1,name);
         }
         return person;
     }
@@ -279,4 +295,88 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
         }
         return person;
     }
+
+    /*
+  设置姓名和颜色
+  color:颜色 1，白色，2出差，3，休假
+     */
+    PersonlInfo getNameAndColor(PersonlInfo person, int type, int color,String name) {
+        BaseEntity map=new BaseEntity();
+        if(color==2){
+            map.setSequenceNo(name);
+            map.setSequenceStatus("2");
+            switch (type){
+                case 1:
+                    person.getUserNames1().add(map);
+                    break;
+                case 2:
+                    person.getUserNames2().add(map);
+                    break;
+                case 3:
+                    person.getUserNames3().add(map);
+                    break;
+                case 4:
+                    person.getUserNames4().add(map);
+                    break;
+                case 5:
+                    person.getUserNames5().add(map);
+                    break;
+                case 6:
+                    person.getUserNames6().add(map);
+                    break;
+            }
+        }else if(color==3){
+            map.setSequenceNo(name);
+            map.setSequenceStatus("3");
+            switch (type){
+                case 1:
+                    person.getUserNames1().add(map);
+                    break;
+                case 2:
+                    person.getUserNames2().add(map);
+                    break;
+                case 3:
+                    person.getUserNames3().add(map);
+                    break;
+                case 4:
+                    person.getUserNames4().add(map);
+                    break;
+                case 5:
+                    person.getUserNames5().add(map);
+                    break;
+                case 6:
+                    person.getUserNames6().add(map);
+                    break;
+            }
+        }else{
+            map.setSequenceNo(name);
+            map.setSequenceStatus("1");
+            switch (type){
+                case 1:
+                    person.getUserNames1().add(map);
+                    break;
+                case 2:
+                    person.getUserNames2().add(map);
+                    break;
+                case 3:
+                    person.getUserNames3().add(map);
+                    break;
+                case 4:
+                    person.getUserNames4().add(map);
+                    break;
+                case 5:
+                    person.getUserNames5().add(map);
+                    break;
+                case 6:
+                    person.getUserNames6().add(map);
+                    break;
+            }
+        }
+
+        return person;
+    }
+
+
+
+
 }

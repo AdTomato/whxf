@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StationStarMonth {
+public class StationStarMonth extends BaseEntity{
 
     /**
      * 消防站id
@@ -26,9 +26,19 @@ public class StationStarMonth {
     private Unit learningStar;
 
     /**
+     * 学习之星头像
+     */
+    private String learningStarImg;
+
+    /**
      * 纪律之星
      */
     private Unit disciplineStar;
+
+    /**
+     * 纪律之星头像
+     */
+    private String disciplineStarImg;
 
     /**
      * 训练之星
@@ -36,8 +46,18 @@ public class StationStarMonth {
     private Unit trainStar;
 
     /**
+     * 训练之星头像
+     */
+    private String trainStarImg;
+
+    /**
      * 内务之星
      */
     private Unit houseStar;
+
+    /**
+     * 内务之星头像
+     */
+    private String houseStarImg;
 
 }

@@ -2,10 +2,10 @@ package com.authine.cloudpivot.web.api.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: weiyao
@@ -30,12 +30,12 @@ public class PersonlInfo {
     private Integer numXiujia;
 
     //详细人员集合
-    List<String> userNames1;
-    List<String> userNames2;
-    List<String> userNames3;
-    List<String> userNames4;
-    List<String> userNames5;
-    List<String> userNames6;
+    List<BaseEntity> userNames1;
+    List<BaseEntity> userNames2;
+    List<BaseEntity> userNames3;
+    List<BaseEntity> userNames4;
+    List<BaseEntity> userNames5;
+    List<BaseEntity> userNames6;
     //生日集合
     List<String> birthdayNames;
     //公告信息

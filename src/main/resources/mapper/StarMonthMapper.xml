@@ -6,18 +6,32 @@
 
     <resultMap id="starMonth" type="com.authine.cloudpivot.web.api.entity.StationStarMonth">
         <id property="stationId" column="station_id"/>
+        <id property="id" column="id"/>
         <collection property="learningStar" column="learningStarId"
                     select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+        <collection property="learningStarImg" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getLearningStarImg"/>
+
         <collection property="disciplineStar" column="disciplineStarId"
                     select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+        <collection property="disciplineStarImg" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getDisciplineStarImg"/>
+
         <collection property="trainStar" column="trainStarId"
                     select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+        <collection property="trainStarImg" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getTrainStarImg"/>
+
         <collection property="houseStar" column="houseStarId"
                     select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getOrgUserById"/>
+        <collection property="houseStarImg" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.StarMonthMapper.getHouseStarImg"/>
+
     </resultMap>
 
     <select id="getStationStarMonthByStationId" resultMap="starMonth">
         SELECT station_id,
+               id,
                JSON_UNQUOTE(learning_star -> '$[0].id')   AS learningStarId,
                JSON_UNQUOTE(discipline_star -> '$[0].id') AS disciplineStarId,
                JSON_UNQUOTE(train_star -> '$[0].id')      AS trainStarId,
@@ -32,6 +46,45 @@
         SELECT name, imgUrl, sourceId, userId
         FROM h_org_user
         WHERE id = #{id}
+    </select>
+    <select id="getLearningStarImg" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT refId
+        FROM h_biz_attachment
+        WHERE bizObjectId = #{id}
+          AND schemaCode = 'ls_star_month'
+          AND bizPropertyCode = 'learning_star_img'
+        ORDER BY createdTime DESC
+        LIMIT 0, 1
+    </select>
+
+    <select id="getDisciplineStarImg" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT refId AS disciplineStarImg
+        FROM h_biz_attachment
+        WHERE bizObjectId = #{id}
+          AND schemaCode = 'ls_star_month'
+          AND bizPropertyCode = 'discipline_star_img'
+        ORDER BY createdTime DESC
+        LIMIT 0, 1
+    </select>
+
+    <select id="getTrainStarImg" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT refId AS trainStarImg
+        FROM h_biz_attachment
+        WHERE bizObjectId = #{id}
+          AND schemaCode = 'ls_star_month'
+          AND bizPropertyCode = 'train_star_img'
+        ORDER BY createdTime DESC
+        LIMIT 0, 1
+    </select>
+
+    <select id="getHouseStarImg" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT refId AS houseStarImg
+        FROM h_biz_attachment
+        WHERE bizObjectId = #{id}
+          AND schemaCode = 'ls_star_month'
+          AND bizPropertyCode = 'house_star_img'
+        ORDER BY createdTime DESC
+        LIMIT 0, 1
     </select>
 
 </mapper>

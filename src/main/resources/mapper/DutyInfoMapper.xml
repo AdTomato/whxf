@@ -15,7 +15,7 @@
         SELECT *
         FROM i6t21_ls_station_duty_info
         WHERE station_id = #{stationId}
-          AND date = #{date}
+          AND YEARWEEK(date_format(date, '%Y-%m-%d')) = YEARWEEK(#{date});
     </select>
 
     <select id="getStationDutyCadreByParentId" parameterType="java.lang.String"
@@ -42,7 +42,7 @@
         SELECT *
         FROM i6t21_ls_brigade_duty_info
         WHERE brigade_id = #{brigadeId}
-          AND date_format(date, '%Y-%m-%d') = date_format(#{date}, '%Y-%m-%d')
+          AND YEARWEEK(date_format(date, '%Y-%m-%d')) = YEARWEEK(#{date});
     </select>
 
     <select id="getCommanderByParentId" parameterType="java.lang.String"
