@@ -1,10 +1,12 @@
 package com.authine.cloudpivot.web.api.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.authine.cloudpivot.web.api.entity.BaseEntity;
 import com.authine.cloudpivot.web.api.entity.Notice;
 import com.authine.cloudpivot.web.api.entity.PersonlInfo;
 import com.authine.cloudpivot.web.api.mapper.DeptMapper;
-import com.authine.cloudpivot.web.api.mapper.TwoRandownMapper;
 import com.authine.cloudpivot.web.api.service.PersonlInfoService;
 import com.authine.cloudpivot.web.api.utils.DateUtil;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
@@ -13,14 +15,12 @@ import com.dingtalk.api.response.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author: weiyao
@@ -55,9 +55,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                 for (OapiUserListbypageResponse.Userlist user : deptUserList.getUserlist()) {
                     //    person.getUserNames1().add(user.getName());//添加指挥员人员姓名
                     //    userNames1.add(user.getName());//添加指挥员人员姓名
-                    person = getPersonState(person, user.getUserid(), token,1,user.getName());//设置在岗，出差，请假人数
+                    person = getPersonState(person, user.getUserid(), token, 1, user.getName());//设置在岗，出差，请假人数
                     person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
-                    person = setPersonNotice(person, user, token);//获取公告
+                    //        person = setPersonNotice(person, user, token);//获取公告
                 }
                 //   person.setUserNames1(userNames1);
             }
@@ -76,9 +76,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
                                 //     person.getUserNames2().add(user.getName());//添加指挥员人员姓名
                                 //     userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token,2,user.getName());//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token, 2, user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
-                                person = setPersonNotice(person, user, token);//获取公告
+                                //                person = setPersonNotice(person, user, token);//获取公告
                             }
                             //    person.setUserNames2(userNames1);
                         }
@@ -90,9 +90,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
                                 //   person.getUserNames3().add(user.getName());//添加指挥员人员姓名
                                 //   userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token,3,user.getName());//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token, 3, user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
-                                person = setPersonNotice(person, user, token);//获取公告
+                                //              person = setPersonNotice(person, user, token);//获取公告
                             }
                             //     person.setUserNames3(userNames1);
                         }
@@ -104,9 +104,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
                                 //   person.getUserNames4().add(user.getName());//添加指挥员人员姓名
                                 //      userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token,4,user.getName());//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token, 4, user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
-                                person = setPersonNotice(person, user, token);//获取公告
+                                //             person = setPersonNotice(person, user, token);//获取公告
                             }
                             //       person.setUserNames4(userNames1);
                         }
@@ -118,9 +118,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
                                 //   person.getUserNames5().add(user.getName());//添加指挥员人员姓名
                                 //       userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token,5,user.getName());//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token, 5, user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
-                                person = setPersonNotice(person, user, token);//获取公告
+                                //         person = setPersonNotice(person, user, token);//获取公告
                             }
                             //    person.setUserNames5(userNames1);
                         }
@@ -132,9 +132,9 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                             for (OapiUserListbypageResponse.Userlist user : tq1.getUserlist()) {
                                 //    person.getUserNames6().add(user.getName());//添加指挥员人员姓名
                                 //     userNames1.add(user.getName());//添加指挥员人员姓名
-                                person = getPersonState(person, user.getUserid(), token,6,user.getName());//设置在岗，出差，请假人数
+                                person = getPersonState(person, user.getUserid(), token, 6, user.getName());//设置在岗，出差，请假人数
                                 person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
-                                person = setPersonNotice(person, user, token);//获取公告
+                                //     person = setPersonNotice(person, user, token);//获取公告
                             }
                             //      person.setUserNames6(userNames1);
                         }
@@ -165,33 +165,33 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                 person.setNumAll(deptUserList.getUserlist().size());//总人数
                 for (OapiUserListbypageResponse.Userlist user : deptUserList.getUserlist()) {
 
-                    if(StringUtils.isNotBlank(user.getPosition())){
-                        if(user.getPosition().equals("大队长") ||user.getPosition().equals("政治教导员")){
+                    if (StringUtils.isNotBlank(user.getPosition())) {
+                        if (user.getPosition().equals("大队长") || user.getPosition().equals("政治教导员")) {
                             //设置大队主官 人员
                             //  person.getUserNames1().add(user.getName());
-                            person = getPersonState(person, user.getUserid(), token,1,user.getName());//设置在岗，出差，请假人数
-                            person.setNumtype1(person.getNumtype1()+1);//添加干部人数
-                        }else if(user.getPosition().indexOf("干部")!= -1 ||user.getPosition().equals("副大队长")){
+                            person = getPersonState(person, user.getUserid(), token, 1, user.getName());//设置在岗，出差，请假人数
+                            person.setNumtype1(person.getNumtype1() + 1);//添加干部人数
+                        } else if (user.getPosition().indexOf("干部") != -1 || user.getPosition().equals("副大队长")) {
                             //设置大队干部 人员
                             //     person.getUserNames2().add(user.getName());
-                            person = getPersonState(person, user.getUserid(), token,2,user.getName());//设置在岗，出差，请假人数
-                            person.setNumtype1(person.getNumtype1()+1);//添加干部人数
-                        }else{
+                            person = getPersonState(person, user.getUserid(), token, 2, user.getName());//设置在岗，出差，请假人数
+                            person.setNumtype1(person.getNumtype1() + 1);//添加干部人数
+                        } else {
                             //设置大队文员 人员
                             //    person.getUserNames3().add(user.getName());
-                            person = getPersonState(person, user.getUserid(), token,3,user.getName());//设置在岗，出差，请假人数
-                            person.setNumtype2(person.getNumtype2()+1);//添加文员人数
+                            person = getPersonState(person, user.getUserid(), token, 3, user.getName());//设置在岗，出差，请假人数
+                            person.setNumtype2(person.getNumtype2() + 1);//添加文员人数
                         }
-                    }else{
+                    } else {
                         //没有职位也算文员
                         //   person.getUserNames3().add(user.getName());
-                        person = getPersonState(person, user.getUserid(), token,3,user.getName());//设置在岗，出差，请假人数
-                        person.setNumtype2(person.getNumtype2()+1);//添加文员人数
+                        person = getPersonState(person, user.getUserid(), token, 3, user.getName());//设置在岗，出差，请假人数
+                        person.setNumtype2(person.getNumtype2() + 1);//添加文员人数
                     }
                     //    userNames1.add(user.getName());//添加指挥员人员姓名
                     //     person = getPersonState(person, user.getUserid(), token);//设置在岗，出差，请假人数
                     person = getBirthdayPerson(person, user.getUserid(), user.getName(), token);//设置生日人员
-                    person = setPersonNotice(person, user, token);//获取公告
+                    //      person = setPersonNotice(person, user, token);//获取公告
                 }
                 //   person.setUserNames1(userNames1);
             }
@@ -206,8 +206,78 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
     根据id查询员工上班状态（休假，出差）
     types: //详细人员集合1-6
      */
-    PersonlInfo getPersonState(PersonlInfo person, String personId, String token,Integer types,String name) {
-        OapiAttendanceScheduleListbydayResponse rsp = DingDingUtil.listbyday(personId, personId, new Date(), token);
+    PersonlInfo getPersonState(PersonlInfo person, String personId, String token, Integer types, String name) {
+        int color = 1;
+        //查询排版信息（不排班）
+        //    OapiAttendanceScheduleListbydayResponse rsp = DingDingUtil.listbyday(personId, personId, new Date(), token);
+        //查询请假信息
+        OapiAttendanceGetleavestatusResponse qingjia = DingDingUtil.getleavestatus(personId, token);
+        if (qingjia.getResult().getLeaveStatus() != null && qingjia.getResult().getLeaveStatus().size() > 0) {
+            //当天存在请假
+            color = 3;
+        } else {
+            //出差
+            //获取商旅出差审批列表（之前七天发起的审批）
+            OapiProcessinstanceListidsResponse slChuChai = DingDingUtil.getApprovalIds(personId, token);
+            if (slChuChai.getResult() != null && slChuChai.getResult().getList().size() > 0) {
+                List<String> ids = slChuChai.getResult().getList();
+                for (String id : ids) {
+                    //查询商旅出差数据
+                    OapiProcessinstanceGetResponse detail = DingDingUtil.getApprovalDetail(id, token);
+                    if (detail.getProcessInstance().getResult() != null && "agree".equals(detail.getProcessInstance().getResult())) {
+                        List<OapiProcessinstanceGetResponse.FormComponentValueVo> list = detail.getProcessInstance().getFormComponentValues();
+                        for (OapiProcessinstanceGetResponse.FormComponentValueVo vo : list) {
+//                        JSONObject json = JSONObject.fromObject(vo.getValue());
+                            JSONArray json = (JSONArray) JSON.parse(vo.getValue());
+//                        Log.info(json.getString("value"));
+                            for (Object obj : json) {
+                                JSONObject j = (JSONObject) obj;
+                                if ("TableField".equals(j.get("componentName"))) {
+                                    String val = (String) j.get("value");
+                                    //     val=val.replaceAll("\", "");//去掉斜巷
+                                    JSONArray json2 = (JSONArray) JSON.parse(val);
+                                    JSONObject json2Data = (JSONObject) json2.get(0);
+                                    JSONArray rowValues = (JSONArray) json2Data.get("rowValue");
+                                    for (Object rowValue : rowValues) {
+                                        String strttime = "";
+                                        String endTime = "";
+                                        JSONObject j2 = (JSONObject) rowValue;
+                                        if ("startTime".equals(j2.get("bizAlias"))) {
+                                            strttime = (String) j2.get("value");
+                                        } else if ("endTime".equals(j2.get("bizAlias"))) {
+                                            endTime = (String) j2.get("value");
+                                        }
+                                        if (strttime.length() > 1 && endTime.length() > 1) {
+                                            if (isEffectiveDate(strttime, endTime)) {
+                                                //出差时间包含当天，状态是出差
+                                                color = 2;
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        if (color == 2) {//公差
+            person.setNumGongchai(person.getNumGongchai() + 1);
+            //设置人员和颜色
+            person = getNameAndColor(person, types, 2, name);
+        } else if (color == 3) {//请假
+            person.setNumXiujia(person.getNumXiujia() + 1);
+            //设置人员和颜色
+            person = getNameAndColor(person, types, 3, name);
+        } else {//在岗
+            person.setNumZaigang(person.getNumZaigang() + 1);
+            //设置人员和颜色
+            person = getNameAndColor(person, types, 1, name);
+        }
+        /*
         if (rsp.getResult() != null && rsp.getResult().size() > 0) {
             //check_type  ==> OnDuty：上班  OffDuty：下班
             //     String check_type=rsp.getResult().get(0).getCheckType();
@@ -233,7 +303,7 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
             person.setNumZaigang(person.getNumZaigang() + 1);
             //设置人员和颜色
             person=getNameAndColor(person,types,1,name);
-        }
+        }*/
         return person;
     }
 
@@ -251,7 +321,7 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
             List<OapiSmartworkHrmEmployeeListResponse.EmpFieldInfoVO> result = us.getResult();
             if (result.get(0).getFieldList().size() > 0) {
                 birthday = result.get(0).getFieldList().get(0).getValue();
-                redisUtils.set(userid  + "-birthday", birthday, 12 * 60 * 60);
+                redisUtils.set(userid + "-birthday", birthday, 12 * 60 * 60);
             }
         }
         if (StringUtils.isNotBlank(birthday) && birthday.length() > 5) {
@@ -267,8 +337,8 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
    weiyao
    设置公告信息
     */
-    PersonlInfo setPersonNotice(PersonlInfo person, OapiUserListbypageResponse.Userlist user, String token) {
-        if(!user.getIsAdmin()) {
+    PersonlInfo setPersonNotice2(PersonlInfo person, OapiUserListbypageResponse.Userlist user, String token) {
+        if (!user.getIsAdmin()) {
             return person;
         }
         List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> rsp = DingDingUtil.listtopten(user.getUserid(), token);
@@ -300,12 +370,12 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
   设置姓名和颜色
   color:颜色 1，白色，2出差，3，休假
      */
-    PersonlInfo getNameAndColor(PersonlInfo person, int type, int color,String name) {
-        BaseEntity map=new BaseEntity();
-        if(color==2){
+    PersonlInfo getNameAndColor(PersonlInfo person, int type, int color, String name) {
+        BaseEntity map = new BaseEntity();
+        if (color == 2) {
             map.setSequenceNo(name);
             map.setSequenceStatus("2");
-            switch (type){
+            switch (type) {
                 case 1:
                     person.getUserNames1().add(map);
                     break;
@@ -325,10 +395,10 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                     person.getUserNames6().add(map);
                     break;
             }
-        }else if(color==3){
+        } else if (color == 3) {
             map.setSequenceNo(name);
             map.setSequenceStatus("3");
-            switch (type){
+            switch (type) {
                 case 1:
                     person.getUserNames1().add(map);
                     break;
@@ -348,10 +418,10 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                     person.getUserNames6().add(map);
                     break;
             }
-        }else{
+        } else {
             map.setSequenceNo(name);
             map.setSequenceStatus("1");
-            switch (type){
+            switch (type) {
                 case 1:
                     person.getUserNames1().add(map);
                     break;
@@ -376,7 +446,25 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
         return person;
     }
 
-
+    /*
+    weiyao
+    判断开始时间，结束时间是否包含今天"yyyy-MM-dd"格式
+     */
+    public boolean isEffectiveDate(String startTime, String endTime) {
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Long now = sdf2.parse(sdf2.format(new Date())).getTime();
+            Long start = sdf2.parse(startTime).getTime();
+            Long end = sdf2.parse(endTime).getTime();
+            if (now >= start && now <= end) {
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
 
 
 }

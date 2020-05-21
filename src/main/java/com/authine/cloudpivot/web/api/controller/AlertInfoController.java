@@ -82,6 +82,8 @@ public class AlertInfoController extends BaseController {
         monthAlertInfoNum.get("otherAlertNum").put("name", "其他警情");
         monthAlertInfoNum.get("otherAlertNum").put("value", 0);
 
+        Map<String, Integer> monthStreetAlert = new HashMap<>();
+
         for (BrigadeAlertInfo alertInfo : alertInfos) {
             String key = getBrigadeAlertInfoAnalysisKey(alertInfo.getAlertType());
             if (!StringUtils.isEmpty(key)) {
@@ -91,12 +93,17 @@ public class AlertInfoController extends BaseController {
                 }
                 Map<String, Object> monthData = monthAlertInfoNum.get(key);
                 monthData.put("value", Integer.parseInt(monthData.get("value") + "") + 1);
-                if (brigadeAlertInfoAnalysis.getMonthStreetAlert().containsKey(alertInfo.getStreet())) {
-                    brigadeAlertInfoAnalysis.getMonthStreetAlert().put(alertInfo.getStreet(), brigadeAlertInfoAnalysis.getMonthStreetAlert().get(alertInfo.getStreet()) + 1);
+                if (monthStreetAlert.containsKey(alertInfo.getStreet())) {
+                    monthStreetAlert.put(alertInfo.getStreet(), monthStreetAlert.get(alertInfo.getStreet()) + 1);
                 } else {
-                    brigadeAlertInfoAnalysis.getMonthStreetAlert().put(alertInfo.getStreet(), 1);
+                    monthStreetAlert.put(alertInfo.getStreet(), 1);
                 }
             }
+        }
+
+        for (String street : monthStreetAlert.keySet()) {
+            brigadeAlertInfoAnalysis.getStreets().add(street);
+            brigadeAlertInfoAnalysis.getAlertNums().add(Integer.parseInt(monthStreetAlert.get(street) + ""));
         }
 
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("fireAlarmNum"));
@@ -104,6 +111,8 @@ public class AlertInfoController extends BaseController {
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("socialAssistanceNum"));
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("falseAlarmNum"));
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("otherAlertNum"));
+
+
 
         return this.getErrResponseResult(brigadeAlertInfoAnalysis, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
@@ -121,7 +130,9 @@ public class AlertInfoController extends BaseController {
         brigadeAlertInfoAnalysis.setDate(date);
         brigadeAlertInfoAnalysis.setDateAlertInfo(new HashMap<>());
         brigadeAlertInfoAnalysis.setMonthAlertAnalysis(new ArrayList<>());
-        brigadeAlertInfoAnalysis.setMonthStreetAlert(new HashMap<>());
+//        brigadeAlertInfoAnalysis.setMonthStreetAlert(new HashMap<>());
+        brigadeAlertInfoAnalysis.setStreets(new ArrayList<>());
+        brigadeAlertInfoAnalysis.setAlertNums(new ArrayList<>());
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("callPoliceTotal", 0);
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("fireAlarmNum", 0);
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("emergencyRescueNum", 0);

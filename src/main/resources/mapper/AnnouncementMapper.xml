@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.AnnouncementMapper">
+
+    <select id="getIsNotCloseStationAnnouncementByStationId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.StationAnnouncement">
+        SELECT id, station_id, title, announcement_info, is_close
+        FROM i6t21_ls_station_announcement
+        WHERE station_id = #{stationId}
+          AND is_close = 0
+        ORDER BY createdTime DESC
+    </select>
+
+    <select id="getIsNotCloseBrigadeAnnouncementByBrigadeId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.BrigadeAnnouncement">
+        SELECT id, brigade_id, title, announcement_info, is_close
+        FROM i6t21_ls_brigade_announcement
+        WHERE brigade_id = #{brigadeId}
+          AND is_close = 0
+        ORDER BY createdTime DESC
+    </select>
+
+</mapper>

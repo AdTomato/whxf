@@ -44,6 +44,16 @@ public class BrigadeAlertInfoAnalysis {
     /**
      * 月度街道警情
      */
-    Map<String, Integer> monthStreetAlert;
+//    Map<String, Integer> monthStreetAlert;
+
+    /**
+     * 街道列表
+     */
+    List<String> streets;
+
+    /**
+     * 警情列表
+     */
+    List<Integer> alertNums;
 
 }
