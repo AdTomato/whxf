@@ -1,6 +1,7 @@
 package com.authine.cloudpivot.web.api.service;
 
 import com.authine.cloudpivot.web.api.entity.QuantiAssessment;
+import com.authine.cloudpivot.web.api.entity.QuantiAssessmentMonthInfoList;
 
 import java.util.Date;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface QuantiAssessmentService {
     List<QuantiAssessment> getAssess(String stationId);
 
     void updateQuantiAssessmentById(QuantiAssessment quantiAssessment);
+
+    List<QuantiAssessmentMonthInfoList> getAssessMonthDetail(String stationId);
 }

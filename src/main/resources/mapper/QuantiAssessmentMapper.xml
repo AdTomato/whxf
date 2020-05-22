@@ -31,4 +31,36 @@
         </set>
         WHERE id = #{id}
     </update>
+    <!--查询部门集合当月-->
+    <select id="getTeamforMonth" parameterType="java.lang.String" resultType="java.lang.String">
+        select team from i6t21_ls_quantitative_assessment where
+        DATE_FORMAT( date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        and station_id = #{stationId}
+         GROUP BY team
+    </select>
+
+    <!--根据部门名查询姓名集合-->
+    <select id="getNameforTeam" parameterType="java.lang.String" resultType="java.lang.String">
+        select evaluation_name from i6t21_ls_quantitative_assessment where
+        DATE_FORMAT( date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        and station_id = #{stationId}
+        and team=#{team}
+         GROUP BY evaluation_name
+    </select>
+    <!--根据姓名查询各项分数总和-->
+    <select id="getSumScoreforNameCurrentMonth" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select sum(score) from i6t21_ls_quantitative_assessment  where
+         DATE_FORMAT( date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m')
+        and station_id = #{stationId}
+        and evaluation_name=#{evaluationName}
+        <if test="project != null"> and project=#{project}</if>
+    </select>
+
+    <!--根据姓名查询各项分数总和上月-->
+    <select id="getSumScoreforNameLastMonth" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select ifnull(sum(score), 0) + 100 from i6t21_ls_quantitative_assessment  where
+          PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( date, '%Y%m' ) ) =1
+        and station_id = #{stationId}
+        and evaluation_name=#{evaluationName}
+    </select>
 </mapper>

@@ -48,7 +48,11 @@ public class AlertInfoController extends BaseController {
 
     @ApiOperation("更新今日警情信息")
     @PutMapping("/updateStationAlertInfoByStationId")
-    public ResponseResult<Object> updateStationAlertInfoByStationId(@RequestBody StationAlertInfo alertInfo) {
+    public ResponseResult<Object> updateStationAlertInfoByStationId(@RequestBody StationAlertInfo alertInfo, @RequestParam String consumerType, @RequestParam String password) {
+        String pwd = UserUtils.getConsumerPassword(alertInfo.getStationId(), this.getUserId(), consumerType);
+        if (StringUtils.isEmpty(pwd) || !pwd.equals(password)) {
+            this.getErrResponseResult(null, 407L, "密码错误");
+        }
         alertInfoService.updateStationAlertInfoByStationId(alertInfo);
         return this.getErrResponseResult("更新成功", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
@@ -111,7 +115,6 @@ public class AlertInfoController extends BaseController {
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("socialAssistanceNum"));
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("falseAlarmNum"));
         brigadeAlertInfoAnalysis.getMonthAlertAnalysis().add(monthAlertInfoNum.get("otherAlertNum"));
-
 
 
         return this.getErrResponseResult(brigadeAlertInfoAnalysis, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());

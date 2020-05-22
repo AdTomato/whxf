@@ -90,4 +90,32 @@ public interface OrgMapper {
      */
     List<Map<String, String>> getAllStationListByBrigadeId(String brigadeId);
 
+    /**
+     * 获取消防站登录人密码
+     *
+     * @param stationId 消防站id
+     * @param userId    登录人id
+     * @return 登录人密码
+     * @author wangyong
+     */
+    String getStationPassword(String stationId, String userId);
+
+    /**
+     * 获取大队登录人密码
+     *
+     * @param brigadeId 大队id
+     * @param userId    登录人id
+     * @return 登录人密码
+     * @author wangyong
+     */
+    String getBrigadePassword(String brigadeId, String userId);
+
+    /**
+     *
+     * @param detachmentId
+     * @param userId
+     * @return
+     */
+    String getDetachmentPassword(String detachmentId, String userId);
+
 }

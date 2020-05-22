@@ -4,11 +4,14 @@ import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.dto.VehicleInfoDto;
 import com.authine.cloudpivot.web.api.service.CarsInfoService;
+import com.authine.cloudpivot.web.api.utils.UserUtils;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.reactive.server.XpathAssertions;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -53,7 +56,11 @@ public class CarsInfoController extends BaseController {
      */
     @ApiOperation(value = "更新消防车辆的状态")
     @PutMapping("/updateCarsStatus")
-    public ResponseResult<Object> updateCarsStatus(@RequestParam String carsId, @RequestParam String status) {
+    public ResponseResult<Object> updateCarsStatus(@RequestParam String carsId, @RequestParam String status, @RequestParam String stationId, @RequestParam String consumerType, @RequestParam String password) {
+        String pwd = UserUtils.getConsumerPassword(stationId, this.getUserId(), consumerType);
+        if (StringUtils.isEmpty(pwd) || !pwd.equals(password)) {
+            this.getErrResponseResult(null, 407L, "密码错误");
+        }
         carsInfoService.updateCarsStatusById(carsId, status);
         return this.getErrResponseResult("更新成功", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }

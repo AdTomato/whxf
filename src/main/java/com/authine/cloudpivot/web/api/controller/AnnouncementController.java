@@ -2,7 +2,6 @@ package com.authine.cloudpivot.web.api.controller;
 
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
-import com.authine.cloudpivot.web.api.entity.BaseEntity;
 import com.authine.cloudpivot.web.api.entity.BrigadeAnnouncement;
 import com.authine.cloudpivot.web.api.entity.StationAnnouncement;
 import com.authine.cloudpivot.web.api.service.AnnouncementService;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public class AnnouncementController extends BaseController {
 
     @ApiOperation(value = "获取消防站没有关闭的公告")
     @GetMapping("/getStationAnnouncement")
-    public ResponseResult<Object> getStationAnnouncement(@RequestParam(required = true) @ApiParam(value = "消防站id") String stationId) {
+    public ResponseResult<Object> getStationAnnouncement(@ApiParam(value = "消防站id", required = true) String stationId) {
         log.info("获取消防站公告");
         long startTime = System.currentTimeMillis();
         List<StationAnnouncement> stationAnnouncementList = announcementService.getIsNotCloseStationAnnouncementByStationId(stationId);
@@ -70,7 +68,7 @@ public class AnnouncementController extends BaseController {
 
     @ApiOperation(value = "获取大队没有关闭的公告")
     @GetMapping("/getBrigadeAnnouncement")
-    public ResponseResult<Object> getBrigadeAnnouncement(@RequestParam(required = true) @ApiParam(value = "大队id") String brigadeId) {
+    public ResponseResult<Object> getBrigadeAnnouncement(@ApiParam(value = "大队id", required = true) String brigadeId) {
 
         log.info("获取大队公告");
         long startTime = System.currentTimeMillis();

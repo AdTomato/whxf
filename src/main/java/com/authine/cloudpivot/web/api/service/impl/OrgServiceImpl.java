@@ -113,4 +113,43 @@ public class OrgServiceImpl implements OrgService {
     public List<Map<String, String>> getAllStationListByBrigadeId(String brigadeId) {
         return orgMapper.getAllStationListByBrigadeId(brigadeId);
     }
+
+    /**
+     * 获取消防站登录人密码
+     *
+     * @param stationId 消防站id
+     * @param userId    登录人id
+     * @return 登录人密码
+     * @author wangyong
+     */
+    @Override
+    public String getStationPassword(String stationId, String userId) {
+        return orgMapper.getStationPassword(stationId, userId);
+    }
+
+    /**
+     * 获取大队登录人密码
+     *
+     * @param brigadeId 大队id
+     * @param userId    登录人id
+     * @return 登录人密码
+     * @author wangyong
+     */
+    @Override
+    public String getBrigadePassword(String brigadeId, String userId) {
+        return orgMapper.getBrigadePassword(brigadeId, userId);
+    }
+
+    /**
+     * 获取支队登录人密码
+     *
+     * @param detachmentId 支队id
+     * @param userId       登录人id
+     * @return 登录人密码
+     * @author wnagyong
+     */
+    @Override
+    public String getDetachmentPassword(String detachmentId, String userId) {
+        return orgMapper.getDetachmentPassword(detachmentId, userId);
+    }
 }

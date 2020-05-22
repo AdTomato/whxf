@@ -39,10 +39,10 @@ public class TestController extends BaseController {
 
     @RequestMapping("/getAllTestData")
     public Object getAllTestData() {
-        Map<String, Object> result = new HashMap<>();
-        getWeather(result, "wuhan");
-        getAirQuality(result, "wuhan");
-        getHighAndLowTemperature(result, "wuhan");
+        Object result = null;
+        result = orgService.getStationPassword("af127c960a8b490683a1ff9c57b83163", "2c90a43e6efe8b04016effb119271c6f");
+        result = orgService.getBrigadePassword("586d63454d6841dfa667405212572ca7", "2c90a43e6eda16b5016ef3d7088225fd");
+        result = orgService.getDetachmentPassword("f05e6ce21b4942ccb3bd2e90b7a936dc", "2c90a43e6eb51314016eb667507239e9");
         return this.getErrResponseResult(result, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
 

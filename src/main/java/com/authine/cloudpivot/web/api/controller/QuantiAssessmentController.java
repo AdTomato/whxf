@@ -5,6 +5,7 @@ import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.entity.PersonlInfo;
 import com.authine.cloudpivot.web.api.entity.QuantiAssessment;
+import com.authine.cloudpivot.web.api.entity.QuantiAssessmentMonthInfoList;
 import com.authine.cloudpivot.web.api.entity.StationAlertInfo;
 import com.authine.cloudpivot.web.api.service.QuantiAssessmentService;
 import com.authine.cloudpivot.web.api.utils.DateUtils;
@@ -48,5 +49,16 @@ public class QuantiAssessmentController extends BaseController {
     public ResponseResult<Object> updateQuantiAssessmentById(@RequestBody QuantiAssessment alertInfo) {
         quantiAssessmentService.updateQuantiAssessmentById(alertInfo);
         return this.getErrResponseResult("更新成功", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+    }
+
+    @ApiOperation("获取量化考勤周报月度详情信息")
+    @GetMapping("/getAssessmentMonthDetailInfo")
+    public ResponseResult<Object> getAssessmentInfoMonthDetail(@RequestParam String stationId) {
+        if(StringUtils.isNotEmpty(stationId)){
+            List<QuantiAssessmentMonthInfoList> list = quantiAssessmentService.getAssessMonthDetail(stationId);
+            return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        }else{
+            return this.getErrResponseResult(null, 404L, "没有部门Id");
+        }
     }
 }

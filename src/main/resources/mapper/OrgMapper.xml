@@ -81,5 +81,25 @@
         WHERE station_name = #{stationName}
     </select>
 
+    <select id="getStationPassword" resultType="java.lang.String">
+        SELECT password
+        FROM i6t21_s_authority
+        WHERE JSON_UNQUOTE(operator -> '$[0].id') = #{userId}
+          AND parentId = #{stationId}
+    </select>
+
+    <select id="getBrigadePassword" resultType="java.lang.String">
+        SELECT password
+        FROM i6t21_b_authority
+        WHERE JSON_UNQUOTE(operator -> '$[0].id') = #{userId}
+          AND parentId = #{brigadeId}
+    </select>
+
+    <select id="getDetachmentPassword" resultType="java.lang.String">
+        SELECT password
+        FROM i6t21_ls_detachment
+        WHERE id = #{detachmentId}
+    </select>
+
 
 </mapper>
