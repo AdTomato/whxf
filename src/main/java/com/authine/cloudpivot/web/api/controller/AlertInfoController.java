@@ -34,6 +34,9 @@ public class AlertInfoController extends BaseController {
     @Autowired
     AlertInfoService alertInfoService;
 
+    @Autowired
+    UserUtils userUtils;
+
     @ApiOperation("根据消防站id获取今日警情信息")
     @GetMapping("/getStationAlertInfoByStationId")
     public ResponseResult<Object> getStationAlertInfoByStationId(@RequestParam String stationId, Date date) {
@@ -49,9 +52,9 @@ public class AlertInfoController extends BaseController {
     @ApiOperation("更新今日警情信息")
     @PutMapping("/updateStationAlertInfoByStationId")
     public ResponseResult<Object> updateStationAlertInfoByStationId(@RequestBody StationAlertInfo alertInfo, @RequestParam String consumerType, @RequestParam String password) {
-        String pwd = UserUtils.getConsumerPassword(alertInfo.getStationId(), this.getUserId(), consumerType);
+        String pwd = userUtils.getConsumerPassword(alertInfo.getStationId(), this.getUserId(), consumerType);
         if (StringUtils.isEmpty(pwd) || !pwd.equals(password)) {
-            this.getErrResponseResult(null, 407L, "密码错误");
+            return this.getErrResponseResult(null, 407L, "密码错误");
         }
         alertInfoService.updateStationAlertInfoByStationId(alertInfo);
         return this.getErrResponseResult("更新成功", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
@@ -92,15 +95,15 @@ public class AlertInfoController extends BaseController {
             String key = getBrigadeAlertInfoAnalysisKey(alertInfo.getAlertType());
             if (!StringUtils.isEmpty(key)) {
                 if (DateUtils.YearMonthDateIsSame(alertInfo.getDate(), date)) {
-                    brigadeAlertInfoAnalysis.getDateAlertInfo().put(key, brigadeAlertInfoAnalysis.getDateAlertInfo().get(key) + 1);
-                    brigadeAlertInfoAnalysis.getDateAlertInfo().put("callPoliceTotal", brigadeAlertInfoAnalysis.getDateAlertInfo().get("callPoliceTotal") + 1);
+                    brigadeAlertInfoAnalysis.getDateAlertInfo().put(key, brigadeAlertInfoAnalysis.getDateAlertInfo().get(key) + alertInfo.getQuantity());
+                    brigadeAlertInfoAnalysis.getDateAlertInfo().put("callPoliceTotal", brigadeAlertInfoAnalysis.getDateAlertInfo().get("callPoliceTotal") + alertInfo.getQuantity());
                 }
                 Map<String, Object> monthData = monthAlertInfoNum.get(key);
-                monthData.put("value", Integer.parseInt(monthData.get("value") + "") + 1);
+                monthData.put("value", Integer.parseInt(monthData.get("value") + "") + alertInfo.getQuantity());
                 if (monthStreetAlert.containsKey(alertInfo.getStreet())) {
-                    monthStreetAlert.put(alertInfo.getStreet(), monthStreetAlert.get(alertInfo.getStreet()) + 1);
+                    monthStreetAlert.put(alertInfo.getStreet(), monthStreetAlert.get(alertInfo.getStreet()) + alertInfo.getQuantity());
                 } else {
-                    monthStreetAlert.put(alertInfo.getStreet(), 1);
+                    monthStreetAlert.put(alertInfo.getStreet(), + alertInfo.getQuantity());
                 }
             }
         }
@@ -133,7 +136,6 @@ public class AlertInfoController extends BaseController {
         brigadeAlertInfoAnalysis.setDate(date);
         brigadeAlertInfoAnalysis.setDateAlertInfo(new HashMap<>());
         brigadeAlertInfoAnalysis.setMonthAlertAnalysis(new ArrayList<>());
-//        brigadeAlertInfoAnalysis.setMonthStreetAlert(new HashMap<>());
         brigadeAlertInfoAnalysis.setStreets(new ArrayList<>());
         brigadeAlertInfoAnalysis.setAlertNums(new ArrayList<>());
         brigadeAlertInfoAnalysis.getDateAlertInfo().put("callPoliceTotal", 0);

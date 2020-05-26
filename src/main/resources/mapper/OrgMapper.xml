@@ -98,7 +98,7 @@
     <select id="getDetachmentPassword" resultType="java.lang.String">
         SELECT password
         FROM i6t21_ls_detachment
-        WHERE id = #{detachmentId}
+        WHERE JSON_UNQUOTE(personal -> '$[0].id') = #{userId}
     </select>
 
 

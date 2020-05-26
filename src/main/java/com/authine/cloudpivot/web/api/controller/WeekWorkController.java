@@ -4,11 +4,13 @@ package com.authine.cloudpivot.web.api.controller;
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.dto.WeekFocusDto;
 import com.authine.cloudpivot.web.api.service.WeekWorkService;
+import com.authine.cloudpivot.web.api.utils.UserUtils;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,9 @@ public class WeekWorkController extends BaseController {
     @Autowired
     WeekWorkService weekWorkService;
 
+    @Autowired
+    UserUtils userUtils;
+
     /**
      *根据大队id获取该队的本周重点工作信息
      * @param brigadeId
@@ -52,7 +57,11 @@ public class WeekWorkController extends BaseController {
      */
     @ApiOperation(value = "更新工作完成进度的状态")
     @PutMapping("/updateWorksStatus")
-    public ResponseResult<Object> updateWorksStatus(@RequestParam String id, @RequestParam String status) {
+    public ResponseResult<Object> updateWorksStatus(@RequestParam String id, @RequestParam String status,@RequestParam String brigadeId, @RequestParam String consumerType, @RequestParam String password) {
+        String pwd = userUtils.getConsumerPassword(brigadeId, this.getUserId(), consumerType);
+        if (StringUtils.isEmpty(pwd) || !pwd.equals(password)) {
+            return this.getErrResponseResult(null, 407L, "密码错误");
+        }
         weekWorkService.updateWorksStatusById(id, status);
         return this.getErrResponseResult("更新成功", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }

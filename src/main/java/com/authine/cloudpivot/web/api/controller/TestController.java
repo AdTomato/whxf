@@ -7,11 +7,14 @@ import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.entity.Test;
 import com.authine.cloudpivot.web.api.service.OrgService;
 import com.authine.cloudpivot.web.api.service.TestService;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import io.swagger.util.Json;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -44,6 +47,21 @@ public class TestController extends BaseController {
         result = orgService.getBrigadePassword("586d63454d6841dfa667405212572ca7", "2c90a43e6eda16b5016ef3d7088225fd");
         result = orgService.getDetachmentPassword("f05e6ce21b4942ccb3bd2e90b7a936dc", "2c90a43e6eb51314016eb667507239e9");
         return this.getErrResponseResult(result, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+    }
+
+    @RequestMapping("/getTest")
+    public Object getTestData(@RequestParam String token) {
+
+        String url = "http://121.41.27.194/form/detail?sheetCode=ls_station_announcement&objectId=ebb3ceec50834ddf899aa07d1e643531&schemaCode=ls_station_announcement&return=/application/large_screen/application-list/ls_station_announcement?parentId=2c90a43e71afeaba0172119450a349ce&code=ls_station_announcement&openMode&pcUrl&queryCode=&iframeAction=detail";
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiYXBpIl0sInVzZXJfaWQiOiIyYzkwYTQzZTZlZmU4YjA0MDE2ZWZmYjExOTI3MWM2ZiIsInVzZXJfbmFtZSI6IjI1MDc2NDAzNDE5MzgxNDAiLCJzY29wZSI6WyJyZWFkIl0sIm1vYmlsZSI6ZmFsc2UsImlzQWRtaW4iOnRydWUsImV4cCI6MTU5MDM2NDk3NCwiaXNBcHBBZG1pbiI6ZmFsc2UsImF1dGhvcml0aWVzIjpbIlVTRVIiLCJBVVRIX1NZU1RFTV9NQU5BR0UiXSwianRpIjoiZWY5OWNhNTEtMDNiYS00YzhhLWFmNjgtYzZkZTBhNWUzMGNmIiwiY2xpZW50X2lkIjoiYXBpIn0.sZfC5vYBXzKEufxKvr5lLQwAZt3UG_WcLpjlNRIafXQ4bUHqRrttzYRTXHSZtuC-x3jZkXoAeLFW3-ZiItPn7FicsGafcPuIo7g3EKEOHSjOhEKZZHBGMBLvxgCrl0G51CBSw_uEi_Aiv_CK_aFvJFXvxxn3rR8TN-4WzCto_oJiCgzJPN6n1FRa0SO0NS_SBiab7Pj4JIilF0-WZ-HbfNP3vvty6HaE2TTEfEr3GgbF97qyau2n6CNOeJSwZ_v8H_TMGSYjvXP9i4jhQnrAJ4lFN1f_Xs-j4fQbAMjzSLJ57tIAZzHf2tK0RD4H5l-UTLuRivnzJdIEmVjwjhNYnA");
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+//        restTemplate.getForEntity(url, request, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        return this.getErrResponseResult(response, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
 
     /**

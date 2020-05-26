@@ -30,6 +30,9 @@ public class CarsInfoController extends BaseController {
     @Autowired
     CarsInfoService carsInfoService;
 
+    @Autowired
+    UserUtils userUtils;
+
     /**
      * 根据消防站的id获取该消防站的所有车辆信息
      *
@@ -57,9 +60,9 @@ public class CarsInfoController extends BaseController {
     @ApiOperation(value = "更新消防车辆的状态")
     @PutMapping("/updateCarsStatus")
     public ResponseResult<Object> updateCarsStatus(@RequestParam String carsId, @RequestParam String status, @RequestParam String stationId, @RequestParam String consumerType, @RequestParam String password) {
-        String pwd = UserUtils.getConsumerPassword(stationId, this.getUserId(), consumerType);
+        String pwd = userUtils.getConsumerPassword(stationId, this.getUserId(), consumerType);
         if (StringUtils.isEmpty(pwd) || !pwd.equals(password)) {
-            this.getErrResponseResult(null, 407L, "密码错误");
+            return this.getErrResponseResult(null, 407L, "密码错误");
         }
         carsInfoService.updateCarsStatusById(carsId, status);
         return this.getErrResponseResult("更新成功", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());

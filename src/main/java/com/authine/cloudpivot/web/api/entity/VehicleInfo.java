@@ -43,16 +43,16 @@ public class VehicleInfo {
     /**
      * 车辆起重重量
      */
-    private Double liftingWeight;
+    private Integer liftingWeight;
 
     /**
      * 车辆的发动机功率
      */
-    private Double enginePower;
+    private Integer enginePower;
 
     /**
      * 车辆的载液容量
      */
-    private Double carrierVolume;
+    private String carrierVolume;
 
 }

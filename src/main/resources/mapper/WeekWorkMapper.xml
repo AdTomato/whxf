@@ -12,7 +12,8 @@
     <select id="getWeekWorksByBrigadeId" parameterType="java.lang.String" resultMap="weekWorks">
         SELECT *
         FROM i6t21_ls_week_priority_work
-        WHERE brigade_id = #{brigadeId} AND  YEARWEEK(date_format(date ,'%Y-%m-%d'),1) = YEARWEEK(now(),1)
+        WHERE brigade_id = #{brigadeId}
+          AND YEARWEEK(date_format(date, '%Y-%m-%d'), 1) = YEARWEEK(now(), 1)
         ORDER BY date ASC
 
     </select>
