@@ -152,4 +152,16 @@ public class OrgServiceImpl implements OrgService {
     public String getDetachmentPassword(String detachmentId, String userId) {
         return orgMapper.getDetachmentPassword(detachmentId, userId);
     }
+
+    /**
+     * 获取大屏的标题
+     *
+     * @param id id值
+     * @return 大屏标题
+     * @author wangyong
+     */
+    @Override
+    public String getTitle(String id) {
+        return orgMapper.getTitle(id);
+    }
 }

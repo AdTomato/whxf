@@ -101,5 +101,15 @@
         WHERE JSON_UNQUOTE(personal -> '$[0].id') = #{userId}
     </select>
 
+    <select id="getTitle" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT deptName
+        FROM i6t21_ls_brigade
+        WHERE id = #{id}
+        UNION
+        SELECT deptName
+        FROM i6t21_ls_station
+        WHERE id = #{id}
+    </select>
+
 
 </mapper>

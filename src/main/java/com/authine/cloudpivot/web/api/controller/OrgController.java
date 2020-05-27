@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -153,8 +154,18 @@ public class OrgController extends BaseController {
      */
     @ApiOperation("根据大队id获取大队下面的消防站")
     @GetMapping("/getAllStationListByBrigadeId")
-    public ResponseResult<Object> getAllStationListByBrigadeId(@RequestParam String brigadeId) {
+    public ResponseResult<Object> getAllStationListByBrigadeId(@RequestParam @ApiParam(value = "大队id", required = true) String brigadeId) {
         List<Map<String, String>> stationList = orgService.getAllStationListByBrigadeId(brigadeId);
         return this.getErrResponseResult(stationList, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+    }
+
+    @ApiOperation(value = "获取大屏的标题")
+    @GetMapping("/getTitle")
+    public ResponseResult<Object> getTitle(@RequestParam @ApiParam(value = "id值", required = true) String id) {
+        String title = orgService.getTitle(id);
+        if (StringUtils.isEmpty(title)) {
+            return this.getErrResponseResult(null, 407L, "没有获取到大屏的标题");
+        }
+        return this.getErrResponseResult(title, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
 }

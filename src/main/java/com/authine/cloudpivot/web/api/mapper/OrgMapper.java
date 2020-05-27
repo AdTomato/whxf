@@ -111,11 +111,19 @@ public interface OrgMapper {
     String getBrigadePassword(String brigadeId, String userId);
 
     /**
-     *
      * @param detachmentId
      * @param userId
      * @return
      */
     String getDetachmentPassword(String detachmentId, String userId);
+
+    /**
+     * 根据id获取大屏的标题
+     *
+     * @param id id值
+     * @return 大屏标题
+     * @author wangyong
+     */
+    String getTitle(String id);
 
 }
