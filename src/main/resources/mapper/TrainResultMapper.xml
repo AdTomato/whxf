@@ -22,6 +22,7 @@
         SELECT *
         FROM i6t21_tr_detail_info
         WHERE parentId = #{id}
+        ORDER BY sortKey ASC
     </select>
 
     <update id="updateSubjectsStatusById">

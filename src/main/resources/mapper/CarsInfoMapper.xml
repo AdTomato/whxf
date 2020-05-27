@@ -22,6 +22,7 @@
         SELECT *
         FROM i6t21_v_vehicle_Info
         WHERE parentId = #{id}
+        ORDER BY sortKey ASC
     </select>
 
     <update id="updateCarsStatusById">

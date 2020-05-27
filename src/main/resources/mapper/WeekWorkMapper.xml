@@ -23,6 +23,7 @@
         SELECT *
         FROM i6t21_wpw_priority_work
         WHERE parentId = #{id}
+        ORDER BY sortKey ASC
     </select>
 
     <update id="updateWorksStatusById">

@@ -23,6 +23,7 @@
         SELECT duty_name
         FROM i6t21_di_station_duty_cadre
         WHERE parentId = #{parentId}
+        ORDER BY sortKey ASC
     </select>
 
     <select id="getBrigadeHeadquarterByParentId" parameterType="java.lang.String"
@@ -30,6 +31,7 @@
         SELECT duty_name
         FROM i6t21_di_brigade_headquarter
         WHERE parentId = #{parentId}
+        ORDER BY sortKey ASC
     </select>
     <resultMap id="brigadeDutyInfo" type="com.authine.cloudpivot.web.api.dto.BrigadeDutyInfoDto">
         <id column="id" property="id"/>
@@ -50,6 +52,7 @@
         SELECT *
         FROM i6t21_bdi_commander
         WHERE parentId = #{id}
+        ORDER BY sortKey ASC
     </select>
 
     <select id="getCommandAssistantByParentId" parameterType="java.lang.String"
@@ -57,6 +60,7 @@
         SELECT *
         FROM i6t21_bdi_command_assistant
         WHERE parentId = #{id}
+        ORDER BY sortKey ASC
     </select>
 
 </mapper>
