@@ -31,7 +31,7 @@ public class XinliPingCeController extends BaseController {
 
         if(StringUtils.isNotEmpty(id)){
             String res=upsetPingCeResultService.upsetResultBySas(id);
-            return this.getOkResponseResult("success", res);
+            return this.getOkResponseResult("success", res);//测试git
         }else{
             return this.getErrResponseResult(null, 404L, "没有Id");
         }
