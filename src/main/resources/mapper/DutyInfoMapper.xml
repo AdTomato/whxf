@@ -15,7 +15,7 @@
         SELECT *
         FROM i6t21_ls_station_duty_info
         WHERE station_id = #{stationId}
-          AND YEARWEEK(date_format(date, '%Y-%m-%d')) = YEARWEEK(#{date})
+          AND date_format(date, '%Y-%m-%d') = date_format(#{date}, '%Y-%m-%d')
         ORDER BY createdTime DESC
         LIMIT 0, 1
     </select>
@@ -46,7 +46,7 @@
         SELECT *
         FROM i6t21_ls_brigade_duty_info
         WHERE brigade_id = #{brigadeId}
-          AND YEARWEEK(date_format(date, '%Y-%m-%d')) = YEARWEEK(#{date})
+          AND date_format(date, '%Y-%m-%d') = date_format(#{date}, '%Y-%m-%d')
         ORDER BY createdTime DESC
         LIMIT 0, 1
     </select>
