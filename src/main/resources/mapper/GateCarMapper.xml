@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.GateCarMapper">
+
+    <insert id="insertGateInfos" parameterType="com.authine.cloudpivot.web.api.entity.GateCarInfo">
+        INSERT INTO i4h9w_wh_gate_car_info(id, name, creater, createdDeptId, owner, ownerDeptId, createdTime, modifier,
+        modifiedTime, workflowInstanceId, sequenceNo, sequenceStatus,
+        ownerDeptQueryCode, plate, no, car_owner_name, address, phone, valid_date,
+        type, is_show)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.name}, #{item.creater}, #{item.createdDeptId}, #{item.owner}, #{item.ownerDeptId},
+            #{item.createdTime}, #{item.modifier}, #{item.modifiedTime}, #{item.workflowInstanceId}, #{item.sequenceNo},
+            #{item.sequenceStatus}, #{item.ownerDeptQueryCode}, #{item.plate}, #{item.no}, #{item.carOwnerName},
+            #{item.address}, #{item.phone}, #{item.validDate},
+            #{item.type}, #{item.isShow})
+        </foreach>
+    </insert>
+
+    <update id="updateGateInfos" parameterType="com.authine.cloudpivot.web.api.entity.GateCarInfo">
+        UPDATE i4h9w_wh_gate_car_info
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="car_owner_name = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.carOwnerName != null">
+                        WHEN plate = #{item.plate} THEN #{item.carOwnerName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="address = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.address != null">
+                        WHEN plate = #{item.plate} THEN #{item.address}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="phone = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.phone != null">
+                        WHEN plate = #{item.plate} THEN #{item.phone}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="valid_date = case" suffix="end,">
+                <foreach collection="lite" item="item" index="index">
+                    <if test="item.validDate != null">
+                        WHEN plate = #{plate} THEN #{item.validDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="type = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.type = null">
+                        WHEN plate = #{plate} THEN #{item.type}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        WHERE plate IN (
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </update>
+
+    <insert id="insertGateCarAccessRecords" parameterType="com.authine.cloudpivot.web.api.entity.GateCarAccessRecord">
+        INSERT INTO i4h9w_wh_gate_car_access_records(id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
+        modifier, modifiedTime, workflowInstanceId, sequenceNo,
+        sequenceStatus, ownerDeptQueryCode, pass_record_code, pass_time,
+        pass_channel_code, pass_channel_name, pass_area_code,
+        pass_area_name, pass_card_type_code, pass_action, pass_plate,
+        pass_pic_path, pass_smallpic_path, is_show)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.name}, #{item.creater}, #{item.createdDeptId}, #{item.owner}, #{item.ownerDeptId},
+            #{item.createdTime}, #{item.modifier}, #{item.modifiedTime}, #{item.workflowInstanceId}, #{item.sequenceNo},
+            #{item.sequenceStatus}, #{item.ownerDeptQueryCode}, #{item.passRecordCode}, #{item.passTime},
+            #{item.passChannelCode}, #{item.passChannelName}, #{item.passAreaCode},
+            #{item.passAreaName}, #{item.passCardTypeCode}, #{item.passAction}, #{item.passPlate},
+            #{item.passPicPath}, #{item.passSmallpicPath}, #{item.isShow})
+        </foreach>
+    </insert>
+
+    <select id="getPresenceGateCarAccessRecord" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT pass_record_code
+        FROM i4h9w_wh_gate_car_access_records
+        WHERE pass_record_code IN (
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+</mapper>
