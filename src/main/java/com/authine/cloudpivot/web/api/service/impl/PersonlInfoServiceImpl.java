@@ -224,7 +224,7 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
             color=3;
         }else{
             //出差
-            //获取商旅出差审批列表（之前七天发起的审批）
+            //获取商旅出差审批列表（之前七天发起的审批）==改为公差勤务
             OapiProcessinstanceListidsResponse  slChuChai= DingDingUtil.getApprovalIds(personId,token);
             if( slChuChai.getResult() !=null && slChuChai.getResult().getList().size()>0){
                 List<String> ids=slChuChai.getResult().getList();
@@ -234,9 +234,23 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                     if(detail.getProcessInstance().getResult()!=null && "agree".equals(detail.getProcessInstance().getResult())){
                         List<OapiProcessinstanceGetResponse.FormComponentValueVo> list=detail.getProcessInstance().getFormComponentValues();
                         for(OapiProcessinstanceGetResponse.FormComponentValueVo vo :list){
-//                        JSONObject json = JSONObject.fromObject(vo.getValue());
-                            JSONArray json = (JSONArray)JSON.parse(vo.getValue());
-//                        Log.info(json.getString("value"));
+//===================================2020-06-01(商旅出差修改为勤务出差)开始====================
+                            if("DDDateRangeField".equals(vo.getComponentType())){
+                                JSONArray json = (JSONArray)JSON.parse(vo.getValue());//开始时间，结束时间，总时长
+                                if(json.size()>0){
+                                    String strttime=(String)json.get(0);
+                                    String endTime=(String)json.get(1);
+                                    if(strttime.length()>1 && endTime.length()>1){
+                                        if(isEffectiveDate(strttime,endTime)){
+                                            //出差时间包含当天，状态是出差
+                                            color=2;
+                                        }
+                                    }
+                                }
+                            }
+//===================================2020-06-01(商旅出差修改为勤务出差)结束====================
+/* =============2020-06-01原来的商旅出差代码注销=============
+             JSONArray json = (JSONArray)JSON.parse(vo.getValue());
                             for (Object obj : json) {
                                 JSONObject j = (JSONObject)obj;
                                 if("TableField".equals(j.get("componentName"))){
@@ -263,7 +277,7 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
                                     }
                                 }
 
-                            }
+                            }*/
                         }
 
                     }

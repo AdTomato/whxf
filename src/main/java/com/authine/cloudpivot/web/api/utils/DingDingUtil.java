@@ -55,6 +55,12 @@ public class DingDingUtil {
      */
     private static String PROCESSCODEBYSLCC = "PROC-07BBDF5E-F582-409D-9878-37AABD470E77";
 
+    /**
+     * 流程模板唯一标识
+     * 公差勤务：PROC-D6308678-78E1-416F-933B-CE4459FB27E9
+     */
+    private static String PROCESSCODEBYGCQW = "PROC-D6308678-78E1-416F-933B-CE4459FB27E9";
+
     @Autowired
     RedisUtils redisUtils;
 
@@ -451,7 +457,8 @@ public class DingDingUtil {
     public static OapiProcessinstanceListidsResponse   getApprovalIds(String userIds,String token){
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/listids");
         OapiProcessinstanceListidsRequest req = new OapiProcessinstanceListidsRequest();
-        req.setProcessCode(PROCESSCODEBYSLCC);//商旅出差
+     //   req.setProcessCode(PROCESSCODEBYSLCC);//商旅出差
+        req.setProcessCode(PROCESSCODEBYGCQW);//公差勤务
         //  Date[] dates=DateUtil.getWeek(); 本周一，本周日
         long current=System.currentTimeMillis();    //当前时间毫秒数（时间戳）
         long daysAgo7=current-24*60*60*1000*7;//七天之前时间戳
