@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StationDutyInfo extends BaseEntity{
+public class StationDutyInfo extends BaseEntity {
 
     /**
      * 消防站id
@@ -26,5 +26,29 @@ public class StationDutyInfo extends BaseEntity{
      * 日期
      */
     private Date date;
+
+    private String userName1;
+
+    private String userName2;
+
+    private String userName3;
+
+    private String userName4;
+
+    private String userName5;
+
+    private String userName6;
+
+    private String userName7;
+
+    private String userName8;
+
+    private String userName9;
+
+    private String userName10;
+
+    private String userName11;
+
+    private String userName12;
 
 }
