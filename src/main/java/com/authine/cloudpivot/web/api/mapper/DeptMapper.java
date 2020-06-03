@@ -18,4 +18,7 @@ public interface DeptMapper {
     //weiyao 获取钉钉部门Id
     String getddDeptId(String deptId);
 
+    //weiyao 获取钉钉角色Id
+    String getddRoleId(String name);
+
 }
