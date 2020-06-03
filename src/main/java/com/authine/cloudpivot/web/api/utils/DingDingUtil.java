@@ -61,6 +61,11 @@ public class DingDingUtil {
      */
     private static String PROCESSCODEBYGCQW = "PROC-D6308678-78E1-416F-933B-CE4459FB27E9";
 
+    /**
+     * 流程模板唯一标识
+     * 干部请假单： PROC-4633A02B-5710-4201-98C0-6608D962EACF
+     */
+    private static String PROCESSCODEBYGBQJ = "PROC-4633A02B-5710-4201-98C0-6608D962EACF";
     @Autowired
     RedisUtils redisUtils;
 
@@ -482,6 +487,38 @@ public class DingDingUtil {
     }
 
     /**
+     * 发起时间在某时间段内的审批实例id列表（当前时间到 提前 days 天）
+     * @param process 审批模板
+     * @param days 提前的天数
+     * @return
+     */
+    public static OapiProcessinstanceListidsResponse   getApprovalIdsByProcess(String userIds,String token,String process,int days){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/listids");
+        OapiProcessinstanceListidsRequest req = new OapiProcessinstanceListidsRequest();
+        req.setProcessCode(process);//审批模板
+        //  Date[] dates=DateUtil.getWeek(); 本周一，本周日
+        long current=System.currentTimeMillis();    //当前时间毫秒数（时间戳）
+        long daysAgo=current-24*60*60*1000*days;//七天之前时间戳
+        req.setStartTime(daysAgo);
+        req.setEndTime(current);
+        req.setSize(10L);//分页参数，每页大小，最多传20，默认值：20
+        req.setCursor(0L);
+        req.setUseridList(userIds);//发起人用户id列表，用逗号分隔，最大列表长度：10
+        OapiProcessinstanceListidsResponse  response =null;
+        try {
+            response = client.execute(req, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return null;
+    }
+
+    /**
      * 根据审批实例id调用此接口获取审批实例详情，包括审批表单信息、操作记录列表、操作人、抄送人、审批任务列表等。
      * @param processId
      * @return
@@ -587,5 +624,29 @@ public class DingDingUtil {
         return response;
     }
 
+    /**
+     * 角色====>>>>>获取角色下的员工列表
+     * @param roleId
+     * @return
+     */
+    public static OapiRoleSimplelistResponse     getRoleLists(String roleId,String token,int page){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/role/simplelist");
+        OapiRoleSimplelistRequest request = new OapiRoleSimplelistRequest();
+        request.setRoleId(Long.parseLong(roleId));
+        request.setOffset((long)page);//分页偏移，默认值：0
+        request.setSize(200L);//分页大小，默认值：20，最大值200
+        OapiRoleSimplelistResponse  response =null;
+        try {
+            response = client.execute(request, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
 
 }
