@@ -4,19 +4,19 @@ import com.authine.cloudpivot.engine.api.facade.OrganizationFacade;
 import com.authine.cloudpivot.engine.api.model.organization.DepartmentModel;
 import com.authine.cloudpivot.engine.api.model.organization.UserModel;
 import com.authine.cloudpivot.web.api.dubbo.DubboConfigService;
+import com.authine.cloudpivot.web.api.entity.EduTrainPaln;
 import com.authine.cloudpivot.web.api.entity.StationEduTrainPaln;
 import com.authine.cloudpivot.web.api.mapper.EduTrainPalnMapper;
 import com.authine.cloudpivot.web.api.mapper.OrgMapper;
 import com.authine.cloudpivot.web.api.service.EduTrainPalnService;
 import com.authine.cloudpivot.web.api.utils.Constant;
 import com.authine.cloudpivot.web.api.utils.DataSetUtils;
-import com.authine.cloudpivot.web.api.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -40,7 +40,7 @@ public class EduTrainPalnServiceImpl implements EduTrainPalnService {
 
     @Override
     public void insertStationEduTrainPaln(StationEduTrainPaln eduTrainPaln) {
-            eduTrainPalnMapper.insertStationEduTrainPaln(eduTrainPaln);
+        eduTrainPalnMapper.insertStationEduTrainPaln(eduTrainPaln);
     }
 
     /**
@@ -82,6 +82,11 @@ public class EduTrainPalnServiceImpl implements EduTrainPalnService {
     public void updateStationEduTrainPalnByStationId(StationEduTrainPaln eduTrainPaln) {
         eduTrainPalnMapper.updateStationEduTrainPalnStationId(eduTrainPaln);
 
+    }
+
+    @Override
+    public List<EduTrainPaln> getEduTrainPalnWeek(String stationId) {
+        return eduTrainPalnMapper.getEduTrainPalnWeek(stationId);
     }
 
 }

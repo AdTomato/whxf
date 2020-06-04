@@ -649,4 +649,81 @@ public class DingDingUtil {
         return response;
     }
 
+    /**
+     * @desc:消息发送
+     * 同一个应用相同消息的内容同一个用户一天只能接收一次。
+     * 同一个应用给同一个用户发送消息，企业内部开发方式一天不得超过500次。
+     * 通过设置to_all_user参数全员推送消息，一天最多3次。
+     * 超出以上限制次数后，接口返回成功，但用户无法接收到。详细的限制说明，请参考“工作通知消息的限制”。
+     * 该接口是异步发送消息，接口返回成功并不表示用户一定会收到消息，需要通过“查询工作通知消息的发送结果”接口查询是否给用户发送成功。
+     * @param userlist 通知人集合
+     * @return
+     */
+    public static OapiMessageCorpconversationAsyncsendV2Response      sendMessage(String userlist,String token,String message){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2");
+
+        OapiMessageCorpconversationAsyncsendV2Request request = new OapiMessageCorpconversationAsyncsendV2Request();
+        request.setUseridList(userlist);//发送消息人员集合，最大用户列表长度：100
+        request.setAgentId(AGENTID);//应用agentId
+        request.setToAllUser(false);//是否发送全部用户
+        //json对象消息内容，最长不超过2048个字节
+        OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
+        msg.setMsgtype("text");//格式
+        msg.setText(new OapiMessageCorpconversationAsyncsendV2Request.Text());
+        msg.getText().setContent(message);//内容
+        request.setMsg(msg);
+        //其他格式消息内容
+      /*  msg.setMsgtype("image");
+        msg.setImage(new OapiMessageCorpconversationAsyncsendV2Request.Image());
+        msg.getImage().setMediaId("@lADOdvRYes0CbM0CbA");
+        request.setMsg(msg);
+
+        msg.setMsgtype("file");
+        msg.setFile(new OapiMessageCorpconversationAsyncsendV2Request.File());
+        msg.getFile().setMediaId("@lADOdvRYes0CbM0CbA");
+        request.setMsg(msg);
+
+        msg.setMsgtype("link");
+        msg.setLink(new OapiMessageCorpconversationAsyncsendV2Request.Link());
+        msg.getLink().setTitle("test");
+        msg.getLink().setText("test");
+        msg.getLink().setMessageUrl("test");
+        msg.getLink().setPicUrl("test");
+        request.setMsg(msg);
+
+        msg.setMsgtype("markdown");
+        msg.setMarkdown(new OapiMessageCorpconversationAsyncsendV2Request.Markdown());
+        msg.getMarkdown().setText("##### text");
+        msg.getMarkdown().setTitle("### Title");
+        request.setMsg(msg);
+
+        msg.setOa(new OapiMessageCorpconversationAsyncsendV2Request.OA());
+        msg.getOa().setHead(new OapiMessageCorpconversationAsyncsendV2Request.Head());
+        msg.getOa().getHead().setText("head");
+        msg.getOa().setBody(new OapiMessageCorpconversationAsyncsendV2Request.Body());
+        msg.getOa().getBody().setContent("xxx");
+        msg.setMsgtype("oa");
+        request.setMsg(msg);
+
+        msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
+        msg.getActionCard().setTitle("xxx123411111");
+        msg.getActionCard().setMarkdown("### 测试123111");
+        msg.getActionCard().setSingleTitle("测试测试");
+        msg.getActionCard().setSingleUrl("https://www.baidu.com");
+        msg.setMsgtype("action_card");
+        request.setMsg(msg);*/
+        OapiMessageCorpconversationAsyncsendV2Response   response =null;
+        try {
+            response = client.execute(request, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
+
 }

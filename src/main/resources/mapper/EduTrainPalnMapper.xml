@@ -39,4 +39,13 @@
         WHERE id = #{id}
     </update>
 
+    <select id="getEduTrainPalnWeek"
+            resultType="com.authine.cloudpivot.web.api.entity.EduTrainPaln">
+        SELECT *
+        FROM i6t21_ls_edu_train_paln
+        WHERE station_id = #{stationId}
+        AND YEARWEEK(date_format(date, '%Y-%m-%d'), 1) = YEARWEEK(now(), 1)
+        ORDER BY date ASC
+    </select>
+
 </mapper>
