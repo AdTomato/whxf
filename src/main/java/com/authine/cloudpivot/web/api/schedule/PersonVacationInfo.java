@@ -47,7 +47,7 @@ private DubboConfigService dubboConfigService;
 
 
 //定时器，每天早上六点执行一次
-   @Scheduled(cron = "0 0 6 * * ? *")
+   @Scheduled(cron = "0 0 6 * * ?")
     public void getPersonVacationInfo() {
         log.info("开始执行获取角色下人员所有请假信息......");
         //获取token
