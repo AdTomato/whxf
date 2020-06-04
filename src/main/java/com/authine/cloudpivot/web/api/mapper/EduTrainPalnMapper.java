@@ -1,9 +1,10 @@
 package com.authine.cloudpivot.web.api.mapper;
 
 
+import com.authine.cloudpivot.web.api.entity.EduTrainPaln;
 import com.authine.cloudpivot.web.api.entity.StationEduTrainPaln;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * 教育训练计划mapper
@@ -38,4 +39,7 @@ public interface EduTrainPalnMapper {
      * @author Ke Longhai
      */
     void updateStationEduTrainPalnStationId(StationEduTrainPaln eduTrainPaln);
+
+    List<EduTrainPaln> getEduTrainPalnWeek(String stationId);
+
 }

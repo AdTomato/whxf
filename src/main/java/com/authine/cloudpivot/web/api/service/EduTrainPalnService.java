@@ -1,10 +1,13 @@
 package com.authine.cloudpivot.web.api.service;
 
+import com.authine.cloudpivot.web.api.entity.EduTrainPaln;
 import com.authine.cloudpivot.web.api.entity.StationEduTrainPaln;
 
-import java.util.Date;
+import java.util.List;
 
 public interface EduTrainPalnService {
+
+
 
     /**
      * 插入消防站的今日教育训练计划
@@ -30,5 +33,7 @@ public interface EduTrainPalnService {
      * @author Ke Longhai
      */
     void updateStationEduTrainPalnByStationId(StationEduTrainPaln eduTrainPaln);
+
+    List<EduTrainPaln> getEduTrainPalnWeek(String stationId);
 
 }

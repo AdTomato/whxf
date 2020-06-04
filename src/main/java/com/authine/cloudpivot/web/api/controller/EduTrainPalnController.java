@@ -3,22 +3,20 @@ package com.authine.cloudpivot.web.api.controller;
 
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
-import com.authine.cloudpivot.web.api.dubbo.DubboConfigService;
+import com.authine.cloudpivot.web.api.entity.EduTrainPaln;
 import com.authine.cloudpivot.web.api.entity.StationEduTrainPaln;
-import com.authine.cloudpivot.web.api.mapper.EduTrainPalnMapper;
-import com.authine.cloudpivot.web.api.mapper.OrgMapper;
 import com.authine.cloudpivot.web.api.service.EduTrainPalnService;
-import com.authine.cloudpivot.web.api.utils.DateUtils;
 import com.authine.cloudpivot.web.api.utils.UserUtils;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.util.Date;
+import java.util.List;
+
 /**
  * 教育训练计划控制层
  *
@@ -70,6 +68,19 @@ public class EduTrainPalnController extends BaseController {
         eduTrainPalnService.updateStationEduTrainPalnByStationId(eduTrainPaln);
         return this.getErrResponseResult("更新成功", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
+
+
+    @ApiOperation("获取今日教育安排月一周详情信息")
+    @GetMapping("/getEduTrainPalnWeekByStationId")
+    public ResponseResult<Object> getEduTrainPalnWeekByStationId(@RequestParam String stationId) {
+        if(StringUtils.isNotEmpty(stationId)){
+            List<EduTrainPaln> list = eduTrainPalnService.getEduTrainPalnWeek(stationId);
+            return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        }else{
+            return this.getErrResponseResult(null, 404L, "没有部门Id");
+        }
+    }
+
 
 
 }
