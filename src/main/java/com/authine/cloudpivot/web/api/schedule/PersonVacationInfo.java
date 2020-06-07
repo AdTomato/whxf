@@ -40,16 +40,16 @@ Component
 public class PersonVacationInfo {
 
 
-    @Resource
-    RoleVacationInfoMapper roleVacationInfoMapper;
+@Resource
+RoleVacationInfoMapper roleVacationInfoMapper;
 
-    @Autowired
-    private DubboConfigService dubboConfigService;
-
-
+@Autowired
+private DubboConfigService dubboConfigService;
 
 
-    @Scheduled(cron = "0 0 6 * * ? ")    //定时器，每天早上六点执行一次
+
+
+   @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
 //@Scheduled(cron = "0 0/5 * * * ? ")   //五分钟执行一次
     public void getPersonVacationInfo() {
         log.info("开始执行获取角色下人员所有请假信息......");
@@ -58,43 +58,43 @@ public class PersonVacationInfo {
         int isInsert=roleVacationInfoMapper.getTodayCount();
         //今日没有查询
         if(isInsert<1){
-            int countGb =0;//干部总人数
-            int countQinjia=0;//请假总人数
-            String roleVacationId= UUID.randomUUID().toString().replace("-","");//保存本地请假信息Id
-            List<RoleVacationInfo> infoList=new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                String roleid = roleVacationInfoMapper.getddRoleId("干部");//干部钉钉角色id
-                if (!StringUtils.isNotBlank(roleid)) {
-                    roleid = "557300626";
-                }
-                //干部角色id :557300626
-                OapiRoleSimplelistResponse roleList = DingDingUtil.getRoleLists(roleid, token, i * 200);
-                if (roleList.getResult().getList()!=null && roleList.getResult().getList().size() > 0) {
-                    countGb = countGb + roleList.getResult().getList().size();
-                    int sortKey = 1;
-                    //遍历每一个干部
-                    for (OapiRoleSimplelistResponse.OpenEmpSimple sim : roleList.getResult().getList()) {
-                        OapiAttendanceGetleavestatusResponse qingjia = DingDingUtil.getleavestatus(sim.getUserid(), token);
-                        if (qingjia.getResult().getLeaveStatus() != null && qingjia.getResult().getLeaveStatus().size() > 0) {
-                            //当天存在请假
-                            //        System.out.println("===============干部请假人确认===============" + sim.getName());
-                            countQinjia++;
-                            RoleVacationInfo role = new RoleVacationInfo();
-                            role.setParentId(roleVacationId);
-                            role.setSortKey(sortKey);
-                            role.setVacationName(sim.getName());
-                            role.setUserId(sim.getUserid());
-                            role.setId(UUID.randomUUID().toString().replace("-", ""));
-                            infoList.add(role);
-                        }
-                        sortKey++;
-                    }
-
-                } else {
-                    break;
-                }
+        int countGb =0;//干部总人数
+        int countQinjia=0;//请假总人数
+        String roleVacationId= UUID.randomUUID().toString().replace("-","");//保存本地请假信息Id
+        List<RoleVacationInfo> infoList=new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            String roleid = roleVacationInfoMapper.getddRoleId("干部");//干部钉钉角色id
+            if (!StringUtils.isNotBlank(roleid)) {
+                roleid = "557300626";
             }
-            //插入
+            //干部角色id :557300626
+            OapiRoleSimplelistResponse roleList = DingDingUtil.getRoleLists(roleid, token, i * 200);
+            if (roleList.getResult().getList()!=null && roleList.getResult().getList().size() > 0) {
+                countGb = countGb + roleList.getResult().getList().size();
+                int sortKey = 1;
+                //遍历每一个干部
+                for (OapiRoleSimplelistResponse.OpenEmpSimple sim : roleList.getResult().getList()) {
+                    OapiAttendanceGetleavestatusResponse qingjia = DingDingUtil.getleavestatus(sim.getUserid(), token);
+                    if (qingjia.getResult().getLeaveStatus() != null && qingjia.getResult().getLeaveStatus().size() > 0) {
+                        //当天存在请假
+                        //        System.out.println("===============干部请假人确认===============" + sim.getName());
+                        countQinjia++;
+                        RoleVacationInfo role = new RoleVacationInfo();
+                        role.setParentId(roleVacationId);
+                        role.setSortKey(sortKey);
+                        role.setVacationName(sim.getName());
+                        role.setUserId(sim.getUserid());
+                        role.setId(UUID.randomUUID().toString().replace("-", ""));
+                        infoList.add(role);
+                    }
+                    sortKey++;
+                }
+
+            } else {
+                break;
+            }
+        }
+        //插入
             OrganizationFacade organizationFacade = dubboConfigService.getOrganizationFacade();
             UserModel user = organizationFacade.getUser(Constant.ADMIN_ID);
             DepartmentModel department = organizationFacade.getDepartment(user.getDepartmentId());
@@ -114,20 +114,21 @@ public class PersonVacationInfo {
             role.setVacationDate(new Date());
             role.setVacationNum(countQinjia);//请假人数
             role.setInworkNum(countGb-countQinjia);//在岗人数
-            Integer isSucc=roleVacationInfoMapper.insertRoleVacation(role);
-            //    log.info("主表插入是成功isSucc="+isSucc);
-            Integer isSuccDetaul=roleVacationInfoMapper.insertVacationDetailList(infoList);
-            //    log.info("子表插入是成功isSucc="+isSuccDetaul);
+        Integer isSucc=roleVacationInfoMapper.insertRoleVacation(role);
+        //    log.info("主表插入是成功isSucc="+isSucc);
+        Integer isSuccDetaul=roleVacationInfoMapper.insertVacationDetailList(infoList);
+        //    log.info("子表插入是成功isSucc="+isSuccDetaul);
 
-            //发送消息通知
+        //发送消息通知
             /*
             userList:通知人集合
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
+            杨宏国：110041056326188470
              */
-            String userList="19431116101255531,manager5388,51594024776243,015907166926133173";
-            String message= DateUtil.getDate()+ " 干部总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
-            OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
+         String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470";
+         String message= DateUtil.getDate()+ " 干部总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
+        OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
 }
