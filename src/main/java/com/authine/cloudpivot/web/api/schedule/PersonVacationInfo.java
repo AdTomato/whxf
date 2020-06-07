@@ -49,7 +49,7 @@ private DubboConfigService dubboConfigService;
 
 
 
-   @Scheduled(cron = "0 0 6 * * ? ")    //定时器，每天早上六点执行一次
+   @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
 //@Scheduled(cron = "0 0/5 * * * ? ")   //五分钟执行一次
     public void getPersonVacationInfo() {
         log.info("开始执行获取角色下人员所有请假信息......");
@@ -124,8 +124,9 @@ private DubboConfigService dubboConfigService;
             userList:通知人集合
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
+            杨宏国：110041056326188470
              */
-         String userList="19431116101255531,manager5388,51594024776243,015907166926133173";
+         String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470";
          String message= DateUtil.getDate()+ " 干部总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
         OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
