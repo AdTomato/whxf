@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- ia0;ug_PingceResult (i8s;nv_PingceResult)-->
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.MonthTrainMapper">
+
+    <select id="getMonthTrainBig" resultType="com.authine.cloudpivot.web.api.entity.MonthTrain" parameterType="java.lang.String">
+       select * from i4h9w_monthTrainBig where id=#{id}
+    </select>
+
+    <select id="getMonthTrainCen" resultType="com.authine.cloudpivot.web.api.entity.MonthTrain" parameterType="java.lang.String">
+       select * from i4h9w_monthTrain where id=#{id}
+    </select>
+
+    <select id="getMonthTrainBigProNum" resultType="com.authine.cloudpivot.web.api.entity.MonthTrain" >
+       select * from i4h9w_monthTrainProbBig where
+       DATE_FORMAT( trainDate, '%Y%m' ) = DATE_FORMAT( #{trainDate} , '%Y%m' )
+       and dept =#{dept}
+       order by createdTime desc limit 1
+    </select>
+
+    <select id="getMonthTrainCenProNum" resultType="com.authine.cloudpivot.web.api.entity.MonthTrain" >
+        select * from i4h9w_monthTrainProbCen where
+       DATE_FORMAT( trainDate, '%Y%m' ) = DATE_FORMAT( #{trainDate} , '%Y%m' )
+       and dept =#{dept}
+       order by createdTime desc limit 1
+    </select>
+
+    <insert id="insertMonthTrainBigPro" parameterType="com.authine.cloudpivot.web.api.entity.MonthTrain">
+        INSERT INTO i4h9w_monthTrainProbBig
+          (id,name,creater,createdDeptId,
+            owner,ownerDeptId,createdTime,
+            modifier, modifiedTime,
+            sequenceNo,sequenceStatus,ownerDeptQueryCode,
+           dept,trainDate,numAll,numBigPerson,numCenPerson,
+           NumberCancun1,canxunProb1,hegeProb1,youxiuProb1,NumberCancun2,canxunProb2,hegeProb2,youxiuProb2,NumberCancun3,canxunProb3,hegeProb3,youxiuProb3,
+            NumberCancun4,canxunProb4,hegeProb4,youxiuProb4,NumberCancun5,canxunProb5,hegeProb5,youxiuProb5,NumberCancun6,canxunProb6,hegeProb6,youxiuProb6,
+              NumberCancun7,canxunProb7,hegeProb7,youxiuProb7,NumberCancun8,canxunProb8,hegeProb8,youxiuProb8, NumberCancun9,canxunProb9,hegeProb9,youxiuProb9,
+              BNumberCancun1,BcanxunProb1,BhegeProb1,ByouxiuProb1, BNumberCancun2,BcanxunProb2,BhegeProb2,ByouxiuProb2, BNumberCancun3,BcanxunProb3,BhegeProb3,ByouxiuProb3,
+               BNumberCancun4,BcanxunProb4,BhegeProb4,ByouxiuProb4, BNumberCancun5,BcanxunProb5,BhegeProb5,ByouxiuProb5, BNumberCancun6,BcanxunProb6,BhegeProb6,ByouxiuProb6
+           )
+        VALUES
+           (#{id},#{name},#{creater},#{createdDeptId},
+            #{owner},#{ownerDeptId},now(),
+            #{modifier},now(),
+            #{sequenceNo},#{sequenceStatus},#{ownerDeptQueryCode},
+             #{dept},#{trainDate},#{numAll},#{numBigPerson},#{numCenPerson},
+            #{NumberCancun1},#{canxunProb1},#{hegeProb1},#{youxiuProb1},#{NumberCancun2},#{canxunProb2},#{hegeProb2},#{youxiuProb2},#{NumberCancun3},#{canxunProb3},#{hegeProb3},#{youxiuProb3},
+        #{NumberCancun4},#{canxunProb4},#{hegeProb4},#{youxiuProb4},#{NumberCancun5},#{canxunProb5},#{hegeProb5},#{youxiuProb5},#{NumberCancun6},#{canxunProb6},#{hegeProb6},#{youxiuProb6},
+        #{NumberCancun7},#{canxunProb7},#{hegeProb7},#{youxiuProb7},#{NumberCancun8},#{canxunProb8},#{hegeProb8},#{youxiuProb8},#{ NumberCancun9},#{canxunProb9},#{hegeProb9},#{youxiuProb9},
+        #{BNumberCancun1},#{BcanxunProb1},#{BhegeProb1},#{ByouxiuProb1},#{ BNumberCancun2},#{BcanxunProb2},#{BhegeProb2},#{ByouxiuProb2},#{ BNumberCancun3},#{BcanxunProb3},#{BhegeProb3},#{ByouxiuProb3},
+        #{BNumberCancun4},#{BcanxunProb4},#{BhegeProb4},#{ByouxiuProb4},#{ BNumberCancun5},#{BcanxunProb5},#{BhegeProb5},#{ByouxiuProb5},#{ BNumberCancun6},#{BcanxunProb6},#{BhegeProb6},#{ByouxiuProb6})
+</insert>
+
+    <insert id="insertMonthTrainCenPro" parameterType="com.authine.cloudpivot.web.api.entity.MonthTrain">
+        INSERT INTO i4h9w_monthTrainProbCen
+          (id,name,creater,createdDeptId,
+            owner,ownerDeptId,createdTime,
+            modifier, modifiedTime,
+            sequenceNo,sequenceStatus,ownerDeptQueryCode,
+           dept,trainDate,numAll,
+           NumberCancun1,canxunProb1,hegeProb1,youxiuProb1,NumberCancun2,canxunProb2,hegeProb2,youxiuProb2,NumberCancun3,canxunProb3,hegeProb3,youxiuProb3,
+            NumberCancun4,canxunProb4,hegeProb4,youxiuProb4,NumberCancun5,canxunProb5,hegeProb5,youxiuProb5,NumberCancun6,canxunProb6,hegeProb6,youxiuProb6,
+              NumberCancun7,canxunProb7,hegeProb7,youxiuProb7,NumberCancun8,canxunProb8,hegeProb8,youxiuProb8, NumberCancun9,canxunProb9,hegeProb9,youxiuProb9
+           )
+        VALUES
+           (#{id},#{name},#{creater},#{createdDeptId},
+            #{owner},#{ownerDeptId},now(),
+            #{modifier},now(),
+            #{sequenceNo},#{sequenceStatus},#{ownerDeptQueryCode},
+             #{dept},#{trainDate},#{numAll},
+            #{NumberCancun1},#{canxunProb1},#{hegeProb1},#{youxiuProb1},#{NumberCancun2},#{canxunProb2},#{hegeProb2},#{youxiuProb2},#{NumberCancun3},#{canxunProb3},#{hegeProb3},#{youxiuProb3},
+        #{NumberCancun4},#{canxunProb4},#{hegeProb4},#{youxiuProb4},#{NumberCancun5},#{canxunProb5},#{hegeProb5},#{youxiuProb5},#{NumberCancun6},#{canxunProb6},#{hegeProb6},#{youxiuProb6},
+        #{NumberCancun7},#{canxunProb7},#{hegeProb7},#{youxiuProb7},#{NumberCancun8},#{canxunProb8},#{hegeProb8},#{youxiuProb8},#{ NumberCancun9},#{canxunProb9},#{hegeProb9},#{youxiuProb9}
+           )
+             </insert>
+
+    <update id="updateMonthTrainBigPro" parameterType="com.authine.cloudpivot.web.api.entity.MonthTrain">
+        UPDATE i4h9w_monthTrainProbBig
+        <set>
+            <if test="numAll != null and numAll !=0">
+                numAll = #{numAll},
+            </if>
+            <if test="numBigPerson != null and numBigPerson !=0">
+                numBigPerson = #{numBigPerson},
+            </if>
+            <if test="numCenPerson != null and numCenPerson !=0">
+                numCenPerson = #{numCenPerson},
+            </if>
+            <if test="NumberCancun1 != null and NumberCancun1 !=0">
+                NumberCancun1 = #{NumberCancun1},
+                canxunProb1 = #{canxunProb1},
+                hegeProb1 = #{hegeProb1},
+                youxiuProb1 = #{youxiuProb1},
+            </if>
+            <if test="NumberCancun2 != null and NumberCancun2 !=0">
+                NumberCancun2 = #{NumberCancun2},
+                canxunProb2 = #{canxunProb2},
+                hegeProb2 = #{hegeProb2},
+                youxiuProb2 = #{youxiuProb2},
+            </if>
+            <if test="NumberCancun3 != null and NumberCancun3 !=0">
+                NumberCancun3 = #{NumberCancun3},
+                canxunProb3 = #{canxunProb3},
+                hegeProb3 = #{hegeProb3},
+                youxiuProb3 = #{youxiuProb3},
+            </if>
+            <if test="NumberCancun4 != null and NumberCancun4 !=0">
+                NumberCancun4 = #{NumberCancun4},
+                canxunProb4 = #{canxunProb4},
+                hegeProb4 = #{hegeProb4},
+                youxiuProb4 = #{youxiuProb4},
+            </if>
+            <if test="NumberCancun5 != null and NumberCancun5 !=0">
+                NumberCancun5 = #{NumberCancun5},
+                canxunProb5 = #{canxunProb5},
+                hegeProb5 = #{hegeProb5},
+                youxiuProb5 = #{youxiuProb5},
+            </if>
+            <if test="NumberCancun6 != null and NumberCancun6 !=0">
+                NumberCancun6 = #{NumberCancun6},
+                canxunProb6 = #{canxunProb6},
+                hegeProb6 = #{hegeProb6},
+                youxiuProb6 = #{youxiuProb6},
+            </if>
+            <if test="NumberCancun7 != null and NumberCancun7 !=0">
+                NumberCancun7 = #{NumberCancun7},
+                canxunProb7 = #{canxunProb7},
+                hegeProb7 = #{hegeProb7},
+                youxiuProb7 = #{youxiuProb7},
+            </if>
+            <if test="NumberCancun8 != null and NumberCancun8 !=0">
+                NumberCancun8 = #{NumberCancun8},
+                canxunProb8 = #{canxunProb8},
+                hegeProb8 = #{hegeProb8},
+                youxiuProb8 = #{youxiuProb8},
+            </if>
+            <if test="NumberCancun9 != null and NumberCancun9 !=0">
+                NumberCancun9 = #{NumberCancun9},
+                canxunProb9 = #{canxunProb9},
+                hegeProb9 = #{hegeProb9},
+                youxiuProb9 = #{youxiuProb9},
+            </if>
+            <if test="BNumberCancun1 != null and BNumberCancun1 !=0">
+                BNumberCancun1 = #{BNumberCancun1},
+                BcanxunProb1 = #{BcanxunProb1},
+                BhegeProb1 = #{BhegeProb1},
+                ByouxiuProb1 = #{ByouxiuProb1},
+            </if>
+            <if test="BNumberCancun2 != null and BNumberCancun2 !=0">
+                BNumberCancun2 = #{BNumberCancun2},
+                BcanxunProb2 = #{BcanxunProb2},
+                BhegeProb2 = #{BhegeProb2},
+                ByouxiuProb2 = #{ByouxiuProb2},
+            </if>
+            <if test="BNumberCancun3 != null and BNumberCancun3 !=0">
+                BNumberCancun3 = #{BNumberCancun3},
+                BcanxunProb3 = #{BcanxunProb3},
+                BhegeProb3 = #{BhegeProb3},
+                ByouxiuProb3 = #{ByouxiuProb3},
+            </if>
+            <if test="BNumberCancun4 != null and BNumberCancun4 !=0">
+                BNumberCancun4 = #{BNumberCancun4},
+                BcanxunProb4 = #{BcanxunProb4},
+                BhegeProb4 = #{BhegeProb4},
+                ByouxiuProb4 = #{ByouxiuProb4},
+            </if>
+            <if test="BNumberCancun5 != null and BNumberCancun5 !=0">
+                BNumberCancun5 = #{BNumberCancun5},
+                BcanxunProb5 = #{BcanxunProb5},
+                BhegeProb5 = #{BhegeProb5},
+                ByouxiuProb5 = #{ByouxiuProb5},
+            </if>
+            <if test="BNumberCancun6 != null and BNumberCancun6 !=0">
+                BNumberCancun6 = #{BNumberCancun6},
+                BcanxunProb6 = #{BcanxunProb6},
+                BhegeProb6 = #{BhegeProb6},
+                ByouxiuProb6 = #{ByouxiuProb6},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateMonthTrainCenPro" parameterType="com.authine.cloudpivot.web.api.entity.MonthTrain">
+        UPDATE i4h9w_monthTrainProbCen
+        <set>
+            <if test="numAll != null and numAll !=0">
+                numAll = #{numAll},
+            </if>
+            <if test="NumberCancun1 != null and NumberCancun1 !=0">
+                NumberCancun1 = #{NumberCancun1},
+                canxunProb1 = #{canxunProb1},
+                hegeProb1 = #{hegeProb1},
+                youxiuProb1 = #{youxiuProb1},
+            </if>
+            <if test="NumberCancun2 != null and NumberCancun2 !=0">
+                NumberCancun2 = #{NumberCancun2},
+                canxunProb2 = #{canxunProb2},
+                hegeProb2 = #{hegeProb2},
+                youxiuProb2 = #{youxiuProb2},
+            </if>
+            <if test="NumberCancun3 != null and NumberCancun3 !=0">
+                NumberCancun3 = #{NumberCancun3},
+                canxunProb3 = #{canxunProb3},
+                hegeProb3 = #{hegeProb3},
+                youxiuProb3 = #{youxiuProb3},
+            </if>
+            <if test="NumberCancun4 != null and NumberCancun4 !=0">
+                NumberCancun4 = #{NumberCancun4},
+                canxunProb4 = #{canxunProb4},
+                hegeProb4 = #{hegeProb4},
+                youxiuProb4 = #{youxiuProb4},
+            </if>
+            <if test="NumberCancun5 != null and NumberCancun5 !=0">
+                NumberCancun5 = #{NumberCancun5},
+                canxunProb5 = #{canxunProb5},
+                hegeProb5 = #{hegeProb5},
+                youxiuProb5 = #{youxiuProb5},
+            </if>
+            <if test="NumberCancun6 != null and NumberCancun6 !=0">
+                NumberCancun6 = #{NumberCancun6},
+                canxunProb6 = #{canxunProb6},
+                hegeProb6 = #{hegeProb6},
+                youxiuProb6 = #{youxiuProb6},
+            </if>
+            <if test="NumberCancun7 != null and NumberCancun7 !=0">
+                NumberCancun7 = #{NumberCancun7},
+                canxunProb7 = #{canxunProb7},
+                hegeProb7 = #{hegeProb7},
+                youxiuProb7 = #{youxiuProb7},
+            </if>
+            <if test="NumberCancun8 != null and NumberCancun8 !=0">
+                NumberCancun8 = #{NumberCancun8},
+                canxunProb8 = #{canxunProb8},
+                hegeProb8 = #{hegeProb8},
+                youxiuProb8 = #{youxiuProb8},
+            </if>
+            <if test="NumberCancun9 != null and NumberCancun9 !=0">
+                NumberCancun9 = #{NumberCancun9},
+                canxunProb9 = #{canxunProb9},
+                hegeProb9 = #{hegeProb9},
+                youxiuProb9 = #{youxiuProb9},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getParentDeptId" resultType="java.lang.String" parameterType="java.lang.String">
+       select parentId from h_org_department where id=#{deptid}
+    </select>
+
+</mapper>
