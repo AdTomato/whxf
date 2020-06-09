@@ -1,0 +1,44 @@
+package com.authine.cloudpivot.web.api.mapper;
+
+
+import com.authine.cloudpivot.web.api.entity.MonthTrain;
+import com.authine.cloudpivot.web.api.entity.PingceResult;
+import com.authine.cloudpivot.web.api.entity.XinliSas;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Date;
+
+/**
+ * @Author: weiyao
+ * @Date: 2020-06-8
+ * @Description:
+ */
+public interface MonthTrainMapper {
+
+    //查询大队训练结果
+    MonthTrain getMonthTrainBig(String id);
+
+    //查询中队训练结果
+    MonthTrain getMonthTrainCen(String id);
+
+    //查询是否有该月大队统计
+    MonthTrain getMonthTrainBigProNum(@Param("trainDate") Date trainDate, @Param("dept")String dept);
+
+    //查询是否有该月中队统计
+    MonthTrain getMonthTrainCenProNum(@Param("trainDate") Date trainDate, @Param("dept")String dept);
+
+    //插入大队统计
+    Integer insertMonthTrainBigPro(MonthTrain monthTrain);
+
+    //插入中队统计
+    Integer insertMonthTrainCenPro(MonthTrain monthTrain);
+
+    //更新大队统计
+    Integer updateMonthTrainBigPro(MonthTrain monthTrain);
+
+    //更新中队统计
+    Integer updateMonthTrainCenPro(MonthTrain monthTrain);
+
+    //查询父部门Id
+    String getParentDeptId(String deptid);
+}
