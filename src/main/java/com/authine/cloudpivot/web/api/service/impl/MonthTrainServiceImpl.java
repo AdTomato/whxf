@@ -1,15 +1,18 @@
 package com.authine.cloudpivot.web.api.service.impl;
 
 import com.authine.cloudpivot.web.api.entity.MonthTrain;
+import com.authine.cloudpivot.web.api.entity.MonthTrainPerson;
 import com.authine.cloudpivot.web.api.mapper.MonthTrainMapper;
 import com.authine.cloudpivot.web.api.service.MonthTrainService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,14 +30,18 @@ public class MonthTrainServiceImpl implements MonthTrainService {
             MonthTrain  mtcen=monthTrainMapper.getMonthTrainCenProNum(mt.getTrainDate(),mt.getDept());
             if(mtcen !=null && StringUtils.isNotBlank(mtcen.id)){
                 //更新
-                MonthTrain updateCen=mt;
+                MonthTrain updateCen=new MonthTrain();
+                //类复制
+                BeanUtils.copyProperties(mt,updateCen);
                 updateCen.setNumAll(mt.getNumAll()+mtcen.getNumAll());
                 updateCen.setId(mtcen.getId());
                 Integer rsc=monthTrainMapper.updateMonthTrainCenPro(updateCen);
                   resc=resc+"中队更新结果"+rsc +";";
             }else{
                 //插入中队
-                MonthTrain insetCen=mt;
+                MonthTrain insetCen=new MonthTrain();
+                //类复制
+                BeanUtils.copyProperties(mt,insetCen);
                 //修改id
                 insetCen.setId(UUID.randomUUID().toString().replace("-", ""));
                 Integer rsc=monthTrainMapper.insertMonthTrainCenPro(insetCen);
@@ -50,8 +57,11 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                 parentDeptId= "[{\"id\":\""+ parentDeptId  +"\",\"type\":1}]";
                 MonthTrain  mtbig=monthTrainMapper.getMonthTrainBigProNum(mt.getTrainDate(),parentDeptId);
                 if(mtbig!=null){
+
                     //更新大队统计
-                    MonthTrain updatebig=mt;
+                    MonthTrain updatebig=new MonthTrain();
+                    //类复制
+                    BeanUtils.copyProperties(mt,updatebig);
                     updatebig.setId(mtbig.getId());
                //     updatebig.setNumAll(mtbig.getNumAll()+mt.getNumAll());//总人数
              //       mtbig.setNumCenPerson(mtbig.getNumCenPerson()==null?0:mtbig.getNumCenPerson());//去空
@@ -60,7 +70,9 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                     resc=resc+"大队更新结果"+rsc+";";
                 }else{
                     //插入大队
-                    MonthTrain insetbig=mt;
+                    MonthTrain insetbig=new MonthTrain();
+                    //类复制
+                    BeanUtils.copyProperties(mt,insetbig);
                     insetbig.setId(UUID.randomUUID().toString().replace("-", ""));
                     insetbig.setDept(parentDeptId);
                //     insetbig.setNumCenPerson(mt.getNumAll());
@@ -69,6 +81,42 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                 }
             }else{
                 resc=resc+"中队里不存在上级大队;";
+            }
+
+            //个人统计操作
+            List<MonthTrainPerson> mtpb=monthTrainMapper.getMonthTrainPersonInfoByCen(mt.getId());
+            if(mtpb!=null && mtpb.size()>0){
+                for(MonthTrainPerson mp :mtpb){
+                    MonthTrainPerson isp=monthTrainMapper.getMonthTrainPerson(mt.getTrainDate(),mp.getTrainNames());
+                    if(isp ==null){
+                        MonthTrainPerson insPerson=new MonthTrainPerson();
+                        //类复制
+                        BeanUtils.copyProperties(mp,insPerson);
+                        insPerson.setId(UUID.randomUUID().toString().replace("-", ""));
+                        insPerson.setName(mt.getName());
+                        insPerson.setSequenceStatus(mt.getSequenceStatus());
+                        insPerson.setCreater(mt.getCreater());
+                        insPerson.setCreatedDeptId(mt.getCreatedDeptId());
+                        insPerson.setOwner(mt.getOwner());
+                        insPerson.setOwnerDeptId(mt.getOwnerDeptId());
+                        insPerson.setOwnerDeptQueryCode(mt.getOwnerDeptQueryCode());
+                        insPerson.setModifier(mt.getModifier());
+
+                        insPerson.setDept(mt.getDept());
+                        insPerson.setTrainDate(mt.getTrainDate());
+                        //插入
+                        Integer rsc=monthTrainMapper.insertMonthTrainPerson(insPerson);
+                        resc=resc+"个人详情中队插入结果"+rsc+";";
+                    }else{
+                        MonthTrainPerson upPerson=new MonthTrainPerson();
+                        //类复制
+                        BeanUtils.copyProperties(mp,upPerson);
+                        upPerson.setId(isp.getId());
+                        //更新个人
+                        Integer rsc=monthTrainMapper.updateMonthTrainPerson(upPerson);
+                        resc=resc+"个人详情中队更新结果"+rsc+";";
+                    }
+                }
             }
 
         }
@@ -109,6 +157,38 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                 insertmt.setTrainDate(mt.getTrainDate());
                 Integer rsc=monthTrainMapper.insertMonthTrainBigPro(insertmt);
                 resc=resc+"大队插入结果"+rsc+";";
+            }
+
+            //个人统计操作
+            List<MonthTrainPerson> mtpb=monthTrainMapper.getMonthTrainPersonInfoByBig(mt.getId());
+            if(mtpb!=null && mtpb.size()>0){
+                for(MonthTrainPerson mp :mtpb){
+                    MonthTrainPerson isp=monthTrainMapper.getMonthTrainPerson(mt.getTrainDate(),mp.getTrainNames());
+                    if(isp ==null){
+                        MonthTrainPerson insPerson=new MonthTrainPerson(mp);
+                        insPerson.setId(UUID.randomUUID().toString().replace("-", ""));
+                        insPerson.setName(mt.getName());
+                        insPerson.setSequenceStatus(mt.getSequenceStatus());
+                        insPerson.setCreater(mt.getCreater());
+                        insPerson.setCreatedDeptId(mt.getCreatedDeptId());
+                        insPerson.setOwner(mt.getOwner());
+                        insPerson.setOwnerDeptId(mt.getOwnerDeptId());
+                        insPerson.setOwnerDeptQueryCode(mt.getOwnerDeptQueryCode());
+                        insPerson.setModifier(mt.getModifier());
+
+                        insPerson.setDept(mt.getDept());
+                        insPerson.setTrainDate(mt.getTrainDate());
+                        //插入
+                        Integer rsc=monthTrainMapper.insertMonthTrainPerson(insPerson);
+                        resc=resc+"个人详情大队插入结果"+rsc+";";
+                    }else{
+                        MonthTrainPerson insPerson=new MonthTrainPerson(mp);
+                        insPerson.setId(isp.getId());
+                        //更新个人
+                        Integer rsc=monthTrainMapper.updateMonthTrainPerson(insPerson);
+                        resc=resc+"个人详情大队更新结果"+rsc+";";
+                    }
+                }
             }
         }
         return resc;

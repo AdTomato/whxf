@@ -178,6 +178,7 @@
                 BhegeProb6 = #{BhegeProb6},
                 ByouxiuProb6 = #{ByouxiuProb6},
             </if>
+            modifiedTime=now()
         </set>
         WHERE id = #{id}
     </update>
@@ -242,6 +243,7 @@
                 hegeProb9 = #{hegeProb9},
                 youxiuProb9 = #{youxiuProb9},
             </if>
+            modifiedTime=now()
         </set>
         WHERE id = #{id}
     </update>
@@ -249,5 +251,132 @@
     <select id="getParentDeptId" resultType="java.lang.String" parameterType="java.lang.String">
        select parentId from h_org_department where id=#{deptid}
     </select>
+
+    <select id="getMonthTrainPersonInfoByBig" resultType="com.authine.cloudpivot.web.api.entity.MonthTrainPerson" >
+       select * from i4h9w_traindengjicasebig where
+       parentId=#{parentId}
+    </select>
+
+    <select id="getMonthTrainPersonInfoByCen" resultType="com.authine.cloudpivot.web.api.entity.MonthTrainPerson" >
+       select * from i4h9w_traindengjicase where
+       parentId=#{parentId}
+    </select>
+
+    <select id="getMonthTrainPerson" resultType="com.authine.cloudpivot.web.api.entity.MonthTrainPerson" >
+        select * from i4h9w_monthTrainPerson where
+       DATE_FORMAT( trainDate, '%Y%m' ) = DATE_FORMAT( #{trainDate} , '%Y%m' )
+       and trainNames =#{trainNames}
+       order by createdTime desc limit 1
+    </select>
+
+    <update id="updateMonthTrainPerson" parameterType="com.authine.cloudpivot.web.api.entity.MonthTrainPerson">
+        UPDATE i4h9w_monthTrainPerson
+        <set>
+            <if test="score1 != null and score1 !=0">
+                grade1 = #{grade1},
+                standard1 = #{standard1},
+                score1 = #{score1},
+            </if>
+            <if test="score2 != null and score2 !=0">
+                grade2 = #{grade2},
+                standard2 = #{standard2},
+                score2 = #{score2},
+            </if>
+            <if test="score3 != null and score3 !=0">
+                grade3 = #{grade3},
+                standard3 = #{standard3},
+                score3 = #{score3},
+            </if>
+            <if test="score4 != null and score4 !=0">
+                grade4 = #{grade4},
+                standard4 = #{standard4},
+                score4 = #{score4},
+            </if>
+            <if test="score5 != null and score5 !=0">
+                grade5 = #{grade5},
+                standard5 = #{standard5},
+                score5 = #{score5},
+            </if>
+            <if test="score6 != null and score6 !=0">
+                grade6 = #{grade6},
+                standard6 = #{standard6},
+                score6 = #{score6},
+            </if>
+            <if test="score7 != null and score7 !=0">
+                grade7 = #{grade7},
+                standard7 = #{standard7},
+                score7 = #{score7},
+            </if>
+            <if test="score8 != null and score8 !=0">
+                grade8 = #{grade8},
+                standard8 = #{standard8},
+                score8 = #{score8},
+            </if>
+            <if test="score9 != null and score9 !=0">
+                grade9 = #{grade9},
+                standard9 = #{standard9},
+                score9 = #{score9},
+            </if>
+            <if test="Bscore1 != null and Bscore1 !=0">
+                Bgrade1 = #{Bgrade1},
+                Bstandard1 = #{Bstandard1},
+                Bscore1 = #{Bscore1},
+            </if>
+            <if test="Bscore2 != null and Bscore2 !=0">
+                Bgrade2 = #{Bgrade2},
+                Bstandard2 = #{Bstandard2},
+                Bscore2 = #{Bscore2},
+            </if>
+            <if test="Bscore3 != null and Bscore3 !=0">
+                Bgrade3 = #{Bgrade3},
+                Bstandard3 = #{Bstandard3},
+                Bscore3 = #{Bscore3},
+            </if>
+            <if test="Bscore4 != null and Bscore4 !=0">
+                Bgrade4 = #{Bgrade4},
+                Bstandard4 = #{Bstandard4},
+                Bscore4 = #{Bscore4},
+            </if>
+            <if test="Bscore5 != null and Bscore5 !=0">
+                Bgrade5 = #{Bgrade5},
+                Bstandard5 = #{Bstandard5},
+                Bscore5 = #{Bscore5},
+            </if>
+            <if test="Bscore6 != null and Bscore6 !=0">
+                Bgrade6 = #{Bgrade6},
+                Bstandard6 = #{Bstandard6},
+                Bscore6 = #{Bscore6},
+            </if>
+            modifiedTime=now()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertMonthTrainPerson" parameterType="com.authine.cloudpivot.web.api.entity.MonthTrainPerson">
+        INSERT INTO i4h9w_monthTrainPerson
+          (id,name,creater,createdDeptId,
+            owner,ownerDeptId,createdTime,
+            modifier, modifiedTime,
+            sequenceNo,sequenceStatus,ownerDeptQueryCode,
+           dept,trainDate,trainNames,position,age,
+          grade1,standard1,score1,grade2,standard2,score2,grade3,standard3,score3,
+           grade4,standard4,score4,grade5,standard5,score5,grade6,standard6,score6,
+            grade7,standard7,score7,grade8,standard8,score8,grade9,standard9,score9,
+            Bgrade1,Bstandard1,Bscore1,Bgrade2,Bstandard2,Bscore2,Bgrade3,Bstandard3,Bscore3,
+            Bgrade4,Bstandard4,Bscore4,Bgrade5,Bstandard5,Bscore5,Bgrade6,Bstandard6,Bscore6
+           )
+        VALUES
+           (#{id},#{name},#{creater},#{createdDeptId},
+            #{owner},#{ownerDeptId},now(),
+            #{modifier},now(),
+            #{sequenceNo},#{sequenceStatus},#{ownerDeptQueryCode},
+             #{dept},#{trainDate},#{trainNames},#{position},#{age},
+            #{grade1},#{standard1},#{score1},#{grade2},#{standard2},#{score2},#{grade3},#{standard3},#{score3},
+            #{grade4},#{standard4},#{score4},#{grade5},#{standard5},#{score5},#{grade6},#{standard6},#{score6},
+            #{grade7},#{standard7},#{score7},#{grade8},#{standard8},#{score8},#{grade9},#{standard9},#{score9},
+            #{Bgrade1},#{Bstandard1},#{Bscore1},#{Bgrade2},#{Bstandard2},#{Bscore2},#{Bgrade3},#{Bstandard3},#{Bscore3},
+            #{Bgrade4},#{Bstandard4},#{Bscore4},#{Bgrade5},#{Bstandard5},#{Bscore5},#{Bgrade6},#{Bstandard6},#{Bscore6}
+           )
+             </insert>
 
 </mapper>
