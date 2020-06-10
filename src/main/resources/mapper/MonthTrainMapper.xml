@@ -253,12 +253,12 @@
     </select>
 
     <select id="getMonthTrainPersonInfoByBig" resultType="com.authine.cloudpivot.web.api.entity.MonthTrainPerson" >
-       select * from i4h9w_traindengjicasebig where
+       select * from i4h9w_trainDengjicaseBig where
        parentId=#{parentId}
     </select>
 
     <select id="getMonthTrainPersonInfoByCen" resultType="com.authine.cloudpivot.web.api.entity.MonthTrainPerson" >
-       select * from i4h9w_traindengjicase where
+       select * from i4h9w_trainDengjicase where
        parentId=#{parentId}
     </select>
 
