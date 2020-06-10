@@ -2,11 +2,13 @@ package com.authine.cloudpivot.web.api.mapper;
 
 
 import com.authine.cloudpivot.web.api.entity.MonthTrain;
+import com.authine.cloudpivot.web.api.entity.MonthTrainPerson;
 import com.authine.cloudpivot.web.api.entity.PingceResult;
 import com.authine.cloudpivot.web.api.entity.XinliSas;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: weiyao
@@ -41,4 +43,18 @@ public interface MonthTrainMapper {
 
     //查询父部门Id
     String getParentDeptId(String deptid);
+
+
+    //获取大(中)队 子表个人信息
+    List<MonthTrainPerson> getMonthTrainPersonInfoByBig(String parentId);
+    List<MonthTrainPerson> getMonthTrainPersonInfoByCen(String parentId);
+
+    //查询是否有个人详情统计
+    MonthTrainPerson getMonthTrainPerson(@Param("trainDate") Date trainDate, @Param("trainNames")String trainNames);
+
+    //插入个人详情统计
+    Integer insertMonthTrainPerson(MonthTrainPerson monthTrainPerson);
+
+    //更新个人详情统计
+    Integer updateMonthTrainPerson(MonthTrainPerson monthTrainPerson);
 }
