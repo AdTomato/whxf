@@ -59,7 +59,7 @@
             owner,ownerDeptId,createdTime,
             modifier, modifiedTime,
             sequenceNo,sequenceStatus,ownerDeptQueryCode,
-           dept,trainDate,numAll,
+           dept,trainDate,numAll,bigDept,
            NumberCancun1,canxunProb1,hegeProb1,youxiuProb1,NumberCancun2,canxunProb2,hegeProb2,youxiuProb2,NumberCancun3,canxunProb3,hegeProb3,youxiuProb3,
             NumberCancun4,canxunProb4,hegeProb4,youxiuProb4,NumberCancun5,canxunProb5,hegeProb5,youxiuProb5,NumberCancun6,canxunProb6,hegeProb6,youxiuProb6,
               NumberCancun7,canxunProb7,hegeProb7,youxiuProb7,NumberCancun8,canxunProb8,hegeProb8,youxiuProb8, NumberCancun9,canxunProb9,hegeProb9,youxiuProb9
@@ -69,7 +69,7 @@
             #{owner},#{ownerDeptId},now(),
             #{modifier},now(),
             #{sequenceNo},#{sequenceStatus},#{ownerDeptQueryCode},
-             #{dept},#{trainDate},#{numAll},
+             #{dept},#{trainDate},#{numAll},#{bigDept},
             #{NumberCancun1},#{canxunProb1},#{hegeProb1},#{youxiuProb1},#{NumberCancun2},#{canxunProb2},#{hegeProb2},#{youxiuProb2},#{NumberCancun3},#{canxunProb3},#{hegeProb3},#{youxiuProb3},
         #{NumberCancun4},#{canxunProb4},#{hegeProb4},#{youxiuProb4},#{NumberCancun5},#{canxunProb5},#{hegeProb5},#{youxiuProb5},#{NumberCancun6},#{canxunProb6},#{hegeProb6},#{youxiuProb6},
         #{NumberCancun7},#{canxunProb7},#{hegeProb7},#{youxiuProb7},#{NumberCancun8},#{canxunProb8},#{hegeProb8},#{youxiuProb8},#{ NumberCancun9},#{canxunProb9},#{hegeProb9},#{youxiuProb9}
@@ -188,6 +188,9 @@
         <set>
             <if test="numAll != null and numAll !=0">
                 numAll = #{numAll},
+            </if>
+            <if test="bigDept != null">
+                bigDept = #{bigDept},
             </if>
             <if test="NumberCancun1 != null and NumberCancun1 !=0">
                 NumberCancun1 = #{NumberCancun1},
@@ -379,4 +382,31 @@
            )
              </insert>
 
+    <select id="getMonthTrainBigListByDT" resultType="com.authine.cloudpivot.web.api.entity.MonthTrain" >
+       select * from i4h9w_monthTrain where
+       DATE_FORMAT( trainDate, '%Y%m' ) = DATE_FORMAT( #{trainDate} , '%Y%m' )
+       and bigDept =#{bigDept}
+    </select>
+
+    <select id="getMonthTrainCenListDT" resultType="com.authine.cloudpivot.web.api.entity.MonthTrain" >
+        select * from i4h9w_monthTrain where
+       DATE_FORMAT( trainDate, '%Y%m' ) = DATE_FORMAT( #{trainDate} , '%Y%m' )
+       and dept =#{dept}
+    </select>
+
+    <update id="updateAvgByBig" parameterType="Map">
+        UPDATE i4h9w_monthTrainProbBig
+        <set>
+            deptAvg =#{deptAvg}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAvgByCen" parameterType="Map">
+        UPDATE   i4h9w_monthTrainProbCen
+        <set>
+            deptAvg =#{deptAvg}
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

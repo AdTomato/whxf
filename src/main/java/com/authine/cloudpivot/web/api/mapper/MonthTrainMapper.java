@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: weiyao
@@ -57,4 +58,16 @@ public interface MonthTrainMapper {
 
     //更新个人详情统计
     Integer updateMonthTrainPerson(MonthTrainPerson monthTrainPerson);
+
+    //查询大队平均分组成(中队)
+    List<MonthTrain> getMonthTrainBigListByDT(@Param("trainDate") Date trainDate, @Param("bigDept")String bigDept);
+
+    //查询中队平均分组成
+    List<MonthTrain> getMonthTrainCenListDT(@Param("trainDate") Date trainDate, @Param("dept")String dept);
+
+    //更新大队平均分
+    Integer updateAvgByBig(Map<String, Object> map);
+
+    //更新中队平均分
+    Integer updateAvgByCen(Map<String, Object> map);
 }

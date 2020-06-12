@@ -20,6 +20,7 @@ public class MonthTrain extends BaseEntity {
     private Date trainDate;//日期
     private String leaderName;//主管人员
     private Integer numAll;//总人数
+    private String bigDept;//所属大队部门
     private Float NumberCancun1;
     private Float canxunProb1;
     private Float hegeProb1;
