@@ -10,10 +10,10 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class MonthTrainServiceImpl implements MonthTrainService {
@@ -25,6 +25,8 @@ public class MonthTrainServiceImpl implements MonthTrainService {
     public String upsetMonthTrainCen(String Id) {
         String resc="结果描述：";
         MonthTrain mt=monthTrainMapper.getMonthTrainCen(Id);
+        String cenid="";
+        String bigid="";
         if(mt !=null && mt.id !=null){
             //查询是否有中队统计，有更新，没有插入
             MonthTrain  mtcen=monthTrainMapper.getMonthTrainCenProNum(mt.getTrainDate(),mt.getDept());
@@ -37,6 +39,8 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                 updateCen.setId(mtcen.getId());
                 Integer rsc=monthTrainMapper.updateMonthTrainCenPro(updateCen);
                   resc=resc+"中队更新结果"+rsc +";";
+                String up=upAvgByCen(updateCen.getId(),mt.getDept(),mt.getTrainDate());
+                resc=resc+up ;
             }else{
                 //插入中队
                 MonthTrain insetCen=new MonthTrain();
@@ -46,15 +50,19 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                 insetCen.setId(UUID.randomUUID().toString().replace("-", ""));
                 Integer rsc=monthTrainMapper.insertMonthTrainCenPro(insetCen);
                 resc=resc+"中队插入结果"+rsc+";";
+                String up=upAvgByCen(insetCen.getId(),mt.getDept(),mt.getTrainDate());
+                resc=resc+up ;
             }
 
             //查询是否有大队统计，有更新，没有插入
-            JSONArray json = (JSONArray)JSON.parse(mt.getDept());
-            JSONObject deptJson = (JSONObject)json.get(0);
-            String deptId=deptJson.getString("id");
-            String parentDeptId=monthTrainMapper.getParentDeptId(deptId);//父部门（大队部门Id）
+//            JSONArray json = (JSONArray)JSON.parse(mt.getDept());
+//            JSONObject deptJson = (JSONObject)json.get(0);
+//            String deptId=deptJson.getString("id");
+//            String parentDeptId=monthTrainMapper.getParentDeptId(deptId);//父部门（大队部门Id）
+            String parentDeptId=mt.getBigDept();
             if(StringUtils.isNotBlank(parentDeptId)){
-                parentDeptId= "[{\"id\":\""+ parentDeptId  +"\",\"type\":1}]";
+//                parentDeptId= "[{\"id\":\""+ parentDeptId  +"\",\"type\":1}]";
+
                 MonthTrain  mtbig=monthTrainMapper.getMonthTrainBigProNum(mt.getTrainDate(),parentDeptId);
                 if(mtbig!=null){
 
@@ -68,6 +76,8 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                 //    updatebig.setNumCenPerson(mtbig.getNumCenPerson()+mt.getNumAll());//中队人数
                     Integer rsc=monthTrainMapper.updateMonthTrainBigPro(updatebig);
                     resc=resc+"大队更新结果"+rsc+";";
+                    String up=upAvgByBig(updatebig.getId(),parentDeptId,mt.getTrainDate());
+                    resc=resc+up ;
                 }else{
                     //插入大队
                     MonthTrain insetbig=new MonthTrain();
@@ -75,9 +85,10 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                     BeanUtils.copyProperties(mt,insetbig);
                     insetbig.setId(UUID.randomUUID().toString().replace("-", ""));
                     insetbig.setDept(parentDeptId);
-               //     insetbig.setNumCenPerson(mt.getNumAll());
                     Integer rsc=monthTrainMapper.insertMonthTrainBigPro(insetbig);
                     resc=resc+"大队插入结果"+rsc+";";
+                    String up=upAvgByBig(insetbig.getId(),parentDeptId,mt.getTrainDate());
+                    resc=resc+up ;
                 }
             }else{
                 resc=resc+"中队里不存在上级大队;";
@@ -191,6 +202,134 @@ public class MonthTrainServiceImpl implements MonthTrainService {
                 }
             }
         }
+        return resc;
+    }
+
+    //更新中队平均分
+    String upAvgByCen(String id, String dept, Date trainDate){
+      List<MonthTrain> mtlist=monthTrainMapper.getMonthTrainCenListDT(trainDate,dept);
+      String resc="";
+      if(!CollectionUtils.isEmpty(mtlist)){
+          int count=0;//总人数
+          Float score=0F;//总分数
+          for(MonthTrain idList :mtlist){
+              //查询子表详细成绩
+              List<MonthTrainPerson> mtpb=monthTrainMapper.getMonthTrainPersonInfoByCen(idList.getId());
+              if(mtpb!=null && mtpb.size()>0){
+                  for(MonthTrainPerson list :mtpb){
+                      if(list.getScore1() !=null ){
+                          count++;
+                          score=score+list.getScore1();
+                      }
+                      if(list.getScore2() !=null ){
+                          count++;
+                          score=score+list.getScore2();
+                      }
+                      if(list.getScore3() !=null ){
+                          count++;
+                          score=score+list.getScore3();
+                      }
+                      if(list.getScore4() !=null ){
+                          count++;
+                          score=score+list.getScore4();
+                      }
+                      if(list.getScore5() !=null ){
+                          count++;
+                          score=score+list.getScore5();
+                      }
+                      if(list.getScore6() !=null ){
+                          count++;
+                          score=score+list.getScore6();
+                      }
+                      if(list.getScore7() !=null ){
+                          count++;
+                          score=score+list.getScore7();
+                      }
+                      if(list.getScore8() !=null ){
+                          count++;
+                          score=score+list.getScore8();
+                      }
+                      if(list.getScore9() !=null ){
+                          count++;
+                          score=score+list.getScore9();
+                      }
+
+                  }
+              }
+          }
+          Float deptAvg=score/count;
+          Map<String,Object> map=new HashMap<>();
+          map.put("id",id);
+          map.put("deptAvg",deptAvg);
+          Integer rsc=monthTrainMapper.updateAvgByCen(map);
+          resc=resc+"中队平均分统计更新结果"+rsc+";";
+      }
+
+
+        return resc;
+    }
+
+    //更新大队平均分
+    String upAvgByBig(String id, String bigDept, Date trainDate){
+        List<MonthTrain> mtlist=monthTrainMapper.getMonthTrainBigListByDT(trainDate,bigDept);
+        String resc="";
+        if(!CollectionUtils.isEmpty(mtlist)){
+            int count=0;//总人数
+            Float score=0F;//总分数
+            for(MonthTrain idList :mtlist){
+                //查询子表详细成绩
+                List<MonthTrainPerson> mtpb=monthTrainMapper.getMonthTrainPersonInfoByCen(idList.getId());
+                if(mtpb!=null && mtpb.size()>0){
+                    for(MonthTrainPerson list :mtpb){
+                        if(list.getScore1() !=null ){
+                            count++;
+                            score=score+list.getScore1();
+                        }
+                        if(list.getScore2() !=null ){
+                            count++;
+                            score=score+list.getScore2();
+                        }
+                        if(list.getScore3() !=null ){
+                            count++;
+                            score=score+list.getScore3();
+                        }
+                        if(list.getScore4() !=null ){
+                            count++;
+                            score=score+list.getScore4();
+                        }
+                        if(list.getScore5() !=null ){
+                            count++;
+                            score=score+list.getScore5();
+                        }
+                        if(list.getScore6() !=null ){
+                            count++;
+                            score=score+list.getScore6();
+                        }
+                        if(list.getScore7() !=null ){
+                            count++;
+                            score=score+list.getScore7();
+                        }
+                        if(list.getScore8() !=null ){
+                            count++;
+                            score=score+list.getScore8();
+                        }
+                        if(list.getScore9() !=null ){
+                            count++;
+                            score=score+list.getScore9();
+                        }
+
+                    }
+                }
+            }
+            Float deptAvg=score/count;
+            Map<String,Object> map=new HashMap<>();
+            map.put("id",id);
+            map.put("deptAvg",deptAvg);
+            Integer rsc=monthTrainMapper.updateAvgByBig(map);
+            resc=resc+"大队平均分统计更新结果"+rsc+";";
+        }
+
+
         return resc;
     }
 }
