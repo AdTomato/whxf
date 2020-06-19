@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.ZhiqingShiliMapper">
+
+    <select id="getZhiqingshiliInfo" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.Zhiqingshili">
+        select id,
+         (SELECT name FROM h_org_department WHERE id = JSON_UNQUOTE(dept -> '$[0].id'))     as deptName,
+        dept,numAll1,numAll2,numMhAll,if(numlgbzCar,1,0)+if(numgsbzCar,1,0)+if(numqtbzCar ,1,0) as numBianchen,
+        ifnull(numlebzSq,0)+ifnull(numgsbzSq,0) + ifnull(numqtbzSq,0) as numSq, numChuqiang,numGsHigh,numGsWidth,heigth
+        from  i4h9w_zhiqingshili where dept =#{deptId}
+        order by createdTime desc limit 1
+    </select>
+
+
+</mapper>
