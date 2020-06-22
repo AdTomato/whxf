@@ -12,6 +12,7 @@ import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.dingtalk.api.response.OapiAttendanceGetleavestatusResponse;
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
 import com.dingtalk.api.response.OapiRoleSimplelistResponse;
+import com.dingtalk.api.response.OapiUserGetResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ private DubboConfigService dubboConfigService;
 
 
    @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
-//@Scheduled(cron = "0 0/5 * * * ? ")   //五分钟执行一次
+// @Scheduled(cron = "0 0/3 * * * ? ")   //四分钟执行一次
     public void getPersonVacationInfo() {
         log.info("开始执行获取角色下人员所有请假信息......");
         //获取token
@@ -74,8 +75,11 @@ private DubboConfigService dubboConfigService;
                 int sortKey = 1;
                 //遍历每一个干部
                 for (OapiRoleSimplelistResponse.OpenEmpSimple sim : roleList.getResult().getList()) {
+                    //当天是否存在请假
                     OapiAttendanceGetleavestatusResponse qingjia = DingDingUtil.getleavestatus(sim.getUserid(), token);
                     if (qingjia.getResult().getLeaveStatus() != null && qingjia.getResult().getLeaveStatus().size() > 0) {
+                        //获取用户详情，部门信息
+                        OapiUserGetResponse userDetail=DingDingUtil.getUserDetail(sim.getUserid(),token);
                         //当天存在请假
                         //        System.out.println("===============干部请假人确认===============" + sim.getName());
                         countQinjia++;
@@ -85,6 +89,21 @@ private DubboConfigService dubboConfigService;
                         role.setVacationName(sim.getName());
                         role.setUserId(sim.getUserid());
                         role.setId(UUID.randomUUID().toString().replace("-", ""));
+                        if(userDetail !=null){
+                            role.setPsition(userDetail.getPosition());//职务信息
+                            //获取部门名称
+                            List<Long> deptIdList=userDetail.getDepartment();
+                            String deptName="";
+                            if(deptIdList!=null){
+                                for(Long deptid :deptIdList){
+                                    String dname = roleVacationInfoMapper.getDeptNameByDDdeptId(String.valueOf(deptid));
+                                    deptName=deptName+dname+" ";
+                                }
+
+                            }
+                            role.setDeptName(deptName);
+                        }
+
                         infoList.add(role);
                     }
                     sortKey++;
@@ -115,9 +134,9 @@ private DubboConfigService dubboConfigService;
             role.setVacationNum(countQinjia);//请假人数
             role.setInworkNum(countGb-countQinjia);//在岗人数
         Integer isSucc=roleVacationInfoMapper.insertRoleVacation(role);
-        //    log.info("主表插入是成功isSucc="+isSucc);
+         //   log.info("主表插入是成功isSucc="+isSucc);
         Integer isSuccDetaul=roleVacationInfoMapper.insertVacationDetailList(infoList);
-        //    log.info("子表插入是成功isSucc="+isSuccDetaul);
+         //   log.info("子表插入是成功isSucc="+isSuccDetaul);
 
         //发送消息通知
             /*

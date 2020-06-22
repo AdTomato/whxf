@@ -36,4 +36,10 @@ public class RoleVacationInfo extends BaseEntity {
     private String parentId;
 
     private Integer sortKey;
+
+    //职务
+    private String psition;
+    //部门名称
+    private String deptName;
+
 }

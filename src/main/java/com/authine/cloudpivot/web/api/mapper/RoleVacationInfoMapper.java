@@ -23,4 +23,7 @@ public interface RoleVacationInfoMapper {
 
     //查询是否有今天数据
     Integer getTodayCount();
+
+    //根据钉钉部门id获取部门名称
+    String getDeptNameByDDdeptId(String sourceId);
 }

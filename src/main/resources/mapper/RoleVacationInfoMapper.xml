@@ -21,10 +21,10 @@
     <!-- 批量插入请假人员详情子表 -->
     <insert id="insertVacationDetailList" parameterType="java.util.List">
         INSERT INTO i4h9w_vacationDetail
-        (id,vacationName,userId,parentId,sortKey)
+        (id,vacationName,userId,parentId,sortKey,psition,deptName)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id},#{item.vacationName},#{item.userId},#{item.parentId},#{item.sortKey})
+            (#{item.id},#{item.vacationName},#{item.userId},#{item.parentId},#{item.sortKey},#{item.psition},#{item.deptName})
         </foreach>
 
     </insert>
@@ -41,4 +41,11 @@
                 #{sequenceNo},#{sequenceStatus}, #{ownerDeptQueryCode},
                 #{roleName}, now(), #{allroleNum}, #{vacationNum}, #{inworkNum})
     </insert>
+
+    <select id="getDeptNameByDDdeptId" resultType="java.lang.String">
+        SELECT name
+        FROM h_org_department
+        where sourceId = #{sourceId}
+         LIMIT 1
+    </select>
 </mapper>

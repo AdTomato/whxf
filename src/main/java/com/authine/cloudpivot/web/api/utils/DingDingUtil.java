@@ -408,7 +408,7 @@ public class DingDingUtil {
      * @param userId
      * @return
      */
-    public static OapiUserGetResponse getUserDetail(String userId){
+    public static OapiUserGetResponse getUserDetail(String userId,String token){
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
         OapiUserGetRequest request = new OapiUserGetRequest();
         request.setUserid(userId);
@@ -417,7 +417,7 @@ public class DingDingUtil {
         //  List<OapiBlackboardListtoptenResponse.OapiBlackboardVo> oapiBlackboardVos = null;
         // List<OapiUserGetResponse.Roles> roles = null;
         try {
-            response = client.execute(request, getToken());
+            response = client.execute(request, token);
             if (response.getErrcode() == 0) {
                 return response;
             }
