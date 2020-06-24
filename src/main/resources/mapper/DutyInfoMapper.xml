@@ -6,10 +6,10 @@
 
     <resultMap id="stationDutyInfo" type="com.authine.cloudpivot.web.api.dto.StationDutyInfoDto">
         <id column="id" property="id"/>
-        <collection property="stationDutyCadres" column="id"
-                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getStationDutyCadreByParentId"/>
-        <collection property="brigadeHeadquarters" column="id"
-                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getBrigadeHeadquarterByParentId"/>
+<!--        <collection property="stationDutyCadres" column="id"-->
+<!--                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getStationDutyCadreByParentId"/>-->
+<!--        <collection property="brigadeHeadquarters" column="id"-->
+<!--                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getBrigadeHeadquarterByParentId"/>-->
     </resultMap>
     <select id="getStationDutyInfoByStationId" resultMap="stationDutyInfo">
         SELECT *
@@ -37,10 +37,10 @@
     </select>
     <resultMap id="brigadeDutyInfo" type="com.authine.cloudpivot.web.api.dto.BrigadeDutyInfoDto">
         <id column="id" property="id"/>
-        <collection property="commanders" column="id"
-                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getCommanderByParentId"/>
-        <collection property="commandAssistants" column="id"
-                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getCommandAssistantByParentId"/>
+<!--        <collection property="commanders" column="id"-->
+<!--                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getCommanderByParentId"/>-->
+<!--        <collection property="commandAssistants" column="id"-->
+<!--                    select="com.authine.cloudpivot.web.api.mapper.DutyInfoMapper.getCommandAssistantByParentId"/>-->
     </resultMap>
     <select id="getBrigadeDutyInfoByBrigadeId" resultMap="brigadeDutyInfo">
         SELECT *

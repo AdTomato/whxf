@@ -27,4 +27,16 @@ public class BrigadeDutyInfo extends BaseEntity{
      */
     private Date date;
 
+    private String userName1;
+
+    private String userName2;
+
+    private String userName3;
+
+    private String userName4;
+
+    private String userName5;
+
+    private String userName6;
+
 }
