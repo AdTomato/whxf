@@ -50,8 +50,8 @@ private DubboConfigService dubboConfigService;
 
 
 
-  // @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
-   @Scheduled(cron = "0 0/6 * * * ? ")   //四分钟执行一次
+   @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
+  // @Scheduled(cron = "0 0/6 * * * ? ")   //四分钟执行一次
     public void getPersonVacationInfo() {
         log.info("开始执行获取角色下人员所有请假信息......");
         //获取token
@@ -147,7 +147,7 @@ private DubboConfigService dubboConfigService;
              */
          String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470";
          String message= DateUtil.getDate()+ " 干部总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
-     //   OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
+        OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
 }
