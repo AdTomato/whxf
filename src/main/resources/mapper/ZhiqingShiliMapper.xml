@@ -9,7 +9,8 @@
         select id,
          (SELECT name FROM h_org_department WHERE id = JSON_UNQUOTE(dept -> '$[0].id'))     as deptName,
         dept,numAll1,numAll2,numMhAll,if(numlgbzCar,1,0)+if(numgsbzCar,1,0)+if(numqtbzCar ,1,0) as numBianchen,
-        ifnull(numlebzSq,0)+ifnull(numgsbzSq,0) + ifnull(numqtbzSq,0) as numSq, numChuqiang,numGsHigh,numGsWidth,heigth
+        ifnull(numlebzSq,0)+ifnull(numgsbzSq,0) + ifnull(numqtbzSq,0) as numSq, numChuqiang,numGsHigh,numGsWidth,heigth,
+        numWater,numPaomo,numGanfen
         from  i4h9w_zhiqingshili where dept =#{deptId}
         order by createdTime desc limit 1
     </select>

@@ -26,6 +26,13 @@ public class Zhiqingshili {
     private Float numAll2;
     //灭火药剂--总量（吨）
     private Float numMhAll;
+    //灭火药剂--水（吨）
+    private Float numWater;
+    //灭火药剂--泡沫（吨）
+    private Float numPaomo;
+    //灭火药剂--干粉（吨）
+    private Float numGanfen;
+
     //战斗编成--》编成数
     private Float numBianchen;
     //战斗编成--》水枪数
