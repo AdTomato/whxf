@@ -17,6 +17,16 @@
         FROM i4h9w_roleVacationInfo
      WHERE TO_DAYS(vacationDate) =TO_DAYS(NOW())
     </select>
+    <select id="getXfyTodayCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM i4h9w_xfyVacationInfo
+     WHERE TO_DAYS(vacationDate) =TO_DAYS(NOW())
+    </select>
+    <select id="getZzxfyTodayCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM i4h9w_zzxfyVacationInfo
+     WHERE TO_DAYS(vacationDate) =TO_DAYS(NOW())
+    </select>
 
     <!-- 批量插入请假人员详情子表 -->
     <insert id="insertVacationDetailList" parameterType="java.util.List">
@@ -28,10 +38,50 @@
         </foreach>
 
     </insert>
+    <insert id="insertXfyVacationDetailList" parameterType="java.util.List">
+        INSERT INTO i4h9w_xfyVacationDetail
+        (id,vacationName,userId,parentId,sortKey,psition,deptName)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.vacationName},#{item.userId},#{item.parentId},#{item.sortKey},#{item.psition},#{item.deptName})
+        </foreach>
+
+    </insert>
+    <insert id="insertZzxfyVacationDetailList" parameterType="java.util.List">
+        INSERT INTO i4h9w_zzxfyVacationDetail
+        (id,vacationName,userId,parentId,sortKey,psition,deptName)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.vacationName},#{item.userId},#{item.parentId},#{item.sortKey},#{item.psition},#{item.deptName})
+        </foreach>
+
+    </insert>
 
     <!-- 插入请假信息主表 -->
     <insert id="insertRoleVacation" parameterType="com.authine.cloudpivot.web.api.entity.RoleVacationInfo">
         INSERT INTO i4h9w_roleVacationInfo
+       (id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
+            modifier,modifiedTime, workflowInstanceId,
+            sequenceNo, sequenceStatus,ownerDeptQueryCode,
+            roleName,vacationDate,allroleNum,vacationNum,inworkNum)
+        VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
+                now(), #{modifier}, now(), #{workflowInstanceId},
+                #{sequenceNo},#{sequenceStatus}, #{ownerDeptQueryCode},
+                #{roleName}, now(), #{allroleNum}, #{vacationNum}, #{inworkNum})
+    </insert>
+    <insert id="insertXfyRoleVacation" parameterType="com.authine.cloudpivot.web.api.entity.RoleVacationInfo">
+        INSERT INTO i4h9w_xfyVacationInfo
+       (id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
+            modifier,modifiedTime, workflowInstanceId,
+            sequenceNo, sequenceStatus,ownerDeptQueryCode,
+            roleName,vacationDate,allroleNum,vacationNum,inworkNum)
+        VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
+                now(), #{modifier}, now(), #{workflowInstanceId},
+                #{sequenceNo},#{sequenceStatus}, #{ownerDeptQueryCode},
+                #{roleName}, now(), #{allroleNum}, #{vacationNum}, #{inworkNum})
+    </insert>
+    <insert id="insertZzxfyRoleVacation" parameterType="com.authine.cloudpivot.web.api.entity.RoleVacationInfo">
+        INSERT INTO i4h9w_zzxfyVacationInfo
        (id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
             modifier,modifiedTime, workflowInstanceId,
             sequenceNo, sequenceStatus,ownerDeptQueryCode,
