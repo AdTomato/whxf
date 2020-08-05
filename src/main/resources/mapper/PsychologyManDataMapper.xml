@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.PsychologyManDataMapper">
+
+
+
+    <resultMap id="psychologyManData" type="com.authine.cloudpivot.web.api.entity.PsychologyManData">
+        <id property="id" column="id"/>
+        <id property="id" column="id"/>
+
+        <collection property="photo" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.PsychologyManDataMapper.getPhoto"/>
+
+    </resultMap>
+
+    <select id="getPsychologyManData" resultMap="psychologyManData">
+        SELECT *
+      FROM igpgf_psychology_man_data
+
+    </select>
+
+    <select id="getPsychologyManDataId" resultMap="psychologyManData">
+        SELECT *
+      FROM igpgf_psychology_man_data
+      where id = #{id}
+    </select>
+
+    <select id="getPhoto" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT refId
+      FROM h_biz_attachment
+      WHERE bizObjectId = #{id}
+      AND schemaCode = 'psychology_man_data'
+      AND bizPropertyCode = 'photo'
+      ORDER BY createdTime DESC
+
+    </select>
+
+
+
+
+</mapper>
