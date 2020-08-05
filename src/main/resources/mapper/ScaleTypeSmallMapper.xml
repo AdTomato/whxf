@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.ScaleTypeSmallMapper">
+    <resultMap id="bigList" type="com.authine.cloudpivot.web.api.entity.ScaleTypeBig">
+        <id column="id" property="id"/>
+        <id column="bigTypeName" property="bigTypeName"/>
+        <collection property="scaleTypeSmallList" ofType="com.authine.cloudpivot.web.api.entity.ScaleTypeSmall"
+                    javaType="java.util.ArrayList">
+             <id column="id" property="smallId"/>
+            <id column="smallTypeName" property="smallTypeName"/>
+        </collection>
+    </resultMap>
+
+    <select id="getScaleTypeSmallOne" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTypeSmall">
+        SELECT *
+        FROM igpgf_scale_type_small
+    </select>
+
+    <select id="getScaleTypeSmallAll" resultMap="bigList">
+        select b.*,a.smallTypeName as smallTypeName,a.id as smallId
+         from  igpgf_scale_type_big b
+        left join igpgf_scale_type_small a
+        on a.bigTypeName = b.id
+    </select>
+
+</mapper>

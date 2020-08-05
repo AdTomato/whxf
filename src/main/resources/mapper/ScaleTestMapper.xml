@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.ScaleTestMapper">
+
+
+
+    <select id="getScaleTestOne" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTest">
+        SELECT a.*
+        FROM igpgf_scale_test a,igpgf_scale_type_small b
+        WHERE b.id = #{id}
+
+    </select>
+
+    <!--<select id="getScaleTestAll" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTest">
+        SELECT b.smallTypeName
+        FROM igpgf_scale_test a,igpgf_scale_type_small b
+        WHERE b.id = #{id}
+
+    </select>-->
+    <resultMap id="scaleTest" type="com.authine.cloudpivot.web.api.entity.ScaleTest">
+        <id property="id" column="id"/>
+        <id property="id" column="id"/>
+        <collection property="learningStar" column="learningStarId"
+                    select="com.authine.cloudpivot.web.api.mapper.ScaleTestMapper.getOrgUserById"/>
+        <collection property="imgUrl" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.ScaleTestMapper.getImgUrl"/>
+
+    </resultMap>
+
+    <select id="getScaleTestId" resultMap="scaleTest">
+        SELECT *
+      FROM igpgf_scale_test
+        WHERE smallTypeName = #{id}
+
+    </select>
+
+    <select id="getOrgUserById" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTypeSmall">
+        SELECT *
+      FROM igpgf_scale_type_small
+      WHERE id = #{id}
+        /*SELECT b.bigTypeName,a.smallTypeName
+        FROM igpgf_scale_type_small a,igpgf_scale_type_big b
+        WHERE a.bigTypeName = b.id and a.id = #{id}*/
+    </select>
+    <select id="getImgUrl" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT refId
+      FROM h_biz_attachment
+      WHERE bizObjectId = #{id}
+      AND schemaCode = 'scale_test'
+      AND bizPropertyCode = 'imgUrl'
+      ORDER BY createdTime DESC
+
+    </select>
+
+
+
+
+</mapper>

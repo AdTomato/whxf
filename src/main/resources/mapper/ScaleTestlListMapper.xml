@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.ScaleTestListMapper">
+
+
+    <resultMap id="scaleTest" type="com.authine.cloudpivot.web.api.dto.ScaleTestList">
+        <id column="id" property="id"/>
+        <collection property="scaleTestDetails" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.ScaleTestListMapper.getScaleTestDetailByParentId"/>
+    </resultMap>
+    <select id="getScaleTestList" resultMap="scaleTest">
+       SELECT *
+      FROM igpgf_scale_test
+      WHERE id = #{id}
+    </select>
+
+    <select id="getScaleTestDetailByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTestDetail">
+         SELECT *
+        FROM igpgf_scale_test_detail
+        WHERE parentId = #{id}
+        ORDER BY sortKey ASC
+    </select>
+
+    <select id="getScaleTestResultByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTestResult">
+       SELECT *
+        FROM igpgf_scale_test_result
+        WHERE parentId = #{id}
+    </select>
+
+<!--    <select id="getScaleTestAcoresByParentId" parameterType="java.lang.String"-->
+<!--            resultType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore">-->
+<!--       SELECT *-->
+<!--        FROM igpgf_scale_test_acore-->
+<!--        WHERE scaleTest = #{id}-->
+<!--    </select>-->
+
+
+    <!--<resultMap id="scaleTestList" type="com.authine.cloudpivot.web.api.dto.ScaleTestList">
+        <id column="id" property="id"/>
+        <collection property="scaleTestDetails" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.ScaleTestListMapper.getScaleTestDetailByParentId"/>
+        <collection property="scaleTestResults" column="id"
+                    select="com.authine.cloudpivot.web.api.mapper.ScaleTestListMapper.getScaleTestResultByParentId"/>
+    </resultMap>
+    <select id="getScaleTestList" resultMap="ScaleTestList">
+        SELECT *
+        FROM igpgf_scale_test
+        WHERE id = #{id}
+    </select>
+
+    <select id="getScaleTestDetailByParentId" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTestDetail">
+        SELECT *
+        FROM igpgf_scale_test_detail
+        WHERE parentId = #{id}
+        ORDER BY sortKey ASC
+    </select>
+
+    <select id="getScaleTestList" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.ScaleTestResult">
+        SELECT *
+        FROM igpgf_scale_test_result
+        WHERE parentId = #{id}
+        ORDER BY sortKey ASC
+    </select>
+-->
+</mapper>

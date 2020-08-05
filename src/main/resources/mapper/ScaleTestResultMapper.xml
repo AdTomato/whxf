@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.ScaleTestResultMapper">
+
+    <select id="getResultByScore" resultType="java.lang.String">
+        select result from igpgf_scale_test_result  where parentId=#{parentId}
+        and min_score <![CDATA[ <= ]]> #{score} and
+        #{score} <![CDATA[ <= ]]> max_score
+        LIMIT 1
+    </select>
+
+    <select id="getIdByddId" resultType="java.lang.String">
+        SELECT id
+        FROM h_org_user
+        WHERE userId = #{userId}
+    </select>
+
+    <select id="getoptionResult" resultType="java.lang.String">
+        SELECT optionResult
+        FROM igpgf_scale_test_detail
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertScaleTestAcore" parameterType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore">
+        INSERT INTO igpgf_scale_test_acore
+       (id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
+            modifier,modifiedTime, workflowInstanceId,
+            sequenceNo, sequenceStatus,ownerDeptQueryCode,
+            scaleTest,userId,testTime,testScore,
+            testResult,testDetail,danger)
+        VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
+                now(), #{modifier}, now(), #{workflowInstanceId},
+                #{sequenceNo},#{sequenceStatus}, #{ownerDeptQueryCode},
+                #{scaleTest},#{userId},  now(), #{testScore},
+                #{testResult}, #{testDetail}, #{danger})
+    </insert>
+
+    <select id="getScaleTestResultInfo" resultType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore"
+            parameterType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore">
+        select * from igpgf_scale_test_acore where
+        1=1
+        <if test="scaleTest != null and scaleTest != ''">
+          and  scaleTest=#{scaleTest}
+        </if>
+        <if test="userId != null and userId != ''">
+            and userId like concat('%',#{userId},'%')
+        </if>
+        <if test="testTime != null and testTime != ''">
+            AND date_format(testTime, '%Y-%m-%d') = date_format(#{testTime}, '%Y-%m-%d')
+        </if>
+    </select>
+
+</mapper>

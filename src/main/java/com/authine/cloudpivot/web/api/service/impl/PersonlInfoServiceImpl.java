@@ -45,8 +45,8 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
         String ddDeptId = deptId;
         //获取token
         String token = DingDingUtil.getToken();
-        //设置生日
 
+        //设置生日
         if (StringUtils.isNotBlank(ddDeptId)) {
             //获取部门用户详情
             OapiUserListbypageResponse deptUserList = DingDingUtil.getDeptUserByDeptId(ddDeptId, token);
@@ -212,7 +212,7 @@ public class PersonlInfoServiceImpl implements PersonlInfoService {
     PersonlInfo getPersonState(PersonlInfo person, String personId, String token,Integer types,String name,List<String> names) {
 
         int color=1;
-//        if("吕磊".equals(name)){
+//        if("魏姚".equals(name) || "张卓".equals(name)){
 //            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>： ");
 //        }
         //查询排版信息（不排班）

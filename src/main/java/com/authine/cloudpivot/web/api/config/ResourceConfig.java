@@ -154,6 +154,11 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                     .antMatchers("/fonts/**").permitAll()
                     .antMatchers("/favicon.*").permitAll()
                     .antMatchers("/api/dingtalk/**").permitAll()
+                    //心理咨询项目
+                    //咨询结果
+                    .antMatchers("/controller/scaleResult/**").permitAll()
+                    //ke量表查询
+                    .antMatchers("/controller/ScaleTest/**").permitAll()
                     //test
                     .antMatchers("/api/licenseExt/**").permitAll()
                     .antMatchers("/v1/dashboard/**").permitAll()
