@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -34,7 +35,7 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
 
     //根据分数得到心里结果
     @Override
-    public String getResultByScore(String parentId, Integer score) {
+    public List<Map<String,String>> getResultByScore(String parentId, Integer score) {
         return scaleTestResultMapper.getResultByScore(parentId,score);
     }
 

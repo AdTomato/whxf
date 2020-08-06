@@ -29,12 +29,16 @@ public class ScaleTestResultController extends BaseController {
 
 
     //weiyao 抑郁 修改或新增测评结果
-    @GetMapping("/getResultByScore")
-    public ResponseResult<String> getResultByScore(@RequestParam String parentId,  @RequestParam Integer score) {
+    @PostMapping("/getResultByScore")
+    public ResponseResult<Object> getResultByScore(@RequestParam String parentId,  @RequestParam Integer score) {
 
         if(StringUtils.isNotEmpty(parentId) && score!=null){
-            String res=scaleTestResultService.getResultByScore(parentId,score);
-            return this.getOkResponseResult("success", res);
+            List<Map<String,String>>  res=scaleTestResultService.getResultByScore(parentId,score);
+            if(res !=null && res.size()>0)
+            return this.getOkResponseResult(res.get(0), "succeed");
+            else{
+                return this.getErrResponseResult(null, 404L, "没有找到结果");
+            }
         }else{
             return this.getErrResponseResult(null, 404L, "参数错误");
         }

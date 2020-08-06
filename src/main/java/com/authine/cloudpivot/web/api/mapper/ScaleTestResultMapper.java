@@ -16,7 +16,7 @@ public interface ScaleTestResultMapper {
     /**
      * 根据分数得出测评结果
      */
-    public String getResultByScore(@Param("parentId")String parentId,@Param("score") Integer score);
+    public List<Map<String,String>> getResultByScore(@Param("parentId")String parentId,@Param("score") Integer score);
 
     //插入量表测评结果
     Integer insertScaleTestAcore(ScaleTestAcore info);

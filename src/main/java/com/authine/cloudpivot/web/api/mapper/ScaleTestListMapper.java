@@ -16,7 +16,8 @@ public interface ScaleTestListMapper {
 
     List<String> getScaleTestDetailByParentId(String parentId);
 
-    List<String> getScaleTestResultByParentId(String parentId);
+    //魏姚8月6号注释--表单已修改，该查询存在错误
+ //   List<String> getScaleTestResultByParentId(String parentId);
 
     List<String> getScaleTestAcoresByParentId(String parentId);
 
