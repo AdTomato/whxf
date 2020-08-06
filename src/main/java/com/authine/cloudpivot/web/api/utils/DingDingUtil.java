@@ -542,6 +542,30 @@ public class DingDingUtil {
     }
 
     /**
+     * 获取用户userid
+     * @param code： 免登授权码，参考上述“获取免登授权码”
+     * @return
+     */
+    public static OapiUserGetuserinfoResponse     getUserIdByCode(String code){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getuserinfo");
+        OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();
+        request.setCode(code);//父部门id（如果不传，默认部门为根部门，根部门ID为1）
+        request.setHttpMethod("GET");
+        OapiUserGetuserinfoResponse     response =null;
+        try {
+            response = client.execute(request, DingDingUtil.getToken());
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
+
+    /**
      * 获取(子)部门列表
      * @param deptId
      * @return

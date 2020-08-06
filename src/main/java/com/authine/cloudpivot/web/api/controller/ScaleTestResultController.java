@@ -1,9 +1,12 @@
 package com.authine.cloudpivot.web.api.controller;
 
+import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.entity.ScaleTestAcore;
 import com.authine.cloudpivot.web.api.service.ScaleTestResultService;
+import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
+import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +52,17 @@ public class ScaleTestResultController extends BaseController {
         }
     }
 
+    //返回登录用户userId
+    @GetMapping("/getUserIdByCode")
+    public ResponseResult<Object> getUserIdByCode(@RequestParam String code) {
+
+        if(StringUtils.isNotEmpty(code) ){
+            OapiUserGetuserinfoResponse rsp=DingDingUtil.getUserIdByCode(code);
+            return this.getErrResponseResult(rsp, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        }else{
+            return this.getErrResponseResult(null, 404L, "没有参数code");
+        }
+    }
 
 
 }
