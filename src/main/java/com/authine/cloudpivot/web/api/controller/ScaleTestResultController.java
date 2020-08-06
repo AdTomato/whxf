@@ -29,7 +29,7 @@ public class ScaleTestResultController extends BaseController {
 
 
     //weiyao 抑郁 修改或新增测评结果
-    @PostMapping("/getResultByScore")
+    @GetMapping("/getResultByScore")
     public ResponseResult<Object> getResultByScore(@RequestParam String parentId,  @RequestParam Integer score) {
 
         if(StringUtils.isNotEmpty(parentId) && score!=null){
@@ -45,7 +45,7 @@ public class ScaleTestResultController extends BaseController {
     }
 
     //weiyao 插入量化测评详情结果
-    @GetMapping("/insertScaleTestAcore")
+    @PostMapping("/insertScaleTestAcore")
     public ResponseResult<String> insertScaleTestAcore(@RequestBody ScaleTestAcore scaleTestAcore) {
 
         if(scaleTestAcore!=null && scaleTestAcore.getUserId()!=null){
