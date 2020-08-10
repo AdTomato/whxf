@@ -8,6 +8,7 @@ import com.authine.cloudpivot.web.api.entity.ScaleTestAcore;
 import com.authine.cloudpivot.web.api.mapper.ScaleTestResultMapper;
 import com.authine.cloudpivot.web.api.service.ScaleTestResultService;
 import com.authine.cloudpivot.web.api.utils.Constant;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,4 +69,15 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
 
         return resc.toString();
     }
+
+    //返回测评结果
+    public List<ScaleTestAcore> getScaleTestResultInfo(ScaleTestAcore info){
+        if(StringUtils.isNotEmpty(info.getUserId())){
+            String userId=scaleTestResultMapper.getIdByddId(info.getUserId());
+            if(userId !=null){
+                info.setUserId(userId);
+            }
+        }
+        return scaleTestResultMapper.getScaleTestResultInfo(info);
+    };
 }

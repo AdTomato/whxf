@@ -45,16 +45,30 @@
 
     <select id="getScaleTestResultInfo" resultType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore"
             parameterType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore">
-        select * from igpgf_scale_test_acore where
-        1=1
+        select a.*,
+        b.name as userName,b.gender as userSex,TIMESTAMPDIFF(YEAR, b.birthday, CURDATE()) as userAge,
+        b.departmentId as userdeptId,b.imgUrl as userImgUrl, c.name as userdeptName,d.title   as scaleTestName,
+        d.smallTypeName as smallTypeNameId,e.smallTypeName as smallTypeName
+         from igpgf_scale_test_acore a
+         left join h_org_user b on a.userId like concat('%',b.id,'%')
+          left join h_org_department c on  b.departmentId=c.id
+        left join igpgf_scale_test d on a.scaleTest=d.id
+        left join igpgf_scale_type_small e on d.smallTypeName=e.id
+        where 1=1
         <if test="scaleTest != null and scaleTest != ''">
-          and  scaleTest=#{scaleTest}
+          and  a.scaleTest=#{scaleTest}
         </if>
         <if test="userId != null and userId != ''">
-            and userId like concat('%',#{userId},'%')
+            and a.userId like concat('%',#{userId},'%')
         </if>
-        <if test="testTime != null and testTime != ''">
-            AND date_format(testTime, '%Y-%m-%d') = date_format(#{testTime}, '%Y-%m-%d')
+        <if test="testTime != null "><!--时间不能用 ！='' -->
+            AND date_format(a.testTime, '%Y-%m-%d') = date_format(#{testTime}, '%Y-%m-%d')
+        </if>
+        <if test="danger != null and danger != ''">
+            AND a.danger=#{danger}
+        </if>
+        <if test="resolved != null and resolved != ''">
+            AND a.resolved=#{resolved}
         </if>
     </select>
 

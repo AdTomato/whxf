@@ -28,11 +28,13 @@ public class ScaleTestResultController extends BaseController {
     ScaleTestResultService scaleTestResultService;
 
 
-    //weiyao 抑郁 修改或新增测评结果
+    //weiyao 根据分数查询结果
     @GetMapping("/getResultByScore")
     public ResponseResult<Object> getResultByScore(@RequestParam String parentId,  @RequestParam Integer score) {
 
         if(StringUtils.isNotEmpty(parentId) && score!=null){
+            //结果
+            //危机程度，0，正常，1，轻度，2，中度，3，重度
             List<Map<String,String>>  res=scaleTestResultService.getResultByScore(parentId,score);
             if(res !=null && res.size()>0)
             return this.getOkResponseResult(res.get(0), "succeed");
@@ -67,6 +69,19 @@ public class ScaleTestResultController extends BaseController {
             return this.getErrResponseResult(null, 404L, "没有参数code");
         }
     }
+    //weiyao 根据分数查询结果
+    @PostMapping("/getScaleTestResultInfo")
+    public ResponseResult<List<ScaleTestAcore>> getScaleTestResultInfo(@RequestBody ScaleTestAcore scaleTestAcore) {
 
+        if(scaleTestAcore!=null){
+            //结果
+            //危机程度，0，正常，1，轻度，2，中度，3，重度
+            List<ScaleTestAcore>  rsp=scaleTestResultService.getScaleTestResultInfo(scaleTestAcore);
+                return this.getOkResponseResult(rsp, "succeed");
+
+        }else{
+            return this.getErrResponseResult(null, 404L, "参数错误");
+        }
+    }
 
 }

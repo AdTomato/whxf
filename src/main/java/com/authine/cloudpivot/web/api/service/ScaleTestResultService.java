@@ -23,5 +23,8 @@ public interface ScaleTestResultService {
      */
     String insertScaleTestAcore(ScaleTestAcore info);
 
+    //查询测评结果
+    List<ScaleTestAcore> getScaleTestResultInfo(ScaleTestAcore info);
+
 
 }
