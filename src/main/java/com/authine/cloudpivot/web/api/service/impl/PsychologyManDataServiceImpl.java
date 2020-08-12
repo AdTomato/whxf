@@ -47,4 +47,18 @@ public class PsychologyManDataServiceImpl implements PsychologyManDataService {
         }
         return stationStarMonths;
     }
+
+    public List<PsychologyManData> getPsychologyManDataList(PsychologyManData  info){
+        List<PsychologyManData> stationStarMonths = psychologyManDataMapper.getPsychologyManDataList(info);
+        if (stationStarMonths != null) {
+            for (PsychologyManData stationStarMonth : stationStarMonths) {
+                if (!StringUtils.isEmpty(stationStarMonth.getPhoto())) {
+                    stationStarMonth.setPhoto("http://121.41.27.194/api/api/aliyun/download?refId=" + stationStarMonth.getPhoto());
+
+                }
+
+            }
+        }
+        return stationStarMonths;
+    };
 }

@@ -43,5 +43,10 @@ public class PsychologyManData extends BaseEntity implements Serializable {
     private String level;//等级
     private String sex;//性别
 
+    private String area;//区域
+    private Integer subscrib;//是否预约 1，是，0否（默认0）
+
+    private String ddUserId;//钉钉Id
+
 
 }

@@ -15,6 +15,9 @@ public interface PsychologyManDataService {
 
     List<PsychologyManData> getPsychologyManData(String id);
 
+    //weiyao
+    List<PsychologyManData> getPsychologyManDataList(PsychologyManData  info);
+
 
 
 }

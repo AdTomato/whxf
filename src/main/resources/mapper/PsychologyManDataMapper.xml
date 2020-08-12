@@ -38,6 +38,30 @@
     </select>
 
 
+    <select id="getPsychologyManDataList" resultType="com.authine.cloudpivot.web.api.entity.PsychologyManData"
+            parameterType="com.authine.cloudpivot.web.api.entity.PsychologyManData">
+        SELECT a.*,b.userid as ddUserId,c.refId as photo
+      FROM igpgf_psychology_man_data a
+      left join h_org_user b on a.counselorName like concat('%',b.id,'%')
+      left join h_biz_attachment c on a.id=c.bizObjectId and c.schemaCode = 'psychology_man_data'
+      and c.bizPropertyCode = 'photo'
+        where 1=1
+        <if test="id != null and id != ''">
+            and  a.id=#{id}
+        </if>
+        <if test="area != null and area != ''">
+            and a.area =#{area}
+        </if>
+        <if test="level != null and level != ''">
+            and  a.level=#{level}
+        </if>
+        <if test="sex != null and sex != ''">
+            and a.sex =#{sex}
+        </if>
+        <if test="subscrib != null">
+            and a.subscrib =#{subscrib}
+        </if>
+    </select>
 
 
 </mapper>
