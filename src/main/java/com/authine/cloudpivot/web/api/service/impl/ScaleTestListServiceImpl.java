@@ -28,12 +28,16 @@ public class ScaleTestListServiceImpl implements ScaleTestListService {
 
     @Resource
     ScaleTestListMapper scaleTestListMapper;
+    @Resource
+    ScaleTestMapper scaleTestMapper;
 
     @Override
     public List<ScaleTestList> getScaleTestList(String id) {
         List<ScaleTestList> scaleTestList = scaleTestListMapper.getScaleTestList(id);
         if (scaleTestList != null){
             for (ScaleTestList testList : scaleTestList) {
+                String img=scaleTestMapper.getImgUrl(id);
+                testList.setImgUrl("http://121.41.27.194/api/api/aliyun/download?refId=" + img);
                 List<ScaleTestDetail> scaleTestDetails = testList.getScaleTestDetails();
                 for (ScaleTestDetail scaleTestDetail : scaleTestDetails) {
                     System.out.println("scaleTestDetail = " + scaleTestDetail);

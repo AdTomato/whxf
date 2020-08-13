@@ -20,6 +20,8 @@ public interface ScaleTestMapper {
 
     List<ScaleTest> getScaleTestId(String id);
 
+    String getImgUrl(String id);
+
 
 
 
