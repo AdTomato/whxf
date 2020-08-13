@@ -161,6 +161,8 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                     .antMatchers("/controller/ScaleTest/**").permitAll()
                     //咨询师档案
                     .antMatchers("/controller/PsychologyManData/**").permitAll()
+                    //服务热线信息
+                    .antMatchers("/controller/ServiceHotline/**").permitAll()
                     //test
                     .antMatchers("/api/licenseExt/**").permitAll()
                     .antMatchers("/v1/dashboard/**").permitAll()

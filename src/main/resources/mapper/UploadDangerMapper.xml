@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.UploadDangerMapper">
+
+    <select id="getUploadDanger" parameterType="java.lang.String"
+            resultType="com.authine.cloudpivot.web.api.entity.UploadDanger">
+        SELECT *
+        FROM igpgf_uploaddanger
+    </select>
+
+
+      <insert id="insertUploadDanger" parameterType="com.authine.cloudpivot.web.api.entity.UploadDanger">
+        INSERT INTO igpgf_uploaddanger(id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
+                                                modifier,
+                                                modifiedTime, workflowInstanceId, sequenceNo, sequenceStatus,
+                                                ownerDeptQueryCode, upTime, upUser,
+                                                detail)
+        VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
+                #{createdTime}, #{modifier}, #{modifiedTime}, #{workflowInstanceId},
+                #{sequenceNo},
+                #{sequenceStatus}, #{ownerDeptQueryCode},
+                #{upTime}, #{upUser},
+                #{detail})
+    </insert>
+
+
+
+</mapper>

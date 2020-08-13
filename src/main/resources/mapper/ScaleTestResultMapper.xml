@@ -72,4 +72,72 @@
         </if>
     </select>
 
+    <select id="getScaleConsultDetail" resultType="com.authine.cloudpivot.web.api.entity.ScaleConsultDetail">
+        select a.*,b2.name as ownerName,
+        b.name as userName,b.gender as userSex, b.birthday as birthday,b.userId as sonsultUserDdId,
+        b.departmentId as userdeptId,b.identityNo as identityNo,b.imgUrl as userImgUrl, c.name as userdeptName
+        from igpgf_scaleConsultDetail a
+        left join h_org_user b on a.sonsultUser like concat('%',b.id,'%')
+        left join h_org_user b2 on a.owner =b2.id
+        left join h_org_department c on  b.departmentId=c.id
+        where 1=1
+        <if test="deptId != null and deptId != ''">
+            and  a.dept like concat('%',#{deptId},'%')
+        </if>
+        <if test="userId != null and userId != ''">
+            and a.sonsultUser like concat('%',#{userId},'%')
+        </if>
+       group by sonsultUser
+    </select>
+
+    <select id="getScaleConsultDetailByPerson" resultType="com.authine.cloudpivot.web.api.entity.ScaleConsultDetail">
+        select
+        b.name as userName,b.gender as userSex, b.birthday as birthday,b.userId as sonsultUserDdId,
+        b.departmentId as userdeptId,b.identityNo as identityNo,b.imgUrl as userImgUrl, c.name as userdeptName
+        from  h_org_user b
+        left join h_org_department c on  b.departmentId=c.id
+        where b.id=#{userId}
+    </select>
+
+    <select id="getScaleAcoreByUserId" resultType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore">
+        select a.*,
+        d.title   as scaleTestName,
+        d.smallTypeName as smallTypeNameId,e.smallTypeName as smallTypeName
+        from igpgf_scale_test_acore a
+        left join igpgf_scale_test d on a.scaleTest=d.id
+        left join igpgf_scale_type_small e on d.smallTypeName=e.id
+        where
+           a.userId like concat('%',#{userId},'%')
+      order by testTime desc
+    </select>
+
+    <select id="getDeptUserIdList" resultType="java.lang.String">
+        select id from h_org_user where
+        status ='ENABLE'
+        and departmentId=#{deptId}
+        GROUP BY id
+    </select>
+
+    <select id="getcepingNum" resultType="java.lang.Integer">
+        select COUNT(DISTINCT a.userId) from igpgf_scale_test_acore a, h_org_user c
+         where a.userId like concat('%',c.id,'%')
+        and c.departmentId=#{deptId}
+        <if test="danger != null and danger != ''">
+            and a.danger= #{danger}
+        </if>
+    </select>
+
+    <select id="getshudaoNum" resultType="java.lang.Integer">
+       select  COUNT(DISTINCT a.sonsultUser)
+       from igpgf_scaleConsultDetail a, h_org_user c
+       where a.sonsultUser like concat('%',c.id,'%')
+        and c.departmentId=#{deptId}
+    </select>
+
+    <select id="getdeptName" resultType="java.lang.String">
+       select  name
+       from h_org_department
+      where  id=#{deptId}
+    </select>
+
 </mapper>
