@@ -7,12 +7,12 @@
     <select id="getUploadDanger" parameterType="java.lang.String"
             resultType="com.authine.cloudpivot.web.api.entity.UploadDanger">
         SELECT *
-        FROM igpgf_uploaddanger
+        FROM igpgf_uploadDanger
     </select>
 
 
       <insert id="insertUploadDanger" parameterType="com.authine.cloudpivot.web.api.entity.UploadDanger">
-        INSERT INTO igpgf_uploaddanger(id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
+        INSERT INTO igpgf_uploadDanger(id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
                                                 modifier,
                                                 modifiedTime, workflowInstanceId, sequenceNo, sequenceStatus,
                                                 ownerDeptQueryCode, upTime, upUser,
