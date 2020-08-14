@@ -69,7 +69,7 @@
         <if test="userId != null and userId != ''">
             and a.userId like concat('%',#{userId},'%')
         </if>
-        <if test="testTime != null "><!--时间不能用 ！='' -->
+        <if test="testTime != null and testTime !='' "><!--时间格式不能用 ！='' -->
             AND date_format(a.testTime, '%Y-%m-%d') = date_format(#{testTime}, '%Y-%m-%d')
         </if>
         <if test="danger != null and danger != ''">
@@ -108,7 +108,7 @@
     </select>
 
     <select id="getScaleAcoreByUserId" resultType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore">
-        select a.*,
+        select a.id,DATE_FORMAT(a.testTime,'%Y-%m-%d')  as testTime,
         d.title   as scaleTestName,
         d.smallTypeName as smallTypeNameId,e.smallTypeName as smallTypeName
         from igpgf_scale_test_acore a
