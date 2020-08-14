@@ -750,4 +750,38 @@ public class DingDingUtil {
         return response;
     }
 
+    /**
+     * 发起待办
+     * @param mess  待办消息
+     * @param userId    待办接收人
+     * @return
+     */
+    public static OapiWorkrecordAddResponse  sendWorkRecord(String name,String mess, String userId){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/workrecord/add");
+        OapiWorkrecordAddRequest req = new OapiWorkrecordAddRequest();
+        req.setUserid(userId);
+        req.setCreateTime(System.currentTimeMillis());//当前时间戳
+        req.setTitle(name+" 的心理咨询预约");
+        req.setUrl("https://oa.dingtalk.com");
+        List<OapiWorkrecordAddRequest.FormItemVo> list2 = new ArrayList<OapiWorkrecordAddRequest.FormItemVo>();
+        OapiWorkrecordAddRequest.FormItemVo obj3 = new OapiWorkrecordAddRequest.FormItemVo();
+        obj3.setTitle(name+" 的心理咨询预约");
+        obj3.setContent(mess);
+        list2.add(obj3);
+
+        req.setFormItemList(list2);
+        OapiWorkrecordAddResponse  response = null;
+        try {
+            response = client.execute(req, getToken());
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
+
 }

@@ -52,4 +52,7 @@ public interface ScaleTestResultMapper {
     //查询部门名称
     String getdeptName(@Param("deptId") String deptId);
 
+    //获取咨询人本身信息
+    Map<String,String> getsendUserInfo(@Param("userId") String userId);
+
 }

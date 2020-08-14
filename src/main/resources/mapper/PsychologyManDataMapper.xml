@@ -16,15 +16,16 @@
     </resultMap>
 
     <select id="getPsychologyManData" resultMap="psychologyManData">
-        SELECT *
-      FROM igpgf_psychology_man_data
-
+        SELECT a.*,b.userId as ddUserId
+      FROM igpgf_psychology_man_data a
+       left join h_org_user b on a.counselorName like concat('%',b.id,'%')
     </select>
 
     <select id="getPsychologyManDataId" resultMap="psychologyManData">
-        SELECT *
-      FROM igpgf_psychology_man_data
-      where id = #{id}
+        SELECT a.*,b.userId as ddUserId
+      FROM igpgf_psychology_man_data a
+       left join h_org_user b on a.counselorName like concat('%',b.id,'%')
+      where a.id = #{id}
     </select>
 
     <select id="getPhoto" parameterType="java.lang.String" resultType="java.lang.String">

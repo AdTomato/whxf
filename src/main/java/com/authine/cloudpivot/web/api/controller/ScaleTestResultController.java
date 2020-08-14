@@ -5,14 +5,18 @@ import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.entity.ScaleConsultDetail;
 import com.authine.cloudpivot.web.api.entity.ScaleTestAcore;
 import com.authine.cloudpivot.web.api.entity.TeamRecord;
+import com.authine.cloudpivot.web.api.mapper.ScaleTestResultMapper;
 import com.authine.cloudpivot.web.api.service.ScaleTestResultService;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
+import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
+import com.dingtalk.api.response.OapiWorkrecordAddResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +32,9 @@ public class ScaleTestResultController extends BaseController {
 
     @Autowired
     ScaleTestResultService scaleTestResultService;
+
+    @Resource
+    ScaleTestResultMapper scaleTestResultMapper;
 
 
     //weiyao 根据分数查询结果
@@ -102,6 +109,23 @@ public class ScaleTestResultController extends BaseController {
         if(StringUtils.isNotEmpty(deptId) ){
             TeamRecord rsp=scaleTestResultService.getDeptNumInfo(deptId);
             return this.getErrResponseResult(rsp, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        }else{
+            return this.getErrResponseResult(null, 404L, "没有部门参数");
+        }
+
+    }
+
+    //发送预约待办
+    @GetMapping("/sendWorkRecord")
+    public ResponseResult<Object> sendWorkRecord(@RequestParam String sendId,@RequestParam String acceptId) {
+
+        if(StringUtils.isNotEmpty(sendId) || StringUtils.isNotEmpty(acceptId) ){
+           Map<String,String> map= scaleTestResultMapper.getsendUserInfo(sendId);
+           String mess="来自 "+map.get("deptName") +"部门;号码为 "+map.get("mobile") +";姓名为 "+map.get("name") +
+           " 对您发起心理预约";
+          //  OapiWorkrecordAddResponse rsp= DingDingUtil.sendWorkRecord("张静","我下午三点的预约","19431116101255531");
+            OapiMessageCorpconversationAsyncsendV2Response rsp=  DingDingUtil.sendMessage(acceptId,DingDingUtil.getToken(),mess);
+            return this.getErrResponseResult(rsp.getErrmsg(), ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
         }else{
             return this.getErrResponseResult(null, 404L, "没有部门参数");
         }

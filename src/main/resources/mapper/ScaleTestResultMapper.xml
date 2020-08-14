@@ -10,6 +10,19 @@
         <id property="danger" column="danger" jdbcType="VARCHAR"></id>
     </resultMap>
 
+    <!--property是实体类中字段；column是数据库中字段 -->
+    <resultMap id="sendUserInfo" type="java.util.Map">
+        <id property="name" column="name" javaType="STRING" jdbcType="VARCHAR"/>
+        <id property="mobile" column="mobile" javaType="STRING" jdbcType="VARCHAR"/>
+        <id property="deptName" column="deptName" javaType="STRING" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getsendUserInfo" resultMap="sendUserInfo" parameterType="java.lang.String">
+        select a.name ,a.mobile,b.name as deptName  from h_org_user a,h_org_department b
+         where a.departmentId=b.id and
+         a.userId=#{userId}
+         limit 1
+    </select>
+
     <select id="getResultByScore" resultMap="resultAndDanger">
         select result,danger from igpgf_scale_test_result  where parentId=#{parentId}
         and min_score <![CDATA[ <= ]]> #{score} and
