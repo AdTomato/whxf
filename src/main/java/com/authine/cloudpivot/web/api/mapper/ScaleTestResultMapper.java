@@ -25,6 +25,9 @@ public interface ScaleTestResultMapper {
     //根据钉钉Id 查询用户id
     String getIdByddId(@Param("userId") String userId);
 
+    //根据钉钉Id 查询用户部门id
+    String getDeptIdByddId(@Param("deptId") String deptId);
+
     //查询结果
     List<ScaleTestAcore> getScaleTestResultInfo(ScaleTestAcore scaleTestAcore);
 

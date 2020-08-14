@@ -23,6 +23,14 @@
         WHERE userId = #{userId}
     </select>
 
+    <select id="getDeptIdByddId" resultType="java.lang.String">
+        SELECT id
+        FROM h_org_department
+        WHERE sourceId = #{deptId}
+        limit 1
+    </select>
+
+
     <select id="getoptionResult" resultType="java.lang.String">
         SELECT optionResult
         FROM igpgf_scale_test_detail
