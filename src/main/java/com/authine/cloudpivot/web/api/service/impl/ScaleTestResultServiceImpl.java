@@ -110,9 +110,9 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
     //返回部门测评档案
     @Override
     public TeamRecord getDeptNumInfo(String deptId) {
-        if(StringUtils.isNotEmpty(deptId)){
-            deptId=scaleTestResultMapper.getDeptIdByddId(deptId);
-        }
+//        if(StringUtils.isNotEmpty(deptId)){
+//            deptId=scaleTestResultMapper.getDeptIdByddId(deptId);
+//        }
         TeamRecord team =new TeamRecord();
         //部门所有人员
         List<String> userList=scaleTestResultMapper.getDeptUserIdList(deptId);
