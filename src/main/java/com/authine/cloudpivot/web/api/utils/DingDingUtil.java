@@ -599,7 +599,36 @@ public class DingDingUtil {
         OapiSmartworkHrmEmployeeListRequest req = new OapiSmartworkHrmEmployeeListRequest();
         req.setUseridList(userIdList);//员工userid列表，最大列表长度：20
         //需要获取的花名册字段列表，最大列表长度：20。具体业务字段的code参见附录（大小写敏感）。不传入该参数时，企业可获取所有字段信息。
-        req.setFieldFilterList("sys02-birthTime");//sys02-birthTime：生日。具体业务字段的code参见附录（大小写敏感）。不传入该参数时，企业可获取所有字段信息。
+        req.setFieldFilterList("sys02-birthTime,sys02-sexType,sys02-certNo");//sys02-birthTime：生日。具体业务字段的code参见附录（大小写敏感）。不传入该参数时，企业可获取所有字段信息。
+//        req.setFieldFilterList("sys02-sexType");//性别
+//        req.setFieldFilterList("sys02-realName");//身份证号码：
+        OapiSmartworkHrmEmployeeListResponse   response =null;
+        try {
+            response = client.execute(req, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
+
+    /**
+     * 获取员工花名册信息--个性化信息
+     * @param userIdList
+     * @return
+     */
+    public static OapiSmartworkHrmEmployeeListResponse     getEmployeeInfo(String userIdList,String token,String filterList){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/smartwork/hrm/employee/list");
+        OapiSmartworkHrmEmployeeListRequest req = new OapiSmartworkHrmEmployeeListRequest();
+        req.setUseridList(userIdList);//员工userid列表，最大列表长度：20
+        //需要获取的花名册字段列表，最大列表长度：20。具体业务字段的code参见附录（大小写敏感）。不传入该参数时，企业可获取所有字段信息。
+        //获取生日，性别（0，男，1女），身份证号码 ="sys02-birthTime,sys02-sexType,sys02-certNo"
+        req.setFieldFilterList("sys02-birthTime,sys02-sexType,sys02-certNo");//sys02-birthTime：生日。具体业务字段的code参见附录（大小写敏感）。不传入该参数时，企业可获取所有字段信息。
+
         OapiSmartworkHrmEmployeeListResponse   response =null;
         try {
             response = client.execute(req, token);

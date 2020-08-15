@@ -9,15 +9,14 @@ import com.authine.cloudpivot.web.api.mapper.ScaleTestResultMapper;
 import com.authine.cloudpivot.web.api.service.ScaleTestResultService;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
-import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
-import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
-import com.dingtalk.api.response.OapiWorkrecordAddResponse;
+import com.dingtalk.api.response.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +126,40 @@ public class ScaleTestResultController extends BaseController {
             OapiMessageCorpconversationAsyncsendV2Response rsp=  DingDingUtil.sendMessage(acceptId,DingDingUtil.getToken(),mess);
             return this.getErrResponseResult(rsp.getErrmsg(), ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
         }else{
-            return this.getErrResponseResult(null, 404L, "没有部门参数");
+            return this.getErrResponseResult(null, 404L, "缺少用户参数");
+        }
+
+    }
+
+    //获取用户性别，出生，身份证号码
+    @GetMapping("/getUserInfoById")
+    public ResponseResult<Object> getUserInfoById(@RequestParam String userId) {
+
+        if(StringUtils.isNotEmpty(userId) ){
+           String ddUserId= scaleTestResultMapper.getDdIdByUserId(userId);
+           //生日，性别，身份证号码
+            OapiSmartworkHrmEmployeeListResponse us = DingDingUtil.getEmployeeInfo(ddUserId, DingDingUtil.getToken(),"sys02-birthTime,sys02-sexType,sys02-certNo");
+            List<OapiSmartworkHrmEmployeeListResponse.EmpFieldInfoVO> result = us.getResult();
+            String birthday="";
+            Map<String,String> map=new HashMap<>();
+            if (result.get(0).getFieldList().size() > 0) {
+                List<OapiSmartworkHrmEmployeeListResponse.EmpFieldVO>  lis=result.get(0).getFieldList();
+                for(OapiSmartworkHrmEmployeeListResponse.EmpFieldVO li :lis){
+                    //sys02-birthTime,sys02-sexType,sys02-certNo
+                    if("sys02-birthTime".equals(li.getFieldCode())){
+                        map.put("birthday",li.getLabel());
+                    }else if("sys02-sexType".equals(li.getFieldCode())) {
+                        map.put("sex", li.getLabel());
+                    }else if("sys02-certNo".equals(li.getFieldCode())) {
+                        map.put("cardNo", li.getLabel());
+                    }
+                }
+
+            }
+
+            return this.getErrResponseResult(map, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        }else{
+            return this.getErrResponseResult(null, 404L, "缺少用户参数");
         }
 
     }

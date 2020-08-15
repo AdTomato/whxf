@@ -36,6 +36,12 @@
         WHERE userId = #{userId}
     </select>
 
+    <select id="getDdIdByUserId" resultType="java.lang.String">
+        SELECT userId
+        FROM h_org_user
+        WHERE  #{userId} like concat('%',id,'%')
+    </select>
+
     <select id="getDeptIdByddId" resultType="java.lang.String">
         SELECT id
         FROM h_org_department

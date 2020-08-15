@@ -7,6 +7,7 @@ import com.authine.cloudpivot.engine.api.model.organization.UserModel;
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.dto.ScaleTestList;
+import com.authine.cloudpivot.web.api.dubbo.DubboConfigService;
 import com.authine.cloudpivot.web.api.entity.HOrgUser;
 import com.authine.cloudpivot.web.api.entity.ServiceHotline;
 import com.authine.cloudpivot.web.api.entity.UploadDanger;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +51,9 @@ public class ServiceHotlineController extends BaseController {
     @Autowired
     private HOrgUserService hOrgUserService;
 
+    @Autowired
+    private DubboConfigService dubboConfigService;
+
     @ApiOperation("获取服务热线信息")
     @GetMapping("/ServiceHotlineList")
     public ResponseResult<Object> getServiceHotlineList() {
@@ -69,27 +74,32 @@ public class ServiceHotlineController extends BaseController {
     public ResponseResult<Object> insertUploadDangerList(@RequestBody UploadDanger uploadDanger) {
         if(uploadDanger != null){
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
             String userId = uploadDanger.getUserId();
 //        userId = "273626253926863917";
             HOrgUser hOrgUser = hOrgUserService.getHOrgUser(userId);
             String id = hOrgUser.getId();
+            String name = hOrgUser.getName();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
             //[{\"id\":\"2c90a43e6f457354016f5eac4ba31571\",\"type\":3}]
             UploadDanger uploadDanger1 = new UploadDanger();
-            uploadDanger1.setId(df.format(new Date()));
-            uploadDanger1.setName("");
-            uploadDanger1.setCreater("");
+            uploadDanger1.setId(UUID.randomUUID().toString().replace("-", ""));
+            uploadDanger1.setName(name+df.format(new Date()));
+            uploadDanger1.setCreater(id);
             uploadDanger1.setCreatedDeptId("");
+            uploadDanger1.setCreatedTime(uploadDanger.createdTime);
             uploadDanger1.setOwner("");
             uploadDanger1.setOwnerDeptId("");
-            uploadDanger1.setModifiedTime(uploadDanger.getUpTime());
+            uploadDanger1.setModifier("");
+            uploadDanger1.setModifiedTime(uploadDanger.modifiedTime);
             uploadDanger1.setWorkflowInstanceId("");
             uploadDanger1.setSequenceNo("");
+            uploadDanger1.setSequenceStatus("");
             uploadDanger1.setOwnerDeptQueryCode("");
             uploadDanger1.setUpTime(new Date());
 //        uploadDanger1.setUpUser("[{\"id\":\"+id=\",\"type\":3}]");
             //[{"id":"2c90a43e6f457354016f5eac4ba31571","type":3}]
-            uploadDanger1.setUpUser("[{"+'"'+"id"+'"'+":"+'"'+id +'"'+","+'"'+"type"+":3}]");
+            uploadDanger1.setUpUser("[{"+'"'+"id"+'"'+":"+'"'+id +'"'+","+'"'+"type"+'"'+":3}]");
             uploadDanger1.setDetail(uploadDanger.getDetail());
 //        StringBuilder sb = new StringBuilder();
 
