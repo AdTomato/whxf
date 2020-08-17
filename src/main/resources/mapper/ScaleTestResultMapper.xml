@@ -36,6 +36,26 @@
         WHERE userId = #{userId}
     </select>
 
+    <select id="getDeptIdByKey" resultType="java.lang.String">
+        SELECT departmentId
+        FROM h_org_user
+        WHERE id = #{id}
+    </select>
+
+    <select id="getIsLeaderById" resultType="java.lang.String">
+        SELECT leader
+        FROM h_org_user
+        WHERE id = #{id}
+    </select>
+
+    <select id="getIsZhuGuan" resultType="java.lang.String">
+        SELECT Id
+        FROM h_org_role_user
+        WHERE userId = #{userId}
+        and roleId= #{roleId}
+        limit 1
+    </select>
+
     <select id="getDdIdByUserId" resultType="java.lang.String">
         SELECT userId
         FROM h_org_user
@@ -96,6 +116,9 @@
         </if>
         <if test="resolved != null and resolved != ''">
             AND a.resolved=#{resolved}
+        </if>
+        <if test="userdeptId != null and userdeptId != ''">
+            AND b.departmentId=#{userdeptId}
         </if>
     </select>
 

@@ -10,6 +10,7 @@ import com.authine.cloudpivot.web.api.entity.TeamRecord;
 import com.authine.cloudpivot.web.api.mapper.ScaleTestResultMapper;
 import com.authine.cloudpivot.web.api.service.ScaleTestResultService;
 import com.authine.cloudpivot.web.api.utils.Constant;
+import com.esotericsoftware.minlog.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,9 +76,25 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
 
     //返回测评结果
     public List<ScaleTestAcore> getScaleTestResultInfo(ScaleTestAcore info){
+        Log.info("===预警测评人钉钉Id:==="+info.getUserId());
         if(StringUtils.isNotEmpty(info.getUserId())){
             String userId=scaleTestResultMapper.getIdByddId(info.getUserId());
-            if(userId !=null){
+            String deptId=scaleTestResultMapper.getDeptIdByKey(userId);//部门Id
+            //是否主管，1，是，主管可看本部门测评信息
+            //主管角色 roleId:2c90a43e6eb51314016eb65007ee0223
+            //查询是不是主管
+            String isLeader=scaleTestResultMapper.getIsZhuGuan("2c90a43e6eb51314016eb65007ee0223",userId);
+            //2c90a43e73a7e9770173ebb55cde2788:咨询师部门Id (咨询师和 杨队可看到全部 )
+            if("2c90a43e73a7e9770173ebb55cde2788".equals(deptId) || "2c90a43e6ed08c91016ed08efa1e003d".equals(userId)){
+                //咨询师和 杨队可看到全部
+                info.setUserId("");//查询人
+                info.setUserdeptId("");//部门
+            }else if(StringUtils.isNotEmpty(isLeader)){
+                //主管看自己部门
+                info.setUserId("");//查询人
+                info.setUserdeptId(deptId);//部门
+            }else{
+                //只能看自己
                 info.setUserId(userId);
             }
         }

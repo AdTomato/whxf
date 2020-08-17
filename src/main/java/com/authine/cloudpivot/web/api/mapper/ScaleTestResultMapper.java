@@ -28,8 +28,15 @@ public interface ScaleTestResultMapper {
     //根据用户Id 查询钉钉用户id
     String getDdIdByUserId(@Param("userId") String userId);
 
-    //根据钉钉Id 查询用户部门id
+    //根据钉钉部门Id 查询用户部门id
     String getDeptIdByddId(@Param("deptId") String deptId);
+
+    //查询是不是主管 1,是
+    String getIsLeaderById(@Param("id") String id);
+    //查询部门Id
+    String getDeptIdByKey(@Param("id") String id);
+
+    String getIsZhuGuan(@Param("roleId")String roleId,@Param("userId")String userId);
 
     //查询结果
     List<ScaleTestAcore> getScaleTestResultInfo(ScaleTestAcore scaleTestAcore);

@@ -81,7 +81,7 @@ public class ScaleTestResultController extends BaseController {
     @PostMapping("/getScaleTestResultInfo")
     public ResponseResult<List<ScaleTestAcore>> getScaleTestResultInfo(@RequestBody ScaleTestAcore scaleTestAcore) {
 
-        if(scaleTestAcore!=null){
+        if(scaleTestAcore!=null && StringUtils.isNotEmpty(scaleTestAcore.getUserId())){
             //结果
             //危机程度，0，正常，1，轻度，2，中度，3，重度
             List<ScaleTestAcore>  rsp=scaleTestResultService.getScaleTestResultInfo(scaleTestAcore);
