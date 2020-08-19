@@ -30,8 +30,8 @@ public class AllCheckServiceImpl implements AllCheckService {
     }
 
     @Override
-    public List<UserInfoByCheck> getUserListByDept(String deptId) {
-        return allCheckMapper.getUserListByDeptId(deptId);
+    public List<UserInfoByCheck> getUserListByDept(String deptId,String userId) {
+        return allCheckMapper.getUserListByDeptId(deptId,userId);
     }
 
 }

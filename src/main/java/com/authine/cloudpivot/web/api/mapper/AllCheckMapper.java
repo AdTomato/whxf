@@ -23,6 +23,6 @@ public interface AllCheckMapper {
     List<Map<String,String>> getDeptListByZD();
 
     //返回部门人员集合
-    List<UserInfoByCheck> getUserListByDeptId(@Param("deptId")String deptId);
+    List<UserInfoByCheck> getUserListByDeptId(@Param("deptId")String deptId,@Param("userId")String userId);
 
 }

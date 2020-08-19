@@ -18,7 +18,7 @@ public interface AllCheckService {
     List<Map<String,String>> getDeptListByName(String name);
 
     //根据部门查询用户信息
-    List<UserInfoByCheck> getUserListByDept(String deptId);
+    List<UserInfoByCheck> getUserListByDept(String deptId,String userId);
 
 
 }

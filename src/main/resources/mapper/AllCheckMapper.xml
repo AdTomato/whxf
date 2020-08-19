@@ -34,6 +34,9 @@
         <if test="deptId != null and deptId != ''">
             AND b.departmentId=#{deptId}
         </if>
+        <if test="userId != null and userId != ''">
+            AND b.userId=#{userId}
+        </if>
     </select>
 
 </mapper>

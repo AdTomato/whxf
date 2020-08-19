@@ -48,8 +48,8 @@ public class AllCheckController extends BaseController {
      * 根据部门查询用户信息
      */
     @GetMapping("/getUserByDept")
-    public ResponseResult<Object> getUserByDept(String deptId) {
-            List<UserInfoByCheck> list=allCheckService.getUserListByDept(deptId);
+    public ResponseResult<Object> getUserByDept(String deptId,String userId) {
+            List<UserInfoByCheck> list=allCheckService.getUserListByDept(deptId,userId);
             return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
     }
 
@@ -63,7 +63,7 @@ public class AllCheckController extends BaseController {
             //获取用户详情，部门信息
             OapiUserGetResponse userDetail=DingDingUtil.getUserDetail(dduserId,DingDingUtil.getToken());
             map.put("position",userDetail.getPosition());//职务
-            map.put("age",userDetail.getPosition());//职务
+            map.put("age","");//职务
 
             OapiSmartworkHrmEmployeeListResponse us = DingDingUtil.getEmployeeInfo(dduserId, DingDingUtil.getToken(),"sys02-birthTime");
             List<OapiSmartworkHrmEmployeeListResponse.EmpFieldInfoVO> result = us.getResult();
