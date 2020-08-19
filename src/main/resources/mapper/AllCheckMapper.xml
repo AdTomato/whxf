@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.AllCheckMapper">
+
+    <!--property是实体类中字段；column是数据库中字段 -->
+    <resultMap id="idAndName" type="java.util.Map">
+        <id property="id" column="id" javaType="java.lang.String" jdbcType="VARCHAR"></id>
+        <id property="name" column="name" jdbcType="VARCHAR"></id>
+    </resultMap>
+
+    <select id="getDeptListByName" resultMap="idAndName" parameterType="java.lang.String">
+        select id,name from  h_org_department
+         where name  like concat('%',#{name})
+        ORDER BY sortKey asc
+    </select>
+
+    <!--查询支队部门 -->
+    <select id="getDeptListByZD" resultMap="idAndName">
+       select id,name from  h_org_department  where parentId='2c90a43e6eb51314016eb6502b600254' and
+       name not in ('支队党委','应急通信与车辆勤务站','心理咨询机构')
+        ORDER BY sortKey asc
+    </select>
+
+    <select id="getUserListByDeptId" resultType="com.authine.cloudpivot.web.api.entity.UserInfoByCheck">
+        select
+        b.id as userId , b.userId as dduserId , b.name as userName,
+        b.departmentId as deptId,b.imgUrl as imgUrl, c.name as deptName
+        from
+       h_org_user b ,h_org_department c
+        where   b.departmentId=c.id
+        <if test="deptId != null and deptId != ''">
+            AND b.departmentId=#{deptId}
+        </if>
+    </select>
+
+</mapper>
