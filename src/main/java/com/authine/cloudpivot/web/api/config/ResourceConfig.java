@@ -166,6 +166,8 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                     //全员考评项目
                     //全员考评=>weiyao
                     .antMatchers("/controller/allCheck/**").permitAll()
+                    //kelonghai
+                    .antMatchers("/controller/TrainInfoList/**").permitAll()
                     //test
                     .antMatchers("/api/licenseExt/**").permitAll()
                     .antMatchers("/v1/dashboard/**").permitAll()
