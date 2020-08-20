@@ -7,6 +7,7 @@ import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
 import com.esotericsoftware.minlog.Log;
 import com.taobao.api.ApiException;
+import com.taobao.api.internal.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -802,6 +803,56 @@ public class DingDingUtil {
         OapiWorkrecordAddResponse  response = null;
         try {
             response = client.execute(req, getToken());
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
+
+    /**
+     * 考勤统计==>报表列定义
+     * @return
+     */
+    public static OapiAttendanceGetattcolumnsResponse    getAttcolumns(String token){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/attendance/getattcolumns");
+        OapiAttendanceGetattcolumnsRequest request = new OapiAttendanceGetattcolumnsRequest();
+        OapiAttendanceGetattcolumnsResponse     response =null;
+        try {
+            response = client.execute(request, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
+
+    /**
+     * 考勤统计==>报表列 值
+     * @param columnList
+     * @return
+     */
+    public static OapiAttendanceGetcolumnvalResponse     getAttcolumnInfo(String userId,String columnList,String token,
+                                                                          Date start,Date end){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/attendance/getcolumnval");
+        OapiAttendanceGetcolumnvalRequest  req = new OapiAttendanceGetcolumnvalRequest ();
+        req.setUserid(userId);
+        req.setColumnIdList(columnList);//报表列id列表，多个用英文逗号分隔，最大长度20
+      //  req.setFromDate(StringUtils.parseDateTime("2020-07-21 12:12:12"));//开始时间-"yyyy-MM-dd HH:mm:ss"
+      //  req.setToDate(StringUtils.parseDateTime("2020-08-19 12:12:00"));//结束时间-"yyyy-MM-dd HH:mm:ss" 不能超过三十天
+        req.setFromDate(start);//开始时间-"yyyy-MM-dd HH:mm:ss"
+        req.setToDate(end);//结束时间-"yyyy-MM-dd HH:mm:ss" 不能超过三十天
+        OapiAttendanceGetcolumnvalResponse      response =null;
+        try {
+            response = client.execute(req, token);
             if (response.getErrcode() == 0) {
                 return response;
             }else{
