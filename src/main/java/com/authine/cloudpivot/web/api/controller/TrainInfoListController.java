@@ -27,7 +27,6 @@ import java.util.UUID;
  * @Date 2020/8/5 12:50
  * @Version 1.0
  */
-@Api(value = "服务热线信息", tags = "服务热线信息")
 @RestController
 @Slf4j
 @RequestMapping("/controller/TrainInfoList")
