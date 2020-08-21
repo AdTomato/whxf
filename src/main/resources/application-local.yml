@@ -18,11 +18,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #    url: jdbc:mysql://127.0.0.1:3306/cloudpivot?serverTimezone=Asia/Shanghai&characterEncoding=utf8
     #   url: jdbc:mysql://127.0.0.1:3306/whcloudpivot?serverTimezone=Asia/Shanghai&characterEncoding=utf8
-    url: jdbc:mysql://127.0.0.1:3306/whxf_cloudvot?serverTimezone=Asia/Shanghai&characterEncoding=utf8
-    #  url: jdbc:mysql://121.41.27.194:3306/cloudpivot?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    #  url: jdbc:mysql://127.0.0.1:3306/whxf_cloudvot?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    url: jdbc:mysql://121.41.27.194:3306/cloudpivot?serverTimezone=Asia/Shanghai&characterEncoding=utf8
     username: root
-    #password: Whxf_123456
-    password: weiyao123
+    password: Whxf_123456
+     #password: weiyao123
     hikari:
       maximum-pool-size: 30                #根据系统并发用户数
       data-source-properties:
