@@ -5,6 +5,7 @@ import com.authine.cloudpivot.web.api.entity.CheckDetail;
 import com.authine.cloudpivot.web.api.entity.TrainInfo;
 import com.authine.cloudpivot.web.api.entity.UploadDanger;
 import com.authine.cloudpivot.web.api.entity.WorkInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ public interface TrainInfoListMapper {
 
     /**
      * 查询训练情况
-     * @param id
+     * @param userId
      * @return
      */
-   List<TrainInfoList> getTrainInfoList(String id);
+   List<TrainInfoList> getTrainInfoList(@Param("userId") String userId);
 
    List<CheckDetail> getCheckDetail(String id);
 

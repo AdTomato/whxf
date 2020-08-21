@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-public class TrainInfo extends BaseEntity {
+public class TrainInfo extends BaseEntity  implements Serializable{
 
     //日期
     private Date checkDate;
@@ -25,7 +25,7 @@ public class TrainInfo extends BaseEntity {
     //训练详情
     private String checkDetail;
 
-
+    private List<CheckDetail> checkDetails;
 
 
 }
