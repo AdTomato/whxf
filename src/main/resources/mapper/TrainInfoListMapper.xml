@@ -30,7 +30,7 @@
     <select id="getCheckDetail" parameterType="java.lang.String"
             resultType="com.authine.cloudpivot.web.api.entity.CheckDetail">
     SELECT *
-	FROM i1e6k_checkdetail
+	FROM i1e6k_checkDetail
 	WHERE  parentId = #{id}
     </select>
 
