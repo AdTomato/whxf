@@ -136,9 +136,10 @@ public class ScaleTestResultController extends BaseController {
     public ResponseResult<Object> getUserInfoById(@RequestParam String userId) {
 
         if(StringUtils.isNotEmpty(userId) ){
-           String ddUserId= scaleTestResultMapper.getDdIdByUserId(userId);
+        //   String ddUserId= scaleTestResultMapper.getDdIdByUserId(userId);
+
            //生日，性别，身份证号码
-            OapiSmartworkHrmEmployeeListResponse us = DingDingUtil.getEmployeeInfo(ddUserId, DingDingUtil.getToken(),"sys02-birthTime,sys02-sexType,sys02-certNo");
+            OapiSmartworkHrmEmployeeListResponse us = DingDingUtil.getEmployeeInfo(userId, DingDingUtil.getToken(),"sys02-birthTime,sys02-sexType,sys02-certNo");
             List<OapiSmartworkHrmEmployeeListResponse.EmpFieldInfoVO> result = us.getResult();
             String birthday="";
             Map<String,String> map=new HashMap<>();

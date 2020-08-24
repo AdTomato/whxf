@@ -151,7 +151,7 @@
 
     <select id="getScaleAcoreByUserId" resultType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore">
         select a.id,DATE_FORMAT(a.testTime,'%Y-%m-%d')  as testTime,
-        d.title   as scaleTestName,
+        d.title   as scaleTestName,a.testResult,
         d.smallTypeName as smallTypeNameId,e.smallTypeName as smallTypeName
         from igpgf_scale_test_acore a
         left join igpgf_scale_test d on a.scaleTest=d.id
