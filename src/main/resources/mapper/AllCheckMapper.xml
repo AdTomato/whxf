@@ -28,11 +28,10 @@
         select
         b.id as userId , b.userId as dduserId , b.name as userName,
         b.departmentId as deptId,b.imgUrl as imgUrl, c.name as deptName
-        from
-       h_org_user b ,h_org_department c
-        where   b.departmentId=c.id
+        from h_org_user b ,h_org_department c,h_org_dept_user t
+        where    t.deptId=c.id and t.userId=b.id
         <if test="deptId != null and deptId != ''">
-            AND b.departmentId=#{deptId}
+            AND  c.id=#{deptId}
         </if>
         <if test="userId != null and userId != ''">
             AND b.userId=#{userId}
