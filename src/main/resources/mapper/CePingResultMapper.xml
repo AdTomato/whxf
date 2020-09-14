@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.authine.cloudpivot.web.api.mapper.CePingResultMapper">
+
+
+    <select id="getAllInfo" resultType="com.authine.cloudpivot.web.api.entity.CePingUserInfo">
+     select a.name,b.deptId,count(*) as count,a.parentId,a.leaf
+     from h_org_department a,  h_org_dept_user  b
+     where b.userId in (
+     select JSON_UNQUOTE(userid -> '$[0].id')   AS userid   from igpgf_scale_test_acore GROUP BY userid
+     )
+      and b.deptId=a.id
+      GROUP BY b.deptId order By count desc
+    </select>
+
+    <select id="getDeptInfo" resultType="com.authine.cloudpivot.web.api.entity.CePingUserInfo">
+     select a.name,b.deptId,count(*) as count,a.parentId,a.leaf,c.deptCount as personCount
+     from h_org_department a,  h_org_dept_user  b,
+     (select a.deptId,count(*) as deptCount from  h_org_dept_user a, h_org_user b where a.userId=b.id group by deptId) c
+     where b.userId in (
+     select JSON_UNQUOTE(userid -> '$[0].id')   AS userid   from igpgf_scale_test_acore GROUP BY userid
+     )
+     and a.id=c.deptId
+      and b.deptId=a.id
+      and a.name like concat('%',#{name})
+      GROUP BY b.deptId order By count desc
+    </select>
+
+    <select id="getParentDept" resultType="com.authine.cloudpivot.web.api.entity.CePingUserInfo">
+     select a.name,a.parentId,a.leaf,a.id as deptId
+     from h_org_department a
+     where a.id=#{parentId}
+    </select>
+
+    <select id="getNum" resultType="java.lang.Integer">
+ select sum(t.count) from (
+      select a.name,b.deptId,count(*) as count,a.parentId from h_org_department a,  h_org_dept_user  b
+      where b.userId in( select JSON_UNQUOTE(userid -> '$[0].id')   AS userid   from igpgf_scale_test_acore
+       GROUP BY userid) and b.deptId=a.id
+     and (a.name like '%站' or a.name like '%大队' or a.name like '%班')
+     GROUP BY b.deptId order By count desc
+     ) t
+    </select>
+
+    <select id="getNumAll" resultType="java.lang.Integer">
+    select count(*) from igpgf_scale_test_acore
+    </select>
+</mapper>

@@ -176,6 +176,8 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
                     .antMatchers("/api/aliyun/download").permitAll()
                     //客户端接口测试
                     .antMatchers("/api/client/**").hasAuthority("AUTH_SYSTEM_MANAGE")
+                    //09-09 导出量表测评结果excel
+                    .antMatchers("/controller/exportExcel/**").permitAll()
                     //test
                     .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                     .antMatchers("/api/**").hasAuthority("AUTH_SYSTEM_MANAGE")
