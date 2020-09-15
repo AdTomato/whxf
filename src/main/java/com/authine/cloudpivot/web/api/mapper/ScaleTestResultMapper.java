@@ -65,4 +65,11 @@ public interface ScaleTestResultMapper {
     //获取咨询人本身信息
     Map<String,String> getsendUserInfo(@Param("userId") String userId);
 
+    //查询大队中队站队部门
+    List<Map<String,String>> getDeptListByName(@Param("name") String name);//站队-站
+    List<Map<String,String>> getDeptListByZD();//支队
+    List<Map<String,String>> getDeptListByDD();//大队
+    //查询用户所在部门
+    List<Map<String,String>> getDeptByUserid(@Param("userid") String userid);
+
 }

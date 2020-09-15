@@ -9,7 +9,10 @@
         <id property="result" column="result" javaType="java.lang.String" jdbcType="VARCHAR"></id>
         <id property="danger" column="danger" jdbcType="VARCHAR"></id>
     </resultMap>
-
+    <resultMap id="idAndName" type="java.util.Map">
+        <id property="id" column="id" javaType="java.lang.String" jdbcType="VARCHAR"></id>
+        <id property="name" column="name" jdbcType="VARCHAR"></id>
+    </resultMap>
     <!--property是实体类中字段；column是数据库中字段 -->
     <resultMap id="sendUserInfo" type="java.util.Map">
         <id property="name" column="name" javaType="STRING" jdbcType="VARCHAR"/>
@@ -123,7 +126,22 @@
     </select>
 
     <select id="getScaleConsultDetail" resultType="com.authine.cloudpivot.web.api.entity.ScaleConsultDetail">
-        select a.*,b2.name as ownerName,
+        select b.name as userName,b.gender as userSex, b.birthday as birthday,b.userId as sonsultUserDdId,
+        b.departmentId as userdeptId,b.identityNo as identityNo,b.imgUrl as userImgUrl,a.*,b2.name as ownerName,
+        c.name as userdeptName
+        from h_org_user b
+        left join igpgf_scaleconsultdetail a on a.sonsultUser like concat('%',b.id,'%')
+        left join h_org_user b2 on a.owner =b2.id
+        left join h_org_dept_user d on d.userid=b.id
+        left join h_org_department c on  d.deptid=c.id
+        where 1=1
+        <if test="deptId != null and deptId != ''">
+            and d.deptid=#{deptId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and b.id=#{userId}
+        </if>
+       <!-- select a.*,b2.name as ownerName,
         b.name as userName,b.gender as userSex, b.birthday as birthday,b.userId as sonsultUserDdId,
         b.departmentId as userdeptId,b.identityNo as identityNo,b.imgUrl as userImgUrl, c.name as userdeptName
         from igpgf_scaleConsultDetail a
@@ -137,7 +155,7 @@
         <if test="userId != null and userId != ''">
             and a.sonsultUser like concat('%',#{userId},'%')
         </if>
-       group by a.sonsultUser
+       group by a.sonsultUser -->
     </select>
 
     <select id="getScaleConsultDetailByPerson" resultType="com.authine.cloudpivot.web.api.entity.ScaleConsultDetail">
@@ -162,10 +180,12 @@
     </select>
 
     <select id="getDeptUserIdList" resultType="java.lang.String">
-        select id from h_org_user where
-        status ='ENABLE'
-        and departmentId=#{deptId}
-        GROUP BY id
+        select a.id from h_org_user a
+        left join h_org_dept_user b on a.id=b.userid
+        where
+        a.status ='ENABLE'
+        and b.deptid=#{deptId}
+        GROUP BY a.id
     </select>
 
     <select id="getcepingNum" resultType="java.lang.Integer">
@@ -188,6 +208,32 @@
        select  name
        from h_org_department
       where  id=#{deptId}
+    </select>
+
+    <select id="getDeptListByName" resultMap="idAndName" parameterType="java.lang.String">
+        select id,name from  h_org_department
+         where name  like concat('%',#{name})
+        ORDER BY sortKey asc
+    </select>
+
+    <!--查询支队部门 -->
+    <select id="getDeptListByZD" resultMap="idAndName">
+       select id,name from  h_org_department  where parentId='2c90a43e6eb51314016eb6502b600254'
+        ORDER BY sortKey asc
+    </select>
+
+    <!--查询大队部门 2c90a43e6eb51314016eb65029860251（武汉消防）-->
+    <select id="getDeptListByDD" resultMap="idAndName">
+       select id,name from  h_org_department  where parentId='2c90a43e6eb51314016eb65029860251'
+       and (name like concat('%','大队') or name like concat('%','站'))
+        ORDER BY sortKey asc
+    </select>
+
+    <!--查询用户所在部门-->
+    <select id="getDeptByUserid" resultMap="idAndName">
+      select b.id,b.name from  h_org_dept_user a,h_org_department b
+      where a.deptid=b.id
+      and a.userid=#{userid}
     </select>
 
 </mapper>

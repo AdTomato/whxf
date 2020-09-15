@@ -34,5 +34,8 @@ public interface ScaleTestResultService {
     //返回部门测评档案
     TeamRecord getDeptNumInfo(String deptId) ;
 
+    //返回部门信息
+    List<Map<String, String>> getDeptListByName(String type,String dduserId);
+
 
 }

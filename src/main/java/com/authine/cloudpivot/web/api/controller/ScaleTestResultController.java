@@ -6,6 +6,7 @@ import com.authine.cloudpivot.web.api.entity.ScaleConsultDetail;
 import com.authine.cloudpivot.web.api.entity.ScaleTestAcore;
 import com.authine.cloudpivot.web.api.entity.TeamRecord;
 import com.authine.cloudpivot.web.api.mapper.ScaleTestResultMapper;
+import com.authine.cloudpivot.web.api.service.AllCheckService;
 import com.authine.cloudpivot.web.api.service.ScaleTestResultService;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
@@ -34,6 +35,9 @@ public class ScaleTestResultController extends BaseController {
 
     @Resource
     ScaleTestResultMapper scaleTestResultMapper;
+
+    @Autowired
+    AllCheckService allCheckService;
 
 
     //weiyao 根据分数查询结果
@@ -89,6 +93,25 @@ public class ScaleTestResultController extends BaseController {
 
         }else{
             return this.getErrResponseResult(null, 404L, "参数错误");
+        }
+    }
+
+    /**
+     * 返回部门信息
+     */
+    @GetMapping("/getDeptInfo")
+    public ResponseResult<Object> getDeptName(String type,String dduserId) {
+        //weiyao:19431116101255531 ;2c90a43e6eb51314016eb667507239e9
+        //杨队：110041056326188470;2c90a43e6ed08c91016ed08efa1e003d
+        //张卓：51594024776243 ；2c90a43e6ed08c91016ed08f834c01cf
+        //陆时正:260730135237806323;2c90a43e6f21161d016f31e3cc710669
+        if (StringUtils.isNotEmpty(dduserId) && StringUtils.isNotEmpty(type)) {
+
+
+            List<Map<String,String>> list=scaleTestResultService.getDeptListByName(type,dduserId);
+            return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        } else {
+            return this.getErrResponseResult(null, 404L, "没有名称");
         }
     }
 

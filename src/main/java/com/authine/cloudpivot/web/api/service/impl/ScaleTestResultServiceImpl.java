@@ -104,9 +104,9 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
     //查询档案
     @Override
     public List<ScaleConsultDetail> getScaleConsultDetail(String deptId, String ddUserId) {
-        if(StringUtils.isNotEmpty(deptId)){
-            deptId=scaleTestResultMapper.getDeptIdByddId(deptId);
-        }
+//        if(StringUtils.isNotEmpty(deptId)){
+//            deptId=scaleTestResultMapper.getDeptIdByddId(deptId);
+//        }
         if(StringUtils.isNotEmpty(ddUserId)){
             ddUserId=scaleTestResultMapper.getIdByddId(ddUserId);
         }
@@ -154,5 +154,45 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
         return team;
     }
 
-    ;
+    @Override
+    public List<Map<String, String>> getDeptListByName(String type,String dduserId) {
+        //weiyao:19431116101255531 ;2c90a43e6eb51314016eb667507239e9
+        //杨队：110041056326188470;2c90a43e6ed08c91016ed08efa1e003d
+        //张卓：51594024776243 ；2c90a43e6ed08c91016ed08f834c01cf
+        //陆时正:260730135237806323;2c90a43e6f21161d016f31e3cc710669
+        boolean admin="260730135237806323".equals(dduserId) ||"110041056326188470".equals(dduserId)||"19431116101255531".equals(dduserId);
+       //admin 表示可查看全部部门
+        if(admin){
+            return getDept(type);
+        }else{
+            String userid=scaleTestResultMapper.getIdByddId(dduserId);
+            //主管角色 roleId:2c90a43e6eb51314016eb65007ee0223
+            //查询是不是主管
+            String isLeader=scaleTestResultMapper.getIsZhuGuan("2c90a43e6eb51314016eb65007ee0223",userid);
+            if(StringUtils.isNotEmpty(isLeader)){
+                System.out.println(userid+"：是部门主管====");
+                return scaleTestResultMapper.getDeptByUserid(userid);
+            }
+        }
+
+        return null;
+    }
+
+    List<Map<String,String>> getDept(String type){
+        List<Map<String,String>> list=null;
+        if("1".equals(type)){
+        //  支队
+            list=scaleTestResultMapper.getDeptListByZD();
+        }else if("2".equals(type)){
+            //  大队
+            list=scaleTestResultMapper.getDeptListByDD();
+        }else if("3".equals(type)){
+            //  大队
+            list=scaleTestResultMapper.getDeptListByName("站");
+        }else if("4".equals(type)){
+            //  班
+            list=scaleTestResultMapper.getDeptListByName("班");
+        }
+        return list;
+    }
 }
