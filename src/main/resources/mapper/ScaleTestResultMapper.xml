@@ -130,7 +130,7 @@
         b.departmentId as userdeptId,b.identityNo as identityNo,b.imgUrl as userImgUrl,a.*,b2.name as ownerName,
         c.name as userdeptName
         from h_org_user b
-        left join igpgf_scaleconsultdetail a on a.sonsultUser like concat('%',b.id,'%')
+        left join igpgf_scaleConsultDetail a on a.sonsultUser like concat('%',b.id,'%')
         left join h_org_user b2 on a.owner =b2.id
         left join h_org_dept_user d on d.userid=b.id
         left join h_org_department c on  d.deptid=c.id
