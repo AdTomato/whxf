@@ -189,9 +189,9 @@
     </select>
 
     <select id="getcepingNum" resultType="java.lang.Integer">
-        select COUNT(DISTINCT a.userId) from igpgf_scale_test_acore a, h_org_user c
-         where a.userId like concat('%',c.id,'%')
-        and c.departmentId=#{deptId}
+        select COUNT(DISTINCT a.userId) from igpgf_scale_test_acore a, h_org_dept_user c
+         where a.userId like concat('%',c.userid,'%')
+        and c.deptid=#{deptId}
         <if test="danger != null and danger != ''">
             and a.danger= #{danger}
         </if>
@@ -211,9 +211,10 @@
     </select>
 
     <select id="getDeptListByName" resultMap="idAndName" parameterType="java.lang.String">
-        select id,name from  h_org_department
-         where name  like concat('%',#{name})
-        ORDER BY sortKey asc
+    select a.id,concat(b.name,'- ',a.name) as name  from  h_org_department a,h_org_department b
+         where  a.parentid=b.id
+			 and a.name  like concat('%',#{name})
+        ORDER BY a.sortKey asc
     </select>
 
     <!--查询支队部门 -->

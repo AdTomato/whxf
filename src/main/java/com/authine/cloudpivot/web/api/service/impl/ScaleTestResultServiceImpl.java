@@ -147,7 +147,8 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
         //危机预警人数
         team.setWjyjNum(team.getWjyj1()+team.getWjyj2()+team.getWjyj3());
         //参与测评总人数
-        team.setCycpNum(team.getWjyj1()+team.getWjyj2()+team.getWjyj3()+team.getWjyj0());
+        int cycpnum=scaleTestResultMapper.getcepingNum(deptId,"");
+        team.setCycpNum(cycpnum);
         //未参与人数
         team.setWcyNum(userList.size()-team.getCycpNum());
         team.setXlsdNum(scaleTestResultMapper.getshudaoNum(deptId));
