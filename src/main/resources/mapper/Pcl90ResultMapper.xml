@@ -5,7 +5,7 @@
 <!-- ia0;ug_PingceResult (i8s;nv_PingceResult)-->
 <mapper namespace="com.authine.cloudpivot.web.api.mapper.Pcl90Mapper">
     <update id="updatePcl90Result" parameterType="com.authine.cloudpivot.web.api.entity.Pcl90Result">
-        UPDATE ia0ug_SCL90Result
+        UPDATE igpgf_PC_SCL90_Result
         <set>
             <if test="scoreResult != null">
                 scoreResult = #{scoreResult},
@@ -81,7 +81,7 @@
     </update>
 
     <insert id="insertPcl90Result" parameterType="com.authine.cloudpivot.web.api.entity.Pcl90Result">
-        INSERT INTO ia0ug_SCL90Result
+        INSERT INTO igpgf_PC_SCL90_Result
           (id,name,creater,createdDeptId,
             owner,ownerDeptId,createdTime,
             modifier, modifiedTime,
@@ -104,13 +104,13 @@
     </insert>
 
     <select id="getResultByNameAndDate" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.Pcl90Result">
-        SELECT * from ia0ug_SCL90Result where creater = #{creater} and
+        SELECT * from igpgf_PC_SCL90_Result where creater = #{creater} and
             DATE_FORMAT( createdTime,'%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
        ORDER BY createdTime desc  LIMIT 1
     </select>
 
     <select id="getPcl90ById" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.Pcl90">
-        SELECT * from ia0ug_SCL_90 where id = #{id}
+        SELECT * from igpgf_PC_SCL_90 where id = #{id}
     </select>
 
 </mapper>
