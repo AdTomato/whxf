@@ -28,6 +28,20 @@
       GROUP BY b.deptId order By count desc
     </select>
 
+    <select id="getDeptBanInfo" resultType="com.authine.cloudpivot.web.api.entity.CePingUserInfo">
+     select a.name,b.deptId,count(*) as count,a.parentId,a.leaf,c.deptCount as personCount
+     from h_org_department a,  h_org_dept_user  b,
+     (select a.deptId,count(*) as deptCount from  h_org_dept_user a, h_org_user b where a.userId=b.id group by deptId) c
+     where b.userId in (
+     select JSON_UNQUOTE(userid -> '$[0].id')   AS userid   from igpgf_scale_test_acore GROUP BY userid
+     )
+     and a.id=c.deptId
+      and b.deptId=a.id
+      and a.name like concat('%',#{name})
+      and a.parentid !='2c90a43e6eb51314016eb6502b600254'
+      GROUP BY b.deptId order By count desc
+    </select>
+
     <select id="getParentDept" resultType="com.authine.cloudpivot.web.api.entity.CePingUserInfo">
      select a.name,a.parentId,a.leaf,a.id as deptId
      from h_org_department a
@@ -46,5 +60,20 @@
 
     <select id="getNumAll" resultType="java.lang.Integer">
     select count(*) from igpgf_scale_test_acore
+    </select>
+
+    <!--查询部门总人数-->
+    <select id="getDeptUserCountByDeptid" resultType="java.lang.Integer">
+       select count(*) as deptCount from  h_org_dept_user d, h_org_user b
+       where d.userId=b.id
+       and d.deptid=#{deptid}
+    </select>
+
+    <!--查询下级部门总人数-->
+    <select id="getDeptUserCountByParentId" resultType="java.lang.Integer">
+     select sum(t.deptCount) from
+        (select a.id,a.parentId,a.leaf,a.name,count(*) as deptCount from h_org_department a, h_org_dept_user b, h_org_user c
+         where b.userId=c.id and a.id=b.deptid and a.parentid=#{parentid}
+         group by a.id) t
     </select>
 </mapper>

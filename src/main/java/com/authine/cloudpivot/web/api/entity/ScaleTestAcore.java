@@ -17,10 +17,12 @@ public class ScaleTestAcore extends BaseEntity {
     private String  testResult; //测评结果
     private String   testTime;//测评时间 Date
     private String  testDetail; //测评明细
-    private String     danger;//心理危机程度
+    private String     danger;//心理危机程度0,1234-0，没有影响，轻微，中度，严重，4，非常严重
 
     private Integer  testScore;  //分数
     private Integer     resolved;//是否已处理 1，是，0否（默认0）
+
+    private String  userdept;//部门
     //用户信息
     private String     userName;//用户姓名
     private String     userSex;//用户性别

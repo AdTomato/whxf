@@ -37,5 +37,8 @@ public interface ScaleTestResultService {
     //返回部门信息
     List<Map<String, String>> getDeptListByName(String type,String dduserId);
 
+    //批量发布
+    Integer updateResolved(List<String> ids);
+
 
 }

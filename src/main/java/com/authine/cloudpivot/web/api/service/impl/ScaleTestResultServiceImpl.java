@@ -66,10 +66,23 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
         }
         info.setUserId("[{\"id\":\""+info.getUserId()+"\",\"type\":3}]");//测评人
      //   List<ScaleTestAcore> list=scaleTestResultMapper.getScaleTestResultInfo(info); --查询
+        List<Map<String,String>> dept=scaleTestResultMapper.getDeptByUserid(userId);//插入部门
+        String userdept="";
+        if(dept.size()==1){
+            userdept="[{\"id\":\""+dept.get(0).get("id")+"\",\"type\":1}]";
+        }else if(dept.size()>1){
+            userdept="[{\"id\":\""+dept.get(0).get("id")+"\",\"type\":1},"+"{\"id\":\""+dept.get(1).get("id")+"\",\"type\":1}]";
+        }
+        info.setUserdept(userdept);
+        info.setResolved(0);
+        if(info.getDanger() !=null && "0".equals(info.getDanger())){
+            //正常不需要发布
+            info.setResolved(1);
+        }
         Integer resc=scaleTestResultMapper.insertScaleTestAcore(info);
 
-        String id="0e77ee9eb4294b9a895969eaaa741f82";
-        String js=scaleTestResultMapper.getoptionResult(id);
+//        String id="0e77ee9eb4294b9a895969eaaa741f82";
+//        String js=scaleTestResultMapper.getoptionResult(id);
 
         return resc.toString();
     }
@@ -98,6 +111,7 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
                 info.setUserId(userId);
             }
         }
+        info.setResolved(1);//查询已处理的
         return scaleTestResultMapper.getScaleTestResultInfo(info);
     }
 
@@ -171,12 +185,18 @@ public class ScaleTestResultServiceImpl implements ScaleTestResultService {
             //查询是不是主管
             String isLeader=scaleTestResultMapper.getIsZhuGuan("2c90a43e6eb51314016eb65007ee0223",userid);
             if(StringUtils.isNotEmpty(isLeader)){
-                System.out.println(userid+"：是部门主管====");
+              //  System.out.println(userid+"：是部门主管====");
                 return scaleTestResultMapper.getDeptByUserid(userid);
             }
         }
 
         return null;
+    }
+
+    //批量发布
+    @Override
+    public Integer updateResolved(List<String> ids) {
+        return scaleTestResultMapper.updateResolved(ids);
     }
 
     List<Map<String,String>> getDept(String type){

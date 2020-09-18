@@ -85,12 +85,12 @@
             modifier,modifiedTime, workflowInstanceId,
             sequenceNo, sequenceStatus,ownerDeptQueryCode,
             scaleTest,userId,testTime,testScore,
-            testResult,testDetail,danger)
+            testResult,testDetail,resolved,danger,userdept)
         VALUES (#{id}, #{name}, #{creater}, #{createdDeptId}, #{owner}, #{ownerDeptId},
                 now(), #{modifier}, now(), #{workflowInstanceId},
                 #{sequenceNo},#{sequenceStatus}, #{ownerDeptQueryCode},
                 #{scaleTest},#{userId},  now(), #{testScore},
-                #{testResult}, #{testDetail}, #{danger})
+                #{testResult}, #{testDetail},#{resolved}, #{danger},#{userdept})
     </insert>
 
     <select id="getScaleTestResultInfo" resultType="com.authine.cloudpivot.web.api.entity.ScaleTestAcore"
@@ -236,5 +236,16 @@
       where a.deptid=b.id
       and a.userid=#{userid}
     </select>
+
+    <update id="updateResolved" parameterType="string">
+        UPDATE igpgf_scale_test_acore
+        <set>
+            resolved =1
+        </set>
+        WHERE id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
 
 </mapper>

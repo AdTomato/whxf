@@ -48,11 +48,13 @@ public class ScaleResultExcelController extends BaseController{
         //中队集合
         List<CePingUserInfo> zhongList=cePingResultMapper.getDeptInfo("站");
         //班队集合
-        List<CePingUserInfo>  banList=cePingResultMapper.getDeptInfo("班");
+        List<CePingUserInfo>  banList=cePingResultMapper.getDeptBanInfo("班");
       //  List<CePingUserInfo> zhongList2=new ArrayList<>(zhongList);
         for(int i=0;i<banList.size();i++){
             //将班队加入到大队
             String parentId=banList.get(i).getParentId();
+//            if("2c90a43e6eb51314016eb662a2ea2f99".equals(parentId))
+//                System.out.println("====================常青站下级部门开始");
             boolean is=true;
             for(int z=0;z<zhongList.size();z++){
                 if(parentId.equals(zhongList.get(z).getDeptId())){
@@ -100,6 +102,24 @@ public class ScaleResultExcelController extends BaseController{
                     System.out.println("专职新加中队："+dept.getName());
                 }
             }
+        }
+
+        //更新部门人数和下级部门人数 09-17
+        for(int i=0;i<zhongList.size();i++){
+
+            String deptid=zhongList.get(i).getDeptId();
+            if("2c90a43e6eb51314016eb662a2ea2f99".equals(deptid)){
+                System.out.println("changqing添加中队：");
+            }
+            Integer deptuser=cePingResultMapper.getDeptUserCountByDeptid(deptid);
+            Integer parentuser=0;
+            //0 有子部门 1 无子部门
+            Integer leaf=zhongList.get(i).getLeaf();
+            if(0==leaf){
+              //  String parentId=zhongList.get(i).getParentId();
+                parentuser=cePingResultMapper.getDeptUserCountByParentId(deptid);
+            }
+            zhongList.get(i).setPersonCount(deptuser==null?0:deptuser+(parentuser==null?0:parentuser));
         }
 
         int ii,jj;

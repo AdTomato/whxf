@@ -72,4 +72,7 @@ public interface ScaleTestResultMapper {
     //查询用户所在部门
     List<Map<String,String>> getDeptByUserid(@Param("userid") String userid);
 
+    //批量发布
+    Integer updateResolved(List<String> ids);
+
 }

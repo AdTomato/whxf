@@ -188,4 +188,19 @@ public class ScaleTestResultController extends BaseController {
 
     }
 
+    //weiyao 批量发布
+    @PostMapping("/updateResolve")
+    public ResponseResult<Integer> updateResolve(@RequestBody List<String> ids) {
+
+        if(ids!=null && ids.size()>0){
+            //结果
+            //危机程度，0，正常，1，轻度，2，中度，3，重度
+            Integer  rsp=scaleTestResultService.updateResolved(ids);
+            return this.getOkResponseResult(rsp, "succeed");
+
+        }else{
+            return this.getErrResponseResult(null, 404L, "参数错误");
+        }
+    }
+
 }
