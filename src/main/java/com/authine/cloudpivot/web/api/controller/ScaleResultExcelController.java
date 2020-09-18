@@ -5,6 +5,7 @@ import com.authine.cloudpivot.engine.api.model.organization.UserModel;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.entity.CePingUserInfo;
 import com.authine.cloudpivot.web.api.mapper.CePingResultMapper;
+import com.authine.cloudpivot.web.api.view.ResponseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.*;
@@ -35,7 +36,7 @@ public class ScaleResultExcelController extends BaseController{
 
     //导出大队站队人数统计
     @GetMapping("/getProvidentExcel")
-    public void getProvidentExcel(HttpServletResponse response) throws IOException {
+    public ResponseResult<String> getProvidentExcel(HttpServletResponse response) throws IOException {
       //  String welfareHandler="六";
         //总人数
         int count=cePingResultMapper.getNum();
@@ -217,7 +218,7 @@ public class ScaleResultExcelController extends BaseController{
         workbook.write(bufferedOutputStream);
         bufferedOutputStream.flush();
         bufferedOutputStream.close();
-
+        return this.getOkResponseResult("success", fname);
     }
 
 
