@@ -5,7 +5,7 @@
 <!-- ia0;ug_PingceResult (i8s;nv_PingceResult)-->
 <mapper namespace="com.authine.cloudpivot.web.api.mapper.XinliCePingMapper">
     <update id="updateCepingResult" parameterType="com.authine.cloudpivot.web.api.entity.PingceResult">
-        UPDATE ia0ug_PingceResult
+        UPDATE igpgf_CePingResult
         <set>
             <if test="yiyuScore != null">
                 yiyuScore = #{yiyuScore},
@@ -30,7 +30,7 @@
     </update>
 
     <insert id="insertCepingResult" parameterType="com.authine.cloudpivot.web.api.entity.PingceResult">
-        INSERT INTO ia0ug_PingceResult
+        INSERT INTO igpgf_CePingResult
           (id,name,creater,createdDeptId,
             owner,ownerDeptId,createdTime,
             modifier, modifiedTime,
@@ -48,14 +48,14 @@
     </insert>
 
     <select id="getCepingResultByName" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.PingceResult">
-        SELECT * from ia0ug_PingceResult where creater = #{creater} ORDER BY createdTime desc LIMIT 1
+        SELECT * from igpgf_CePingResult where creater = #{creater} ORDER BY createdTime desc LIMIT 1
     </select>
 
     <select id="getXinliSdsById" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.XinliSas">
-        SELECT * from ia0ug_XinLi_SDS where id = #{id}
+        SELECT * from igpgf_PC_XinLi_SDS where id = #{id}
     </select>
 
     <select id="getXinliSasById" parameterType="java.lang.String" resultType="com.authine.cloudpivot.web.api.entity.XinliSas">
-        SELECT * from ia0ug_XinLi_SAS where id = #{id}
+        SELECT * from igpgf_PC_XinLi_SAS where id = #{id}
     </select>
 </mapper>
