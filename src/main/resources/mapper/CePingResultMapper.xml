@@ -38,7 +38,7 @@
      and a.id=c.deptId
       and b.deptId=a.id
       and a.name like concat('%',#{name})
-      and a.parentid !='2c90a43e6eb51314016eb6502b600254'
+      and a.parentid !='2c90a43e6eb51314016eb65029860251'
       GROUP BY b.deptId order By count desc
     </select>
 

@@ -36,7 +36,7 @@ public class ScaleResultExcelController extends BaseController{
 
     //导出大队站队人数统计
     @GetMapping("/getProvidentExcel")
-    public ResponseResult<String> getProvidentExcel(HttpServletResponse response) throws IOException {
+    public void getProvidentExcel(HttpServletResponse response) throws IOException {
       //  String welfareHandler="六";
         //总人数
         int count=cePingResultMapper.getNum();
@@ -54,8 +54,8 @@ public class ScaleResultExcelController extends BaseController{
         for(int i=0;i<banList.size();i++){
             //将班队加入到大队
             String parentId=banList.get(i).getParentId();
-//            if("2c90a43e6eb51314016eb662a2ea2f99".equals(parentId))
-//                System.out.println("====================常青站下级部门开始");
+//           if("2c90a43e6eb51314016eb65029860251".equals(parentId))
+//               System.out.println("====================武汉市消防救援支队");
             boolean is=true;
             for(int z=0;z<zhongList.size();z++){
                 if(parentId.equals(zhongList.get(z).getDeptId())){
@@ -83,6 +83,8 @@ public class ScaleResultExcelController extends BaseController{
                 //专职消防员放到上级
                 CePingUserInfo zzInfo=zhongList.get(zz);
                 String parentId=zzInfo.getParentId();
+//                if("2c90a43e6eb51314016eb65029860251".equals(parentId))
+//                    System.out.println("============2========武汉市消防救援支队");
                 zhongList.remove(zz);
                 zz--;
                 boolean iszz=true;
@@ -91,7 +93,7 @@ public class ScaleResultExcelController extends BaseController{
                         iszz=false;
                         zhongList.get(kk).setCount(zzInfo.getCount()+zhongList.get(kk).getCount());
                         zhongList.get(kk).setPersonCount(zzInfo.getPersonCount()+zhongList.get(kk).getPersonCount());
-                        System.out.println("专职："+zzInfo.getName()+" 插入上级："+zhongList.get(kk).getName());
+                   //     System.out.println("专职："+zzInfo.getName()+" 插入上级："+zhongList.get(kk).getName());
                     }
                 }
                 if(iszz){
@@ -100,7 +102,7 @@ public class ScaleResultExcelController extends BaseController{
                     dept.setCount(zzInfo.getCount());
                     dept.setPersonCount(zzInfo.getPersonCount());
                     zhongList.add(dept);
-                    System.out.println("专职新加中队："+dept.getName());
+                //    System.out.println("专职新加中队："+dept.getName());
                 }
             }
         }
@@ -109,9 +111,9 @@ public class ScaleResultExcelController extends BaseController{
         for(int i=0;i<zhongList.size();i++){
 
             String deptid=zhongList.get(i).getDeptId();
-            if("2c90a43e6eb51314016eb662a2ea2f99".equals(deptid)){
-                System.out.println("changqing添加中队：");
-            }
+//            if("2c90a43e6eb51314016eb662a2ea2f99".equals(deptid)){
+//                System.out.println("changqing添加中队：");
+//            }
             Integer deptuser=cePingResultMapper.getDeptUserCountByDeptid(deptid);
             Integer parentuser=0;
             //0 有子部门 1 无子部门
@@ -218,7 +220,7 @@ public class ScaleResultExcelController extends BaseController{
         workbook.write(bufferedOutputStream);
         bufferedOutputStream.flush();
         bufferedOutputStream.close();
-        return this.getOkResponseResult("success", fname);
+     //   return this.getOkResponseResult("success", "说的减肥还是开发哈萨克后方可首付款");
     }
 
 
