@@ -50,8 +50,9 @@ private DubboConfigService dubboConfigService;
 
 
 
-   @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
+//   @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
   // @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
+    @Scheduled(cron = "0 0 9,21 * * ? *")   //定时器,每天早上九点和晚上九点执行一次
     public void getPersonVacationInfo() {
         log.info("开始执行获取角色下人员所有请假信息......");
         //获取token
@@ -140,20 +141,22 @@ private DubboConfigService dubboConfigService;
          //   log.info("子表插入是成功isSucc="+isSuccDetaul);
 
         //发送消息通知
-            /*
+ /*
             userList:通知人集合
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
-            杨宏国：110041056326188470
+            杨宏国：110041056326188470  陆时正:260730135237806323
+            柯龙海:273626253926863917
              */
-         String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470";
+         String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
         //    String userList="19431116101255531";
          String message= DateUtil.getDate()+ " 干部总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
         OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
 
-    @Scheduled(cron = "0 29 8 * * ? ")    //定时器，每天早上八点二十五执行一次--消防员
+    @Scheduled(cron = "0 0 9,21 * * ? *")   //定时器,每天早上九点和晚上九点执行一次
+//    @Scheduled(cron = "0 29 8 * * ? ")    //定时器，每天早上八点二十五执行一次--消防员
  //    @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
     public void getPersonXFYVacationInfo() {
         log.info("开始执行获取消防员角色下人员所有请假信息......");
@@ -243,21 +246,22 @@ private DubboConfigService dubboConfigService;
             //   log.info("子表插入是成功isSucc="+isSuccDetaul);
 
             //发送消息通知
-            /*
+             /*
             userList:通知人集合
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
-            杨宏国：110041056326188470
+            杨宏国：110041056326188470  陆时正:260730135237806323
+            柯龙海:273626253926863917
              */
-            String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470";
+            String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
          //   String userList="19431116101255531";
             String message= DateUtil.getDate()+ " 消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
 
-
-    @Scheduled(cron = "0 27 8 * * ? ")    //定时器，每天早上八点二十执行一次--专职消防员
+    @Scheduled(cron = "0 0 9,21 * * ? *")   //定时器,每天早上九点和晚上九点执行一次
+//    @Scheduled(cron = "0 27 8 * * ? ")    //定时器，每天早上八点二十执行一次--专职消防员
    //  @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
     public void getPersonZZXFYVacationInfo() {
         log.info("开始执行获取专职消防员角色下人员所有请假信息......");
@@ -349,13 +353,14 @@ private DubboConfigService dubboConfigService;
             //   log.info("子表插入是成功isSucc="+isSuccDetaul);
 
             //发送消息通知
-            /*
+           /*
             userList:通知人集合
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
-            杨宏国：110041056326188470
+            杨宏国：110041056326188470  陆时正:260730135237806323
+            柯龙海:273626253926863917
              */
-            String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470";
+            String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
           //  String userList="19431116101255531";
             String message= DateUtil.getDate()+ " 专职消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
