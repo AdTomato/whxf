@@ -52,7 +52,7 @@ private DubboConfigService dubboConfigService;
 
 //   @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
   // @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
-    @Scheduled(cron = "0 0 9,21 * * ? *")   //定时器,每天早上九点和晚上九点执行一次
+    @Scheduled(cron = "0 0 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
     public void getPersonVacationInfo() {
         log.info("开始执行获取角色下人员所有请假信息......");
         //获取token
@@ -155,7 +155,7 @@ private DubboConfigService dubboConfigService;
         }
     }
 
-    @Scheduled(cron = "0 0 9,21 * * ? *")   //定时器,每天早上九点和晚上九点执行一次
+    @Scheduled(cron = "0 1 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
 //    @Scheduled(cron = "0 29 8 * * ? ")    //定时器，每天早上八点二十五执行一次--消防员
  //    @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
     public void getPersonXFYVacationInfo() {
@@ -260,7 +260,7 @@ private DubboConfigService dubboConfigService;
         }
     }
 
-    @Scheduled(cron = "0 0 9,21 * * ? *")   //定时器,每天早上九点和晚上九点执行一次
+    @Scheduled(cron = "0 2 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
 //    @Scheduled(cron = "0 27 8 * * ? ")    //定时器，每天早上八点二十执行一次--专职消防员
    //  @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
     public void getPersonZZXFYVacationInfo() {
