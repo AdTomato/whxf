@@ -54,7 +54,7 @@ private DubboConfigService dubboConfigService;
   // @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
     @Scheduled(cron = "0 0 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
     public void getPersonVacationInfo() {
-        log.info("开始执行获取角色下人员所有请假信息......");
+        log.info("开始执行干部获取角色下人员所有请假信息......");
         //获取token
         String token = DingDingUtil.getToken();
         int isInsert=roleVacationInfoMapper.getTodayCount();
@@ -146,9 +146,9 @@ private DubboConfigService dubboConfigService;
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
             杨宏国：110041056326188470  陆时正:260730135237806323
-            柯龙海:273626253926863917
+            柯龙海:273626253926863917 杨波:106268222925848394
              */
-         String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
+         String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
         //    String userList="19431116101255531";
          String message= DateUtil.getDate()+ " 干部总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
         OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
@@ -251,9 +251,9 @@ private DubboConfigService dubboConfigService;
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
             杨宏国：110041056326188470  陆时正:260730135237806323
-            柯龙海:273626253926863917
+            柯龙海:273626253926863917 杨波:106268222925848394
              */
-            String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
+            String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
          //   String userList="19431116101255531";
             String message= DateUtil.getDate()+ " 消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
@@ -358,9 +358,9 @@ private DubboConfigService dubboConfigService;
             魏姚：19431116101255531  李姗珊：manager5388
             张卓：51594024776243  李坤懋：015907166926133173
             杨宏国：110041056326188470  陆时正:260730135237806323
-            柯龙海:273626253926863917
+            柯龙海:273626253926863917 杨波:106268222925848394
              */
-            String userList="19431116101255531,manager5388,51594024776243,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
+            String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
           //  String userList="19431116101255531";
             String message= DateUtil.getDate()+ " 专职消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
