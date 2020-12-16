@@ -51,8 +51,8 @@ private DubboConfigService dubboConfigService;
 
 
 //   @Scheduled(cron = "0 30 8 * * ? ")    //定时器，每天早上八点半执行一次
-  // @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
-    @Scheduled(cron = "0 0 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
+ //  @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
+     @Scheduled(cron = "0 0 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
     public void getPersonVacationInfo() {
         log.info("开始执行干部获取角色下人员所有请假信息......");
         //获取token
@@ -148,8 +148,8 @@ private DubboConfigService dubboConfigService;
             杨宏国：110041056326188470  陆时正:260730135237806323
             柯龙海:273626253926863917 杨波:106268222925848394
              */
-         String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
-        //    String userList="19431116101255531";
+              String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
+            //  String userList="19431116101255531";
          String message= DateUtil.getDate()+ " 干部总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
         OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
@@ -157,7 +157,7 @@ private DubboConfigService dubboConfigService;
 
     @Scheduled(cron = "0 1 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
 //    @Scheduled(cron = "0 29 8 * * ? ")    //定时器，每天早上八点二十五执行一次--消防员
- //    @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
+  //   @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
     public void getPersonXFYVacationInfo() {
         log.info("开始执行获取消防员角色下人员所有请假信息......");
         //获取token
@@ -240,7 +240,7 @@ private DubboConfigService dubboConfigService;
             role.setVacationDate(new Date());
             role.setVacationNum(countQinjia);//请假人数
             role.setInworkNum(countGb-countQinjia);//在岗人数
-            Integer isSucc=roleVacationInfoMapper.insertXfyRoleVacation(role);
+           Integer isSucc=roleVacationInfoMapper.insertXfyRoleVacation(role);
             //   log.info("主表插入是成功isSucc="+isSucc);
             Integer isSuccDetaul=roleVacationInfoMapper.insertXfyVacationDetailList(infoList);
             //   log.info("子表插入是成功isSucc="+isSuccDetaul);
@@ -253,9 +253,11 @@ private DubboConfigService dubboConfigService;
             杨宏国：110041056326188470  陆时正:260730135237806323
             柯龙海:273626253926863917 杨波:106268222925848394
              */
-            String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
-         //   String userList="19431116101255531";
-            String message= DateUtil.getDate()+ " 消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
+              String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
+            //String userList="19431116101255531";
+            //  weiyao-2020-1216 增加推送消息 (包括政府安排工作的冬季退出消防员19人)
+            String pushinfo=roleVacationInfoMapper.getPushInfo();
+            String message= DateUtil.getDate()+ " 消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人"+pushinfo+";"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
