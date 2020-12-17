@@ -262,7 +262,7 @@ private DubboConfigService dubboConfigService;
 
     @Scheduled(cron = "0 2 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
 //    @Scheduled(cron = "0 27 8 * * ? ")    //定时器，每天早上八点二十执行一次--专职消防员
-   //  @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
+//     @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
     public void getPersonZZXFYVacationInfo() {
         log.info("开始执行获取专职消防员角色下人员所有请假信息......");
         //获取token
@@ -361,9 +361,116 @@ private DubboConfigService dubboConfigService;
             柯龙海:273626253926863917 杨波:106268222925848394
              */
             String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
-          //  String userList="19431116101255531";
+//            String userList="273626253926863917";
             String message= DateUtil.getDate()+ " 专职消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
-}
+
+    @Scheduled(cron = "0 3 9,21 * * ? ")   //定时器,每天早上九点和晚上九点执行一次
+//    @Scheduled(cron = "0 27 8 * * ? ")    //定时器，每天早上八点二十执行一次--专职消防员
+//      @Scheduled(cron = "0 0/5 * * * ? ")   //四分钟执行一次
+    public void getPersonWYVacationInfo() {
+        log.info("开始执行获取文员角色下人员所有请假信息......");
+        //获取token
+        String token = DingDingUtil.getToken();
+        int isInsert=roleVacationInfoMapper.getWyTodayCount();
+        //今日没有查询
+        if(isInsert<1){
+            int countGb =0;//文员总人数
+            int countQinjia=0;//文员请假总人数
+            String roleVacationId= UUID.randomUUID().toString().replace("-","");//保存本地请假信息Id
+            List<RoleVacationInfo> infoList=new ArrayList<>();
+
+            String roleid = roleVacationInfoMapper.getddRoleId("消防文员");//文员钉钉角色id
+            if (!StringUtils.isNotBlank(roleid)) {
+                roleid = "1271813968";
+            }
+            for (int i = 0; i < 16; i++) {//1406人
+
+                //干部角色id :557300626
+                //消防员：1482045166，专职消防员：1261340294,消防文员:1271813968
+                OapiRoleSimplelistResponse roleList = DingDingUtil.getRoleLists(roleid, token, i * 200);
+                if (roleList.getResult().getList()!=null && roleList.getResult().getList().size() > 0) {
+                    countGb = countGb + roleList.getResult().getList().size();
+                    int sortKey = 1;
+                    //遍历每一个干部
+                    for (OapiRoleSimplelistResponse.OpenEmpSimple sim : roleList.getResult().getList()) {
+                        //当天是否存在请假
+                        OapiAttendanceGetleavestatusResponse qingjia = DingDingUtil.getleavestatus(sim.getUserid(), token);
+                        if (qingjia.getResult().getLeaveStatus() != null && qingjia.getResult().getLeaveStatus().size() > 0) {
+                            //获取用户详情，部门信息
+                            OapiUserGetResponse userDetail=DingDingUtil.getUserDetail(sim.getUserid(),token);
+                            //当天存在请假
+//                                    System.out.println("===============文员请假人确认===============" + sim.getName());
+                            countQinjia++;
+                            RoleVacationInfo role = new RoleVacationInfo();
+                            role.setParentId(roleVacationId);
+                            role.setSortKey(sortKey);
+                            role.setVacationName(sim.getName());
+                            role.setUserId(sim.getUserid());
+                            role.setId(UUID.randomUUID().toString().replace("-", ""));
+                            if(userDetail !=null){
+                                role.setPsition(userDetail.getPosition());//职务信息
+                                //获取部门名称
+                                List<Long> deptIdList=userDetail.getDepartment();
+                                String deptName="";
+                                if(deptIdList!=null){
+                                    for(Long deptid :deptIdList){
+                                        String dname = roleVacationInfoMapper.getDeptNameByDDdeptId(String.valueOf(deptid));
+                                        deptName=deptName+dname+" ";
+                                    }
+
+                                }
+                                role.setDeptName(deptName);
+                            }
+
+                            infoList.add(role);
+                        }
+                        sortKey++;
+                    }
+
+                } else {
+                    break;
+                }
+            }
+            //插入
+            OrganizationFacade organizationFacade = dubboConfigService.getOrganizationFacade();
+            UserModel user = organizationFacade.getUser(Constant.ADMIN_ID);
+            DepartmentModel department = organizationFacade.getDepartment(user.getDepartmentId());
+            RoleVacationInfo role = new RoleVacationInfo();
+            role.setId(roleVacationId);
+            role.setName("请假信息");
+            role.setSequenceStatus(Constant.COMPLETED_STATUS);
+            role.setWorkflowInstanceId(null);
+            role.setCreater(Constant.ADMIN_ID);
+            role.setCreatedDeptId(department.getId());
+            role.setOwner(Constant.ADMIN_ID);
+            role.setOwnerDeptId(department.getId());
+            role.setOwnerDeptQueryCode(department.getQueryCode());
+            role.setModifier(Constant.ADMIN_ID);
+            role.setAllroleNum(countGb);//总人数
+            role.setRoleName("消防文员");
+            role.setVacationDate(new Date());
+            role.setVacationNum(countQinjia);//请假人数
+            role.setInworkNum(countGb-countQinjia);//在岗人数
+            Integer isSucc=roleVacationInfoMapper.insertWyRoleVacation(role);
+//               log.info("主表插入是成功isSucc="+isSucc);
+            Integer isSuccDetaul=roleVacationInfoMapper.insertWyVacationDetailList(infoList);
+//               log.info("子表插入是成功isSucc="+isSuccDetaul);
+
+            //发送消息通知
+           /*
+            userList:通知人集合
+            魏姚：19431116101255531  李姗珊：manager5388
+            张卓：51594024776243  李坤懋：015907166926133173
+            杨宏国：110041056326188470  陆时正:260730135237806323
+            柯龙海:273626253926863917 杨波:106268222925848394
+             */
+            String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
+//              String userList="273626253926863917";
+            String message= DateUtil.getDate()+ " 文员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
+            OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
+        }
+    }
+        }

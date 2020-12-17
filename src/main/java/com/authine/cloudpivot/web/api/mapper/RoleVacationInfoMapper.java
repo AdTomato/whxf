@@ -21,6 +21,9 @@ public interface RoleVacationInfoMapper {
     Integer insertXfyVacationDetailList(List<RoleVacationInfo> infolist);
     //批量插入请假人员信息-专职消防员
     Integer insertZzxfyVacationDetailList(List<RoleVacationInfo> infolist);
+    //批量插入请假人员信息-文员
+    Integer insertWyVacationDetailList(List<RoleVacationInfo> infolist);
+
 
     //插入请假信息主表-干部
     Integer insertRoleVacation(RoleVacationInfo info);
@@ -28,6 +31,8 @@ public interface RoleVacationInfoMapper {
     Integer insertXfyRoleVacation(RoleVacationInfo info);
     //插入请假信息主表-专职消防员
     Integer insertZzxfyRoleVacation(RoleVacationInfo info);
+    //插入请假信息主表-专职消防员
+    Integer insertWyRoleVacation(RoleVacationInfo info);
 
     //查询是否有今天数据
     Integer getTodayCount();
@@ -35,6 +40,9 @@ public interface RoleVacationInfoMapper {
     Integer getXfyTodayCount();
     //查询是否有今天数据-专职消防员
     Integer getZzxfyTodayCount();
+    //查询是否有今天数据-文员
+    Integer getWyTodayCount();
+
 
     //根据钉钉部门id获取部门名称
     String getDeptNameByDDdeptId(String sourceId);
