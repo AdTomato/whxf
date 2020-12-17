@@ -17,6 +17,12 @@
         FROM i4h9w_roleVacationInfo
      WHERE TO_DAYS(vacationDate) =TO_DAYS(NOW())
     </select>
+
+    <select id="getPushInfo" resultType="java.lang.String">
+        SELECT pushInfo
+        FROM i4h9w_pushinfo
+     LIMIT 1
+    </select>
     <select id="getXfyTodayCount" resultType="java.lang.Integer">
         SELECT count(*)
         FROM i4h9w_xfyVacationInfo

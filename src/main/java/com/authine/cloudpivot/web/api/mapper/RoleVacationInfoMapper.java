@@ -46,4 +46,7 @@ public interface RoleVacationInfoMapper {
 
     //根据钉钉部门id获取部门名称
     String getDeptNameByDDdeptId(String sourceId);
+
+    //weiyao-2020-1216 查询增加的干部请假推送消息
+    String getPushInfo();
 }
