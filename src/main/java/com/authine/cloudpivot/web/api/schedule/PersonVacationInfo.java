@@ -20,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +39,7 @@ Component
  */
 @Component
 @Slf4j
-public class PersonVacationInfo {
+public class PersonVacationInfo implements Serializable {
 
 
 @Resource
@@ -297,7 +298,7 @@ private DubboConfigService dubboConfigService;
                             //获取用户详情，部门信息
                             OapiUserGetResponse userDetail=DingDingUtil.getUserDetail(sim.getUserid(),token);
                             //当天存在请假
-                            //        System.out.println("===============干部请假人确认===============" + sim.getName());
+//                                    System.out.println("===============专职消防员请假人确认===============" + sim.getName());
                             countQinjia++;
                             RoleVacationInfo role = new RoleVacationInfo();
                             role.setParentId(roleVacationId);
@@ -388,7 +389,7 @@ private DubboConfigService dubboConfigService;
             if (!StringUtils.isNotBlank(roleid)) {
                 roleid = "1271813968";
             }
-            for (int i = 0; i < 16; i++) {//1406人
+            for (int i = 0; i < 5; i++) {
 
                 //干部角色id :557300626
                 //消防员：1482045166，专职消防员：1261340294,消防文员:1271813968
@@ -428,6 +429,7 @@ private DubboConfigService dubboConfigService;
                             }
 
                             infoList.add(role);
+//                            System.out.println("role = " + role);
                         }
                         sortKey++;
                     }

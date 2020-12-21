@@ -70,7 +70,7 @@
     </insert>
 
     <insert id="insertWyVacationDetailList" parameterType="java.util.List">
-        INSERT INTO i4h9w_wyVacationDetail
+        INSERT INTO i4h9w_wyVacationDetail1
         (id,vacationName,userId,parentId,sortKey,psition,deptName)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
@@ -114,7 +114,7 @@
                 #{roleName}, now(), #{allroleNum}, #{vacationNum}, #{inworkNum})
     </insert>
     <insert id="insertWyRoleVacation" parameterType="com.authine.cloudpivot.web.api.entity.RoleVacationInfo">
-        INSERT INTO i4h9w_wenyuan_qingjia_xinxi
+        INSERT INTO i4h9w_WyVacationInfo
        (id, name, creater, createdDeptId, owner, ownerDeptId, createdTime,
             modifier,modifiedTime, workflowInstanceId,
             sequenceNo, sequenceStatus,ownerDeptQueryCode,
