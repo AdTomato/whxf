@@ -365,7 +365,7 @@ private DubboConfigService dubboConfigService;
              */
             String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
 //            String userList="273626253926863917";
-            String message= DateUtil.getDate()+ " 专职消防员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
+            String message= DateUtil.getDate()+ " 专职队员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
@@ -473,7 +473,7 @@ private DubboConfigService dubboConfigService;
              */
             String userList="19431116101255531,manager5388,106268222925848394,015907166926133173,110041056326188470,260730135237806323,273626253926863917";
 //              String userList="273626253926863917";
-            String message= DateUtil.getDate()+ " 文员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
+            String message= DateUtil.getDate()+ "消防文员总人数 "+countGb+" 人；"+"其中请假人数 "+countQinjia+" 人;"+"在岗人数 "+(countGb-countQinjia)+" 人";
             OapiMessageCorpconversationAsyncsendV2Response response =DingDingUtil.sendMessage(userList,token,message);
         }
     }
