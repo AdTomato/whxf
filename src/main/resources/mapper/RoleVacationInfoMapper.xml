@@ -35,7 +35,7 @@
     </select>
     <select id="getWyTodayCount" resultType="java.lang.Integer">
         SELECT count(*)
-        FROM i4h9w_wenyuan_qingjia_xinxi
+        FROM i4h9w_WyVacationInfo
      WHERE TO_DAYS(vacationDate) =TO_DAYS(NOW())
     </select>
 
