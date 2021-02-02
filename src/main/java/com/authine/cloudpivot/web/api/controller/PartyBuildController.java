@@ -28,9 +28,9 @@ import java.util.Map;
 @Api(value = "党建数据对接", tags = "党建数据对接")
 public class PartyBuildController extends BaseController {
 
-    private static final String HUPING_URL = "http://119.whudml.com:8080/dingdingapi.asmx/GetHuping";
-    private static final String ZIPING_URL = "http://119.whudml.com:8080/dingdingapi.asmx/GetZiping";
-    private static final String STUDY_URL = "http://119.whudml.com:8080/dingdingapi.asmx/GetStudy";
+    private static final String HUPING_URL = "http://xf.whusoft.cn:8086/dingdingapi.asmx/GetHuping";
+    private static final String ZIPING_URL = "http://xf.whusoft.cn:8086/dingdingapi.asmx/GetZiping";
+    private static final String STUDY_URL = "http://xf.whusoft.cn:8086/dingdingapi.asmx/GetStudy";
     @Autowired
     RestTemplate restTemplate;
 
