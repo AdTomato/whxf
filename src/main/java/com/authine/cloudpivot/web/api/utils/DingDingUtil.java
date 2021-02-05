@@ -463,7 +463,7 @@ public class DingDingUtil {
     public static OapiProcessinstanceListidsResponse   getApprovalIds(String userIds,String token){
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/listids");
         OapiProcessinstanceListidsRequest req = new OapiProcessinstanceListidsRequest();
-     //   req.setProcessCode(PROCESSCODEBYSLCC);//商旅出差
+     //   req.setProcessCode(PROCESSCODEBYSLCC);//商旅出差PROC-9F0D610E-070D-40B9-BA93-1C14F55DE30D
         req.setProcessCode(PROCESSCODEBYGCQW);//公差勤务
         //  Date[] dates=DateUtil.getWeek(); 本周一，本周日
         long current=System.currentTimeMillis();    //当前时间毫秒数（时间戳）
@@ -487,6 +487,69 @@ public class DingDingUtil {
         return null;
     }
 
+    /**
+     * 发起时间在某时间段内的审批实例id列表（三十天之前到当前时间）(干部请假单)
+     * @param userIds
+     * @return
+     */
+    public static OapiProcessinstanceListidsResponse   getApprovalGanbuIds(String userIds,String token){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/listids");
+        OapiProcessinstanceListidsRequest req = new OapiProcessinstanceListidsRequest();
+        //   req.setProcessCode(PROCESSCODEBYSLCC);//商旅出差PROC-9F0D610E-070D-40B9-BA93-1C14F55DE30D
+        req.setProcessCode("PROC-4633A02B-5710-4201-98C0-6608D962EACF");//干部请假
+        //  Date[] dates=DateUtil.getWeek(); 本周一，本周日
+        long current=System.currentTimeMillis();    //当前时间毫秒数（时间戳）
+        long daysAgo7=current-24*60*60*1000*7;//七天之前时间戳
+        req.setStartTime(daysAgo7);
+        req.setEndTime(current);
+        req.setSize(10L);//分页参数，每页大小，最多传20，默认值：20
+        req.setCursor(0L);
+        req.setUseridList(userIds);//发起人用户id列表，用逗号分隔，最大列表长度：10
+        OapiProcessinstanceListidsResponse  response =null;
+        try {
+            response = client.execute(req, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return null;
+    }
+
+    /**
+     * 发起时间在某时间段内的审批实例id列表（七天之前到当前时间）(饮酒报备
+     * @param userIds
+     * @return
+     */
+    public static OapiProcessinstanceListidsResponse   getApprovalId(String userIds,String token){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/processinstance/listids");
+        OapiProcessinstanceListidsRequest req = new OapiProcessinstanceListidsRequest();
+        //   req.setProcessCode(PROCESSCODEBYSLCC);//商旅出差PROC-9F0D610E-070D-40B9-BA93-1C14F55DE30D
+        req.setProcessCode("PROC-9F0D610E-070D-40B9-BA93-1C14F55DE30D");//饮酒报备
+        //  Date[] dates=DateUtil.getWeek(); 本周一，本周日
+        long current=System.currentTimeMillis();    //当前时间毫秒数（时间戳）
+        long daysAgo7=current-24*60*60*1000*7;//七天之前时间戳
+        req.setStartTime(daysAgo7);
+        req.setEndTime(current);
+        req.setSize(10L);//分页参数，每页大小，最多传20，默认值：20
+        req.setCursor(0L);
+        req.setUseridList(userIds);//发起人用户id列表，用逗号分隔，最大列表长度：10
+        OapiProcessinstanceListidsResponse  response =null;
+        try {
+            response = client.execute(req, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return null;
+    }
     /**
      * 发起时间在某时间段内的审批实例id列表（当前时间到 提前 days 天）
      * @param process 审批模板
@@ -542,6 +605,32 @@ public class DingDingUtil {
         return response;
     }
 
+    /**
+     * 获取指定用户可见的审批表单列表
+     *
+     * @param userId 用户id
+     * @param token  令牌
+     * @return {@link OapiProcessListbyuseridResponse}
+     */
+    public static OapiProcessListbyuseridResponse   getProcessListByUserId(String userId,String token){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/process/listbyuserid");
+        OapiProcessListbyuseridRequest req = new OapiProcessListbyuseridRequest();
+        req.setUserid(userId);
+        req.setOffset(0L);
+        req.setSize(100L);
+        OapiProcessListbyuseridResponse response = null;
+        try {
+            response = client.execute(req, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return null;
+    }
     /**
      * 获取用户userid
      * @param code： 免登授权码，参考上述“获取免登授权码”
@@ -662,6 +751,43 @@ public class DingDingUtil {
 
         req.setStartTime(zeroT);
         req.setEndTime(endT);
+        req.setOffset(0L);
+        req.setSize(10L);
+        OapiAttendanceGetleavestatusResponse response =null;
+        try {
+            response = client.execute(req, token);
+            if (response.getErrcode() == 0) {
+                return response;
+            }else{
+                log.info("错误原因:"+response.getErrmsg());
+            }
+        } catch (ApiException e) {
+            log.info("获取token错误:"+e.getErrMsg());
+        }
+        return response;
+    }
+
+    /**
+     * 查询指定企业下的指定用户在指定时间（当月时间）段内的请假状态
+     * @param userIdList
+     * @return
+     */
+    public static OapiAttendanceGetleavestatusResponse    getleavestatusMonth(String userIdList,String token){
+        DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/attendance/getleavestatus");
+        OapiAttendanceGetleavestatusRequest req = new OapiAttendanceGetleavestatusRequest();
+        req.setUseridList(userIdList);
+        Date date=new   Date(); //取时间
+        //获取当天首尾时间戳
+        long current=System.currentTimeMillis();    //当前时间毫秒数
+
+        Long monthStartTime = DateStamp.getMonthStartTime(current, "GMT+8:00");
+        Long monthEndTime = DateStamp.getMonthEndTime(current, "GMT+8:00");
+        /*//今天零点零分零秒的毫秒数
+        long zeroT=current/(1000*3600*24)*(1000*3600*24)- TimeZone.getDefault().getRawOffset();
+        long endT=zeroT+24*60*60*1000-1;  //今天23点59分59秒的毫秒数*/
+
+        req.setStartTime(monthStartTime);
+        req.setEndTime(monthEndTime);
         req.setOffset(0L);
         req.setSize(10L);
         OapiAttendanceGetleavestatusResponse response =null;

@@ -2,14 +2,14 @@ package com.authine.cloudpivot.web.api.controller;
 
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
+import com.authine.cloudpivot.web.api.dto.Drinking;
 import com.authine.cloudpivot.web.api.entity.UserInfoByCheck;
+import com.authine.cloudpivot.web.api.jiaqinxinxi.*;
+import com.authine.cloudpivot.web.api.mapper.RoleVacationInfoMapper;
 import com.authine.cloudpivot.web.api.service.AllCheckService;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
-import com.dingtalk.api.response.OapiAttendanceGetattcolumnsResponse;
-import com.dingtalk.api.response.OapiAttendanceGetcolumnvalResponse;
-import com.dingtalk.api.response.OapiSmartworkHrmEmployeeListResponse;
-import com.dingtalk.api.response.OapiUserGetResponse;
+import com.dingtalk.api.response.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -32,6 +33,9 @@ public class AllCheckController extends BaseController {
 
     @Autowired
     AllCheckService allCheckService;
+
+    @Resource
+    RoleVacationInfoMapper roleVacationInfoMapper;
 
     /**
      * 查询支队，大队等部门
@@ -246,4 +250,151 @@ public class AllCheckController extends BaseController {
     }
 
 
+    /**
+     * 角色请假人员详情
+     *
+     * @return {@link ResponseResult<Object>}
+     */
+    @GetMapping("/getPersonVacationInfo")
+    public ResponseResult<Object> getPersonVacationInfo(){
+
+/*        String getCadreLeave();
+        String getFiremenLeave();
+        String getProfessionalPlayers();
+        String getClerkLeave();*/
+        LerveDto lerveDto = new LerveDto();
+
+        List<CadreLeave> cadreLeave = roleVacationInfoMapper.getCadreLeave();
+        lerveDto.setCadreLeavelist(cadreLeave);
+        List<FiremenLeave> firemenLeave = roleVacationInfoMapper.getFiremenLeave();
+        lerveDto.setFiremenLeaveList(firemenLeave);
+        List<ProfessionalPlayers> professionalPlayers = roleVacationInfoMapper.getProfessionalPlayers();
+        lerveDto.setProfessionalPlayersList(professionalPlayers);
+        List<ClerkLeave> clerkLeave = roleVacationInfoMapper.getClerkLeave();
+        lerveDto.setClerkLeaveList(clerkLeave);
+
+        if (lerveDto == null) {
+            return this.getErrResponseResult("无数据", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        }else {
+            return this.getErrResponseResult(lerveDto, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+        }
+
+    }
+
+    /**
+     * 休假审批情况
+     *
+     * @return {@link ResponseResult<Object>}
+     */
+    @GetMapping("/getAboutVacations")
+    public ResponseResult<Object> getAboutVacations(String dingDingId) {
+        //获取token
+        String token = DingDingUtil.getToken();
+        if (StringUtils.isNotEmpty(dingDingId)) {
+            //获取当月请假信息
+//            OapiAttendanceGetleavestatusResponse noteForLeave = DingDingUtil.getleavestatus(dingDingId, token);
+
+            OapiProcessinstanceListidsResponse approvalIds = DingDingUtil.getApprovalGanbuIds(dingDingId, token);
+            List<String> qingJiaList = approvalIds.getResult().getList();
+//            System.out.println("noteForLeave = " + noteForLeave);
+            if (qingJiaList == null&& qingJiaList.size() == 0) {
+                return this.getErrResponseResult("当月无请假审批记录", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+            } else {
+                Map<String,Object> map=new HashMap<>();
+                for (String qingjiaid : qingJiaList) {
+                    OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail(qingjiaid, token);
+                    //新建干部休假信息类
+                    LeaveInformation leaveInformation = new LeaveInformation();
+                    List<OapiProcessinstanceGetResponse.FormComponentValueVo> a =   approvalDetail.getProcessInstance().getFormComponentValues();
+                    for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : a) {
+//                        System.out.println("formComponentValueVo = " + formComponentValueVo.getName() +"+"+ formComponentValueVo.getValue());
+
+
+                        if ("请假事由".equals(formComponentValueVo.getName()) ){
+                            leaveInformation.setReason(formComponentValueVo.getValue());
+                        }
+
+                        if ("[\"开始时间\",\"结束时间\"]".equals(formComponentValueVo.getName()) ){
+                          /*  System.out.println( "0"+ formComponentValueVo.getValue().charAt(0));
+                            System.out.println( "1"+ formComponentValueVo.getValue().charAt(1));
+                            System.out.println( "2"+ formComponentValueVo.getValue().charAt(2));
+                            System.out.println( "3"+ formComponentValueVo.getValue().charAt(3));
+                            System.out.println( "4444"+ formComponentValueVo.getValue().charAt(4));
+                            System.out.println("toooo = " + formComponentValueVo.getValue().toString());
+                            System.out.println("formComponentValueVo = " + formComponentValueVo.getValue().substring(2,18).toString());
+                            System.out.println("时间 = " + formComponentValueVo.getValue());*/
+                            leaveInformation.setStartTime(formComponentValueVo.getValue().substring(2,18).toString());
+                            leaveInformation.setEndTime(formComponentValueVo.getValue().substring(21,36).toString());
+                        }
+                        if ("*关联审批单".equals(formComponentValueVo.getName()) ){
+//                            System.out.println("name = " + formComponentValueVo.getValue().substring(2,4));
+                            leaveInformation.setName(formComponentValueVo.getValue().substring(2,5));
+                        }
+                    }
+
+
+                    map.put("休假信息",leaveInformation);
+                }
+
+                return this.getErrResponseResult(map, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+            }
+        }else
+        {
+            return this.getErrResponseResult(null, 404L, "钉钉Id为空");
+        }
+
+    }
+
+    /**
+     * 饮酒报备记录
+     *
+     * @param dingDingId 用户钉钉id
+     * @return {@link ResponseResult<Object>}
+     */
+    @GetMapping("/getDrinking")
+    public ResponseResult<Object> getDrinking(String dingDingId) {
+        //获取token
+        String token = DingDingUtil.getToken();
+        if (StringUtils.isNotEmpty(dingDingId)) {
+
+            OapiProcessinstanceListidsResponse userIdDrinkId = DingDingUtil.getApprovalId(dingDingId, token);
+            List<String> userIdLists = userIdDrinkId.getResult().getList();
+            if (userIdLists == null && userIdLists.size() == 0) {
+                return this.getErrResponseResult("近一周无饮酒报备记录", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+
+            } else {
+                Map<String,Object> map=new HashMap<>();
+                for (String userIdList : userIdLists) {
+                    OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail(userIdList, token);
+                    Drinking drinking = new Drinking();
+                    List<OapiProcessinstanceGetResponse.FormComponentValueVo> a =   approvalDetail.getProcessInstance().getFormComponentValues();
+
+//                    System.out.println("a = " + a);
+                    for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : a) {
+//                        System.out.println("formComponentValueVo = " + formComponentValueVo.getName() +"+"+ formComponentValueVo.getValue());
+
+                        if ("饮酒时间".equals(formComponentValueVo.getName())){
+//                            System.out.println("formComponentValueVo = " + formComponentValueVo.getName() + formComponentValueVo.getValue());
+                            drinking.setDate(formComponentValueVo.getValue());
+                        }
+                        if ("饮酒地点".equals(formComponentValueVo.getName())){
+                            drinking.setSite(formComponentValueVo.getValue());
+                        }
+                        if ("饮酒事由".equals(formComponentValueVo.getName()) ){
+                            drinking.setReason(formComponentValueVo.getValue());
+                        }
+                        ;map.put("饮酒报备",drinking);
+                    }
+//                    drinking.getDate(approvalDetail.getProcessInstance().getFormComponentValues().);
+//                    map.put("饮酒报备",approvalDetail.getProcessInstance().getFormComponentValues());
+                }
+                return this.getErrResponseResult(map, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+            }
+        }
+        else
+            {
+                return this.getErrResponseResult(null, 404L, "钉钉Id为空");
+            }
+
+    }
 }

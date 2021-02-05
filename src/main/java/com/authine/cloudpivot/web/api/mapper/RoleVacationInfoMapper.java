@@ -2,6 +2,10 @@ package com.authine.cloudpivot.web.api.mapper;
 
 import com.authine.cloudpivot.web.api.entity.RoleVacationInfo;
 import com.authine.cloudpivot.web.api.entity.Unit;
+import com.authine.cloudpivot.web.api.jiaqinxinxi.CadreLeave;
+import com.authine.cloudpivot.web.api.jiaqinxinxi.ClerkLeave;
+import com.authine.cloudpivot.web.api.jiaqinxinxi.FiremenLeave;
+import com.authine.cloudpivot.web.api.jiaqinxinxi.ProfessionalPlayers;
 
 import java.util.List;
 
@@ -11,6 +15,8 @@ import java.util.List;
  * 角色请假人员详情
  */
 public interface RoleVacationInfoMapper {
+
+
 
     //weiyao 获取钉钉角色Id
     String getddRoleId(String name);
@@ -49,4 +55,27 @@ public interface RoleVacationInfoMapper {
 
     //weiyao-2020-1216 查询增加的干部请假推送消息
     String getPushInfo();
+
+
+    /**
+     * 休假的角色信息
+     *
+     * @return {@link String}
+     */
+    String getRoleVacationInfo();
+
+  /*  //干部
+    private List<CadreLeave> cadreLeavelist;
+    //消防员
+    private List<FiremenLeave> firemenLeaveList;
+    //专职队员
+    private List<ProfessionalPlayers> professionalPlayersList;
+    //文员
+    private List<ClerkLeave> clerkLeaveList;*/
+  List<CadreLeave> getCadreLeave();
+    List<FiremenLeave> getFiremenLeave();
+    List<ProfessionalPlayers> getProfessionalPlayers();
+    List<ClerkLeave> getClerkLeave();
+
+
 }
