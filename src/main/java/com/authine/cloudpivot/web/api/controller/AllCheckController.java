@@ -329,7 +329,7 @@ public class AllCheckController extends BaseController {
                             System.out.println("formComponentValueVo = " + formComponentValueVo.getValue().substring(2,18).toString());
                             System.out.println("时间 = " + formComponentValueVo.getValue());*/
                             leaveInformation.setStartTime(formComponentValueVo.getValue().substring(2,18).toString());
-                            leaveInformation.setEndTime(formComponentValueVo.getValue().substring(21,36).toString());
+                            leaveInformation.setEndTime(formComponentValueVo.getValue().substring(21,37).toString());
                         }
                         if ("*关联审批单".equals(formComponentValueVo.getName()) ){
 //                            System.out.println("name = " + formComponentValueVo.getValue().substring(2,4));
