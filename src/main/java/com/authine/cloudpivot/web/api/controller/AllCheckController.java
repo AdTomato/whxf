@@ -295,16 +295,20 @@ public class AllCheckController extends BaseController {
 //            OapiAttendanceGetleavestatusResponse noteForLeave = DingDingUtil.getleavestatus(dingDingId, token);
 
             OapiProcessinstanceListidsResponse approvalIds = DingDingUtil.getApprovalGanbuIds(dingDingId, token);
+//            System.out.println("approvalIds = " + approvalIds);
             List<String> qingJiaList = approvalIds.getResult().getList();
 //            System.out.println("noteForLeave = " + noteForLeave);
             if (qingJiaList == null&& qingJiaList.size() == 0) {
                 return this.getErrResponseResult("当月无请假审批记录", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
             } else {
                 Map<String,Object> map=new HashMap<>();
+                LeaveInformation leaveInformation = new LeaveInformation();
+//                List<LeaveInformation> leaveInformationList = null;
+                ArrayList<LeaveInformation> list = new ArrayList<>();
                 for (String qingjiaid : qingJiaList) {
                     OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail(qingjiaid, token);
                     //新建干部休假信息类
-                    LeaveInformation leaveInformation = new LeaveInformation();
+                    leaveInformation.setCreateTime(approvalDetail.getProcessInstance().getCreateTime());
                     List<OapiProcessinstanceGetResponse.FormComponentValueVo> a =   approvalDetail.getProcessInstance().getFormComponentValues();
                     for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : a) {
 //                        System.out.println("formComponentValueVo = " + formComponentValueVo.getName() +"+"+ formComponentValueVo.getValue());
@@ -313,6 +317,7 @@ public class AllCheckController extends BaseController {
                         if ("请假事由".equals(formComponentValueVo.getName()) ){
                             leaveInformation.setReason(formComponentValueVo.getValue());
                         }
+
 
                         if ("[\"开始时间\",\"结束时间\"]".equals(formComponentValueVo.getName()) ){
                           /*  System.out.println( "0"+ formComponentValueVo.getValue().charAt(0));
@@ -332,11 +337,14 @@ public class AllCheckController extends BaseController {
                         }
                     }
 
+//                    leaveInformationList.set(1,leaveInformation);
+//                    map.put("假勤数据",leaveInformation);
+                    list.add(leaveInformation);
 
-                    map.put("休假信息",leaveInformation);
                 }
 
-                return this.getErrResponseResult(map, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+//                return this.getErrResponseResult(leaveInformationList, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+                return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
             }
         }else
         {

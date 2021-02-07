@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**干部休假审批
  * @Author Ke LongHai
  * @Date 2021/2/5 15:58
@@ -17,6 +19,9 @@ public class LeaveInformation {
     private String name;
     //事由
     private String reason;
+
+    //申请时间
+    private Date createTime;
     //开始时间
     private String startTime;
     //结束时间
