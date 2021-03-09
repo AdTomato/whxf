@@ -3,10 +3,12 @@ package com.authine.cloudpivot.web.api.controller;
 import com.authine.cloudpivot.engine.enums.ErrCode;
 import com.authine.cloudpivot.web.api.controller.base.BaseController;
 import com.authine.cloudpivot.web.api.dto.Drinking;
+import com.authine.cloudpivot.web.api.entity.HOrgUser;
 import com.authine.cloudpivot.web.api.entity.UserInfoByCheck;
 import com.authine.cloudpivot.web.api.jiaqinxinxi.*;
 import com.authine.cloudpivot.web.api.mapper.RoleVacationInfoMapper;
 import com.authine.cloudpivot.web.api.service.AllCheckService;
+import com.authine.cloudpivot.web.api.service.HOrgUserService;
 import com.authine.cloudpivot.web.api.utils.DingDingUtil;
 import com.authine.cloudpivot.web.api.view.ResponseResult;
 import com.dingtalk.api.response.*;
@@ -33,6 +35,9 @@ public class AllCheckController extends BaseController {
 
     @Autowired
     AllCheckService allCheckService;
+
+    @Autowired
+    HOrgUserService hOrgUserService;
 
     @Resource
     RoleVacationInfoMapper roleVacationInfoMapper;
@@ -288,62 +293,44 @@ public class AllCheckController extends BaseController {
      */
     @GetMapping("/getAboutVacations")
     public ResponseResult<Object> getAboutVacations(String dingDingId) {
+        HOrgUser hOrgUser = hOrgUserService.getHOrgUser(dingDingId);
         //获取token
         String token = DingDingUtil.getToken();
         if (StringUtils.isNotEmpty(dingDingId)) {
             //获取当月请假信息
 //            OapiAttendanceGetleavestatusResponse noteForLeave = DingDingUtil.getleavestatus(dingDingId, token);
-
-            OapiProcessinstanceListidsResponse approvalIds = DingDingUtil.getApprovalGanbuIds(dingDingId, token);
-//            System.out.println("approvalIds = " + approvalIds);
-            List<String> qingJiaList = approvalIds.getResult().getList();
-//            System.out.println("noteForLeave = " + noteForLeave);
+            OapiProcessinstanceListidsResponse userIdCheckId = DingDingUtil.getApprovalGanbuIds(dingDingId, token);
+//            System.out.println("userIdCheckId = " + userIdCheckId.getBody());
+            List<String> qingJiaList = userIdCheckId.getResult().getList();
+//            System.out.println("qingJiaList = " + qingJiaList);
             if (qingJiaList == null&& qingJiaList.size() == 0) {
-                return this.getErrResponseResult("当月无请假审批记录", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+                return this.getErrResponseResult("最近无请假审批记录", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
             } else {
                 Map<String,Object> map=new HashMap<>();
-                LeaveInformation leaveInformation = new LeaveInformation();
+//                LeaveInformation leaveInformation = new LeaveInformation();
 //                List<LeaveInformation> leaveInformationList = null;
                 ArrayList<LeaveInformation> list = new ArrayList<>();
-                for (String qingjiaid : qingJiaList) {
-                    OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail(qingjiaid, token);
+                for (int i = 0; i < qingJiaList.size(); i++) {
+                    OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail(qingJiaList.get(i), token);
+                    LeaveInformation leaveInformation = new LeaveInformation();
                     //新建干部休假信息类
                     leaveInformation.setCreateTime(approvalDetail.getProcessInstance().getCreateTime());
                     List<OapiProcessinstanceGetResponse.FormComponentValueVo> a =   approvalDetail.getProcessInstance().getFormComponentValues();
                     for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : a) {
 //                        System.out.println("formComponentValueVo = " + formComponentValueVo.getName() +"+"+ formComponentValueVo.getValue());
-
-
                         if ("请假事由".equals(formComponentValueVo.getName()) ){
                             leaveInformation.setReason(formComponentValueVo.getValue());
                         }
-
-
                         if ("[\"开始时间\",\"结束时间\"]".equals(formComponentValueVo.getName()) ){
-                          /*  System.out.println( "0"+ formComponentValueVo.getValue().charAt(0));
-                            System.out.println( "1"+ formComponentValueVo.getValue().charAt(1));
-                            System.out.println( "2"+ formComponentValueVo.getValue().charAt(2));
-                            System.out.println( "3"+ formComponentValueVo.getValue().charAt(3));
-                            System.out.println( "4444"+ formComponentValueVo.getValue().charAt(4));
-                            System.out.println("toooo = " + formComponentValueVo.getValue().toString());
-                            System.out.println("formComponentValueVo = " + formComponentValueVo.getValue().substring(2,18).toString());
-                            System.out.println("时间 = " + formComponentValueVo.getValue());*/
                             leaveInformation.setStartTime(formComponentValueVo.getValue().substring(2,18).toString());
                             leaveInformation.setEndTime(formComponentValueVo.getValue().substring(21,37).toString());
                         }
-                        if ("*关联审批单".equals(formComponentValueVo.getName()) ){
-//                            System.out.println("name = " + formComponentValueVo.getValue().substring(2,4));
-                            leaveInformation.setName(formComponentValueVo.getValue().substring(2,5));
-                        }
+                        leaveInformation.setName(hOrgUser.getName());
                     }
-
-//                    leaveInformationList.set(1,leaveInformation);
-//                    map.put("假勤数据",leaveInformation);
                     list.add(leaveInformation);
 
                 }
-
-//                return this.getErrResponseResult(leaveInformationList, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+//                System.out.println("list = " + list);
                 return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
             }
         }else
@@ -363,26 +350,27 @@ public class AllCheckController extends BaseController {
     public ResponseResult<Object> getDrinking(String dingDingId) {
         //获取token
         String token = DingDingUtil.getToken();
+//        Map<String,Object> map=new HashMap<>();
         if (StringUtils.isNotEmpty(dingDingId)) {
-
             OapiProcessinstanceListidsResponse userIdDrinkId = DingDingUtil.getApprovalId(dingDingId, token);
+//            System.out.println("userIdDrinkId = " + userIdDrinkId.getBody());
             List<String> userIdLists = userIdDrinkId.getResult().getList();
+//            System.out.println("userIdLists = " + userIdLists);
             if (userIdLists == null && userIdLists.size() == 0) {
-                return this.getErrResponseResult("近一周无饮酒报备记录", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+                return this.getErrResponseResult("最近无饮酒报备记录", ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
 
             } else {
                 Map<String,Object> map=new HashMap<>();
-                for (String userIdList : userIdLists) {
-                    OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail(userIdList, token);
+//                Drinking drinking = new Drinking();
+                ArrayList<Drinking> list = new ArrayList<>();
+                for (int i = 0; i < userIdLists.size(); i++) {
+                    OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail( userIdLists.get(i), token);
                     Drinking drinking = new Drinking();
                     List<OapiProcessinstanceGetResponse.FormComponentValueVo> a =   approvalDetail.getProcessInstance().getFormComponentValues();
-
-//                    System.out.println("a = " + a);
                     for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : a) {
-//                        System.out.println("formComponentValueVo = " + formComponentValueVo.getName() +"+"+ formComponentValueVo.getValue());
-
+//                        System.out.println("f1o1 = " + formComponentValueVo.getName() +"+"+ formComponentValueVo.getValue());
                         if ("饮酒时间".equals(formComponentValueVo.getName())){
-//                            System.out.println("formComponentValueVo = " + formComponentValueVo.getName() + formComponentValueVo.getValue());
+//                            System.out.println("form2Co = " + formComponentValueVo.getName() + formComponentValueVo.getValue());
                             drinking.setDate(formComponentValueVo.getValue());
                         }
                         if ("饮酒地点".equals(formComponentValueVo.getName())){
@@ -391,12 +379,15 @@ public class AllCheckController extends BaseController {
                         if ("饮酒事由".equals(formComponentValueVo.getName()) ){
                             drinking.setReason(formComponentValueVo.getValue());
                         }
-                        ;map.put("饮酒报备",drinking);
+//                        map.put("饮酒报备",drinking);
+//                        list.add(drinking);
                     }
-//                    drinking.getDate(approvalDetail.getProcessInstance().getFormComponentValues().);
-//                    map.put("饮酒报备",approvalDetail.getProcessInstance().getFormComponentValues());
+//                    map.put("饮酒报备",drinking);
+                    list.add(drinking);
                 }
-                return this.getErrResponseResult(map, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
+
+//                System.out.println("list = " + list);
+                return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
             }
         }
         else

@@ -488,7 +488,7 @@ public class DingDingUtil {
     }
 
     /**
-     * 发起时间在某时间段内的审批实例id列表（三十天之前到当前时间）(干部请假单)
+     * 发起时间在某时间段内的审批实例id列表（120天之前到当前时间）(干部请假单)
      * @param userIds
      * @return
      */
@@ -499,7 +499,8 @@ public class DingDingUtil {
         req.setProcessCode("PROC-4633A02B-5710-4201-98C0-6608D962EACF");//干部请假
         //  Date[] dates=DateUtil.getWeek(); 本周一，本周日
         long current=System.currentTimeMillis();    //当前时间毫秒数（时间戳）
-        long daysAgo7=current-24*60*60*1000*7;//七天之前时间戳
+        long daysAgo7=current-10368000000L;//120天之前时间戳
+//        long daysAgo7=current-24*60*60*1000*7;//七天之前时间戳
         req.setStartTime(daysAgo7);
         req.setEndTime(current);
         req.setSize(10L);//分页参数，每页大小，最多传20，默认值：20
@@ -520,7 +521,7 @@ public class DingDingUtil {
     }
 
     /**
-     * 发起时间在某时间段内的审批实例id列表（七天之前到当前时间）(饮酒报备
+     * 发起时间在某时间段内的审批实例id列表（120天之前到当前时间）(饮酒报备
      * @param userIds
      * @return
      */
@@ -531,7 +532,11 @@ public class DingDingUtil {
         req.setProcessCode("PROC-9F0D610E-070D-40B9-BA93-1C14F55DE30D");//饮酒报备
         //  Date[] dates=DateUtil.getWeek(); 本周一，本周日
         long current=System.currentTimeMillis();    //当前时间毫秒数（时间戳）
-        long daysAgo7=current-24*60*60*1000*7;//七天之前时间戳
+//        System.out.println("current = " + current);
+        long daysAgo7=current-10368000000L;//120天之前时间戳
+//        System.out.println("daysAgo7 = " + daysAgo7);
+//        req.setStartTime(1612161939000L);
+//        req.setEndTime(1615271934662L);
         req.setStartTime(daysAgo7);
         req.setEndTime(current);
         req.setSize(10L);//分页参数，每页大小，最多传20，默认值：20
