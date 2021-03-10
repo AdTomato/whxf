@@ -315,22 +315,27 @@ public class AllCheckController extends BaseController {
                     LeaveInformation leaveInformation = new LeaveInformation();
                     //新建干部休假信息类
                     leaveInformation.setCreateTime(approvalDetail.getProcessInstance().getCreateTime());
+                    OapiProcessinstanceGetResponse.ProcessInstanceTopVo processInstance = approvalDetail.getProcessInstance();
                     List<OapiProcessinstanceGetResponse.FormComponentValueVo> a =   approvalDetail.getProcessInstance().getFormComponentValues();
                     for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : a) {
-//                        System.out.println("formComponentValueVo = " + formComponentValueVo.getName() +"+"+ formComponentValueVo.getValue());
                         if ("请假事由".equals(formComponentValueVo.getName()) ){
                             leaveInformation.setReason(formComponentValueVo.getValue());
                         }
                         if ("[\"开始时间\",\"结束时间\"]".equals(formComponentValueVo.getName()) ){
-                            leaveInformation.setStartTime(formComponentValueVo.getValue().substring(2,18).toString());
-                            leaveInformation.setEndTime(formComponentValueVo.getValue().substring(21,37).toString());
+                            formComponentValueVo.getExtValue();
+//                            System.out.println("formComponentValueVo = " + formComponentValueVo.getValue()+formComponentValueVo.getExtValue()+formComponentValueVo.getName());
+//                           formComponentValueVo = ["2021-03-02 17:00","2021-03-04 09:00",40,"hour","日常轮休","请假类型"]
+                            leaveInformation.setStartTime(formComponentValueVo.getValue().substring(2,12).toString());
+                            //获取第一个,出现下标数
+                            int i1 = formComponentValueVo.getValue().indexOf(',');
+                            leaveInformation.setEndTime(formComponentValueVo.getValue().substring(i1+2,i1+12).toString());
+
                         }
                         leaveInformation.setName(hOrgUser.getName());
                     }
                     list.add(leaveInformation);
 
                 }
-//                System.out.println("list = " + list);
                 return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
             }
         }else
@@ -361,7 +366,6 @@ public class AllCheckController extends BaseController {
 
             } else {
                 Map<String,Object> map=new HashMap<>();
-//                Drinking drinking = new Drinking();
                 ArrayList<Drinking> list = new ArrayList<>();
                 for (int i = 0; i < userIdLists.size(); i++) {
                     OapiProcessinstanceGetResponse approvalDetail = DingDingUtil.getApprovalDetail( userIdLists.get(i), token);
@@ -379,14 +383,10 @@ public class AllCheckController extends BaseController {
                         if ("饮酒事由".equals(formComponentValueVo.getName()) ){
                             drinking.setReason(formComponentValueVo.getValue());
                         }
-//                        map.put("饮酒报备",drinking);
-//                        list.add(drinking);
                     }
 //                    map.put("饮酒报备",drinking);
                     list.add(drinking);
                 }
-
-//                System.out.println("list = " + list);
                 return this.getErrResponseResult(list, ErrCode.OK.getErrCode(), ErrCode.OK.getErrMsg());
             }
         }
