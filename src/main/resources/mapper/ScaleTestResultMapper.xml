@@ -141,21 +141,7 @@
         <if test="userId != null and userId != ''">
             and b.id=#{userId}
         </if>
-       <!-- select a.*,b2.name as ownerName,
-        b.name as userName,b.gender as userSex, b.birthday as birthday,b.userId as sonsultUserDdId,
-        b.departmentId as userdeptId,b.identityNo as identityNo,b.imgUrl as userImgUrl, c.name as userdeptName
-        from igpgf_scaleConsultDetail a
-        left join h_org_user b on a.sonsultUser like concat('%',b.id,'%')
-        left join h_org_user b2 on a.owner =b2.id
-        left join h_org_department c on  b.departmentId=c.id
-        where 1=1
-        <if test="deptId != null and deptId != ''">
-            and  a.dept like concat('%',#{deptId},'%')
-        </if>
-        <if test="userId != null and userId != ''">
-            and a.sonsultUser like concat('%',#{userId},'%')
-        </if>
-       group by a.sonsultUser -->
+
     </select>
 
     <select id="getScaleConsultDetailByPerson" resultType="com.authine.cloudpivot.web.api.entity.ScaleConsultDetail">

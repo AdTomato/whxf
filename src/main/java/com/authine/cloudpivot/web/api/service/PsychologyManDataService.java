@@ -11,6 +11,12 @@ import java.util.List;
  */
 public interface PsychologyManDataService {
 
+    /**
+     * 获得心理学的人数据id
+     *
+     * @param id id
+     * @return {@link PsychologyManData}
+     */
     PsychologyManData getPsychologyManDataId(String id);
 
     List<PsychologyManData> getPsychologyManData(String id);

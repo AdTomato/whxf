@@ -34,41 +34,6 @@
 	WHERE  parentId = #{id}
     </select>
 
-    <!--SELECT id FROM i1e6k_train_info WHERE creater = #{id}-->
-    <!--parentId = (SELECT id FROM i1e6k_train_info WHERE creater = "2c90a43e6f457354016f5eac4ba31571" order by checkDate desc limit 1)-->
-    <!--
-     SELECT *
-         FROM (select a.*,b.parentId,b.projectName,b.result from i1e6k_train_info a INNER JOIN i1e6k_checkdetail b on a.id = b.parentId) as c
-         WHERE  a.creater = #{id}
-SELECT *
-FROM i1e6k_checkdetail b
-WHERE  parentId = (SELECT id FROM i1e6k_train_info WHERE creater = "2c90a43e6f457354016f5eac4ba31571" order by checkDate desc limit 1)
-    /* SELECT *
-    FROM i1e6k_checkdetail b,i1e6k_train_info a
-    WHERE creater = #{id}
-    and a.id = b.parentId
-    order by checkDate desc limit 1*/-->
-
-    <!-- <resultMap type="com.authine.cloudpivot.web.api.dto.TrainInfoList" id="trainInfoList">
-         <id column="id" property="id"/>
-         <result column="name" property="name"/>
-         <collection property="checkDetails" ofType="com.authine.cloudpivot.web.api.entity.CheckDetail" >
-             <id column="c_id" property="id"/>
-             <result column="c_projectName" property="projectName"/>
-             <result column="c_result" property="result"/>
-         </collection>
-     </resultMap>
-
-
-     <select id="getTrainInfoList" resultMap="trainInfoList">
-     SELECT
-        a.*,
-         b.*
-     FROM i1e6k_train_info a
-     LEFT JOIN i1e6k_checkdetail b ON a.id=b.parentId
-     WHERE a.creater=#{id}
- </select>
- -->
 
 
 </mapper>

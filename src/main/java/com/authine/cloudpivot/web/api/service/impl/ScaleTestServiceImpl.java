@@ -43,10 +43,4 @@ public class ScaleTestServiceImpl implements ScaleTestService {
 
             }
 
-   /* @Override
-    public List<ScaleTest> getScaleTestAll(String id) {
-        return scaleTestMapper.getScaleTestAll(id);
-    }*/
-
-
 }

@@ -132,17 +132,6 @@
          LIMIT 1
     </select>
 
-
-    <!--<select id="getRoleVacationInfo" resultType="java.lang.String">
-        SELECT a.roleName,a.allroleNum,a.vacationNum,a.inworkNum,b.roleName,b.allroleNum,b.vacationNum,b.inworkNum,
-					 c.roleName,c.allroleNum,c.vacationNum,c.inworkNum,
-					  d.roleName,d.allroleNum,d.vacationNum,d.inworkNum
-        FROM i4h9w_roleVacationInfo a,i4h9w_xfyVacationInfo b,i4h9w_zzxfyVacationInfo c,i4h9w_WyVacationInfo d
-        WHERE TO_DAYS(a.vacationDate) =TO_DAYS(NOW())
-				LIMIT 1
-    </select>-->
-
-
     <select id="getCadreLeave" parameterType="java.lang.String"
             resultType="com.authine.cloudpivot.web.api.jiaqinxinxi.CadreLeave">
           SELECT *

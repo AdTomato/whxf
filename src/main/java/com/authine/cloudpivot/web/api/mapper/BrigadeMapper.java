@@ -3,7 +3,7 @@ package com.authine.cloudpivot.web.api.mapper;
 import java.util.List;
 import java.util.Map;
 
-/**
+/**抽签接口
  * @author: wangyong
  * @time: 2020/4/26 14:16
  * @Description: 大队

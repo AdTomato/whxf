@@ -15,8 +15,18 @@ import java.util.List;
 @Mapper
 public interface ScaleTypeSmallMapper {
 
+    /**
+     * 获取量表测评小类
+     *
+     * @return {@link List<ScaleTypeSmall>}
+     */
     List<ScaleTypeSmall> getScaleTypeSmallOne();
 
+    /**
+     * 获取量表测评大类
+     *
+     * @return {@link List<ScaleTypeBig>}
+     */
     List<ScaleTypeBig> getScaleTypeSmallAll();
 
 

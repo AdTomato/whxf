@@ -18,8 +18,20 @@ public interface ScaleTestMapper {
     List<ScaleTest> getScaleTestOne(String id);
 
 
+    /**
+     * 获得量表测评信息
+     *
+     * @param id id
+     * @return {@link List<ScaleTest>}
+     */
     List<ScaleTest> getScaleTestId(String id);
 
+    /**
+     * 获取图片详情
+     *
+     * @param id id
+     * @return {@link String}
+     */
     String getImgUrl(String id);
 
 

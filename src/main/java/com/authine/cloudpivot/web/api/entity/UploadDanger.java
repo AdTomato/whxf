@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 心理危机上报
  * @Author Ke LongHai
  * @Date 2020/8/12 11:38
  * @Version 1.0

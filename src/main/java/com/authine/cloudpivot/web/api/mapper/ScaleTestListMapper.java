@@ -21,6 +21,12 @@ public interface ScaleTestListMapper {
 
     List<String> getScaleTestAcoresByParentId(String parentId);
 
+    /**
+     * 获得规模测试列表
+     *
+     * @param id id
+     * @return {@link List<ScaleTestList>}
+     */
     List<ScaleTestList> getScaleTestList(String id);
 
 
